@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace APZ_BACKEND.Core.Dtos
+namespace APZ_BACKEND.Core.Dtos.Auth
 {
 	public class AuthenticateRequest
 	{

@@ -1,4 +1,4 @@
-﻿using APZ_BACKEND.Core.Dtos;
+﻿using APZ_BACKEND.Core.Dtos.Auth;
 using APZ_BACKEND.Core.Entities;
 using System.Threading.Tasks;
 

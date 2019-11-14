@@ -1,5 +1,4 @@
-﻿using APZ_BACKEND.Core.Dtos;
-using APZ_BACKEND.Core.Entities;
+﻿using APZ_BACKEND.Core.Dtos.Auth;
 using APZ_BACKEND.Core.Exceptions;
 using APZ_BACKEND.Core.Helpers;
 using APZ_BACKEND.Core.Services.Users;
@@ -8,9 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,36 +17,17 @@ namespace APZ_BACKEND.Presentation.Controllers
 	[Authorize]
 	[ApiController]
 	[Route("[controller]")]
-	public class UsersController : ControllerBase
+	public class BusinessAccountsController : ControllerBase
 	{
 		private IUserService _userService;
 		private readonly AppSettings _appSettings;
 
-		public UsersController(
+		public BusinessAccountsController(
 			IUserService userService,
 			IOptions<AppSettings> appSettings)
 		{
 			_userService = userService;
 			_appSettings = appSettings.Value;
-		}
-
-		[AllowAnonymous]
-		[HttpPost("authenticate-private")]
-		public async Task<IActionResult> AuthenticatePrivate([FromBody]AuthenticateRequest model)
-		{
-			var user = await _userService.AuthenticatePrivateAsync(model.Login, model.Password);
-
-			if (user == null)
-				return BadRequest(new { message = "Username or password is incorrect" });
-
-			var token = GetTokenString(user.Id);
-
-			return Ok(new
-			{
-				Id = user.Id,
-				Login = user.Login,
-				Token = token
-			});
 		}
 
 		[AllowAnonymous]
@@ -72,27 +50,12 @@ namespace APZ_BACKEND.Presentation.Controllers
 		}
 
 		[AllowAnonymous]
-		[HttpPost("register-private")]
-		public async Task<IActionResult> RegisterPrivate([FromBody]RegisterPrivateRequest dto)
-		{
-			try
-			{
-				await _userService.RegisterPrivateAsync(dto);
-				return Ok();
-			}
-			catch (AppException ex)
-			{
-				return BadRequest(new { message = ex.Message });
-			}
-		}
-
-		[AllowAnonymous]
 		[HttpPost("register-business")]
-		public IActionResult RegisterPrivate([FromBody]RegisterBusinessRequest dto)
+		public async Task<IActionResult> RegisterPrivate([FromBody]RegisterBusinessRequest dto)
 		{
 			try
 			{
-				_userService.RegisterBusinessAsync(dto);
+				await _userService.RegisterBusinessAsync(dto);
 				return Ok();
 			}
 			catch (AppException ex)
@@ -101,13 +64,29 @@ namespace APZ_BACKEND.Presentation.Controllers
 			}
 		}
 
-		//[HttpGet("{id}")]
-		//public IActionResult GetById(int id)
-		//{
-		//	var user = _userService.GetById(id);
-		//	var model = _mapper.Map<UserModel>(user);
-		//	return Ok(model);
-		//}
+		[HttpGet("public-profile")]
+		public async Task<IActionResult> GetPublicProfile(int? id, string? login)
+		{
+			return BadRequest("Not implemented");
+		}
+
+		[HttpGet("account-data")]
+		public async Task<IActionResult> GetAccountData()
+		{
+			return BadRequest("Not implemented");
+		}
+
+		[HttpPut("{id}")]
+		public async Task<IActionResult> Update(int id, [FromBody]string businessUser)
+		{
+			return BadRequest("Not implemented");
+		}
+
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> Delete(int id)
+		{
+			return BadRequest("Not implemented");
+		}
 
 		//[HttpPut("{id}")]
 		//public IActionResult Update(int id, [FromBody]UpdateModel model)
@@ -127,13 +106,6 @@ namespace APZ_BACKEND.Presentation.Controllers
 		//		// return error message if there was an exception
 		//		return BadRequest(new { message = ex.Message });
 		//	}
-		//}
-
-		//[HttpDelete("{id}")]
-		//public IActionResult Delete(int id)
-		//{
-		//	_userService.Delete(id);
-		//	return Ok();
 		//}
 
 		private string GetTokenString(int userId)

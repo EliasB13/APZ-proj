@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using APZ_BACKEND.Core.Dtos;
+using APZ_BACKEND.Core.Dtos.Auth;
 using APZ_BACKEND.Core.Entities;
 using APZ_BACKEND.Core.Exceptions;
 using APZ_BACKEND.Core.Helpers;

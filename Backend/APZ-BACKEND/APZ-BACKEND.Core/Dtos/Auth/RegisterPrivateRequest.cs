@@ -4,16 +4,18 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace APZ_BACKEND.Core.Dtos
+namespace APZ_BACKEND.Core.Dtos.Auth
 {
-	public class RegisterBusinessRequest
+	public class RegisterPrivateRequest
 	{
 		[Required]
 		public string Login { get; set; }
 		[Required]
-		public string Email { get; set; }
+		public string FirstName { get; set; }
 		[Required]
-		public string CompanyName { get; set; }
+		public string LastName { get; set; }
+		[Required]
+		public string Email { get; set; }
 		[Required]
 		public string Password { get; set; }
 	}
