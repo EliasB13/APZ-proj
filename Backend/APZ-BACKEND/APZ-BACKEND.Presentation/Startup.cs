@@ -19,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace APZ_BACKEND.Presentation
@@ -40,7 +41,7 @@ namespace APZ_BACKEND.Presentation
 			services.AddControllers();
 
 			ConfigureJwtAuth(services);
-			//ConfigureSwagger(services);
+			ConfigureSwagger(services);
 
 			services.AddScoped<IUserService, UserService>();
 		}
@@ -68,12 +69,12 @@ namespace APZ_BACKEND.Presentation
 				endpoints.MapControllers();
 			});
 
-			//app.UseSwagger();
-			//app.UseSwaggerUI(c =>
-			//{
-			//	c.SwaggerEndpoint("/swagger/v1/swagger.json", "SCNURE-BACKEND");
-			//	c.RoutePrefix = string.Empty;
-			//});
+			app.UseSwagger();
+			app.UseSwaggerUI(c =>
+			{
+				c.SwaggerEndpoint("/swagger/v1/swagger.json", "SCNURE-BACKEND");
+				c.RoutePrefix = string.Empty;
+			});
 		}
 
 		private void ConfigureJwtAuth(IServiceCollection services)
@@ -122,22 +123,31 @@ namespace APZ_BACKEND.Presentation
 		{
 			services.AddSwaggerGen(c =>
 			{
-				c.SwaggerDoc("v1", new Info() { Title = "SCNURE-BACKEND", Version = "v.0.0.1" });
+				c.SwaggerDoc("v1", new OpenApiInfo() { Title = "APZ-BACKEND", Version = "v.0.0.1" });
 
 
-				c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+				c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
 				{
 					Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
 					Name = "Authorization",
-					In = "header",
-					Type = "apiKey"
+					BearerFormat = "JWT",
+					Type = SecuritySchemeType.ApiKey,
+					In = ParameterLocation.Header,
+					Scheme = "Bearer"
 				});
-				c.AddSecurityRequirement(
-					new Dictionary<string, IEnumerable<string>>
+				c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+				{
+					new OpenApiSecurityScheme
 					{
-						{ "Bearer", new string[] { } },
+						Reference = new OpenApiReference
+						{
+							Type = ReferenceType.SecurityScheme,
+							Id = "Bearer"
+						}
+					},
+					new string[] { }
 					}
-				);
+				});
 			});
 		}
 	}
