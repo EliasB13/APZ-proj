@@ -12,5 +12,6 @@ namespace APZ_BACKEND.Core.Services.Employees
 	{
 		Task<IEnumerable<EmployeeDto>> GetBusinessEmployees(int businessUserId);
 		Task<GenericServiceResponse<Employee>> AddEmployee(int businessUserId, string login);
+		Task<GenericServiceResponse<Employee>> DeleteEmployee(int employeeId);
 	}
 }

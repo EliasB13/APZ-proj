@@ -28,8 +28,8 @@ namespace APZ_BACKEND.Core.Services.Employees
 
 		public async Task<IEnumerable<EmployeeDto>> GetBusinessEmployees(int businessUserId)
 		{
-			var employees = await employeesRepository.ListAllAsync(e => e.BusinessUser.Id == businessUserId);
-			if (employees.Count > 0)
+			var employees = await employeesRepository.GetEmployeesWithUsers(businessUserId);
+			if (employees.Count() > 0)
 			{
 				var businessUser = await businessUsersRepository.SingleOrDefaultAsync(bu => bu.Id == businessUserId);
 				var employeesDto = employees.Select(e => e.ToEmployeeDto(businessUser.CompanyName));
@@ -61,6 +61,17 @@ namespace APZ_BACKEND.Core.Services.Employees
 			};
 
 			await employeesRepository.AddAsync(employee);
+			return new GenericServiceResponse<Employee>(employee);
+		}
+
+		public async Task<GenericServiceResponse<Employee>> DeleteEmployee(int employeeId)
+		{
+			var employee = await employeesRepository.GetByIdAsync(employeeId);
+			if (employee == null)
+				return new GenericServiceResponse<Employee>("Employee with specified id wasn't found");
+
+			await employeesRepository.DeleteAsync(employee);
+
 			return new GenericServiceResponse<Employee>(employee);
 		}
 	}

@@ -43,16 +43,22 @@ namespace APZ_BACKEND.Presentation.Controllers
 			return Ok();
 		}
 
-		[HttpPost("add-employees")]
-		public async Task<IActionResult> AddEmployees(IEnumerable<int> userIds)
+		[HttpPost("000-add-employees")]
+		public async Task<IActionResult> AddEmployees([FromBody]IEnumerable<int> userIds)
 		{
 			return BadRequest("Not implemented");
 		}
 
 		[HttpDelete("employee")]
-		public async Task<IActionResult> DeleteEmployeeFromBusiness(int userId)
+		public async Task<IActionResult> DeleteEmployeeFromBusiness(int employeeId)
 		{
-			return BadRequest("Not implemented");
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+
+			var result = await employeesService.DeleteEmployee(employeeId);
+			if (!result.Success)
+				return BadRequest(new { message = result.ErrorMessage });
+
+			return Ok();
 		}
 	}
 }
