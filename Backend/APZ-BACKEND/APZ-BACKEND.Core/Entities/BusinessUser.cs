@@ -17,6 +17,7 @@ namespace APZ_BACKEND.Core.Entities
 		public string Address { get; set; }
 		public string Phone { get; set; }
 		public bool IsEmailConfirmed { get; set; }
+		public string Photo { get; set; }
 
 		public IEnumerable<SharedItem> SharedItems { get; set; }
 		public IEnumerable<Employee> Employees { get; set; }

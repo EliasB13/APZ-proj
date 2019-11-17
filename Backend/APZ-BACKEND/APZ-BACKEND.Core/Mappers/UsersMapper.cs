@@ -35,5 +35,16 @@ namespace APZ_BACKEND.Core.Mappers
 				Phone = user.Phone
 			};
 		}
+
+		public static void UpdateUserFromDto(this BusinessUser user, EditBusinessUserDto userData)
+		{
+			user.Address = userData.Address;
+			user.CompanyName = userData.CompanyName;
+			user.Description = userData.Description;
+			user.Email = userData.Email;
+			user.Login = userData.Login;
+			user.Phone = userData.Phone;
+			user.Photo = userData.Photo;
+		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using APZ_BACKEND.Core.Dtos.Auth;
+using APZ_BACKEND.Core.Dtos.Users;
 using APZ_BACKEND.Core.Exceptions;
 using APZ_BACKEND.Core.Helpers;
 using APZ_BACKEND.Core.Services.Users;
@@ -102,36 +103,28 @@ namespace APZ_BACKEND.Presentation.Controllers
 		}
 
 		[HttpPut("{id}")]
-		public async Task<IActionResult> Update(int id, [FromBody]string businessUser)
+		public async Task<IActionResult> Update([FromBody]EditBusinessUserDto businessUser)
 		{
-			return BadRequest("Not implemented");
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+
+			var result = await userService.UpdateBusinessUser(businessUser, contextUserId);
+			if (!result.Success)
+				return BadRequest(new { message = result.ErrorMessage });
+
+			return Ok();
 		}
 
-		[HttpDelete("{id}")]
-		public async Task<IActionResult> Delete(int id)
+		[HttpDelete]
+		public async Task<IActionResult> Delete()
 		{
-			return BadRequest("Not implemented");
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+
+			var result = await userService.DeleteBusinessUser(contextUserId);
+			if (!result.Success)
+				return BadRequest(new { message = result.ErrorMessage });
+
+			return Ok();
 		}
-
-		//[HttpPut("{id}")]
-		//public IActionResult Update(int id, [FromBody]UpdateModel model)
-		//{
-		//	// map model to entity and set id
-		//	var user = _mapper.Map<User>(model);
-		//	user.Id = id;
-
-		//	try
-		//	{
-		//		// update user 
-		//		_userService.Update(user, model.Password);
-		//		return Ok();
-		//	}
-		//	catch (AppException ex)
-		//	{
-		//		// return error message if there was an exception
-		//		return BadRequest(new { message = ex.Message });
-		//	}
-		//}
 
 		private string GetTokenString(int userId)
 		{

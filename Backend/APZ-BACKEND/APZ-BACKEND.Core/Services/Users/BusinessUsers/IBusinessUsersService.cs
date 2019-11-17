@@ -18,5 +18,7 @@ namespace APZ_BACKEND.Core.Services.Users.BusinessUsers
 		Task<GenericServiceResponse<BusinessUserProfile>> GetPublicProfile(int id);
 		Task<GenericServiceResponse<BusinessUserProfile>> GetPublicProfile(string login);
 		Task<GenericServiceResponse<BusinessUserAccountData>> GetAccountData(int id);
+		Task<GenericServiceResponse<BusinessUser>> UpdateBusinessUser(EditBusinessUserDto editBusinessUserDto, int businessUserId);
+		Task<GenericServiceResponse<BusinessUser>> DeleteBusinessUser(int businessUserId);
 	}
 }
