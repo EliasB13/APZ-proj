@@ -1,7 +1,7 @@
 ﻿using APZ_BACKEND.Core.Dtos.Auth;
 using APZ_BACKEND.Core.Exceptions;
 using APZ_BACKEND.Core.Helpers;
-using APZ_BACKEND.Core.Services.Users;
+using APZ_BACKEND.Core.Services.Users.PrivateUsers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -17,24 +17,49 @@ namespace APZ_BACKEND.Presentation.Controllers
 	[Authorize]
 	[ApiController]
 	[Route("[controller]")]
-	public class BusinessAccountsController : ControllerBase
+	public class PrivateUsersController : ControllerBase
 	{
-		private IUserService _userService;
-		private readonly AppSettings _appSettings;
+		private IPrivateUsersService userService;
+		private readonly AppSettings appSettings;
 
-		public BusinessAccountsController(
-			IUserService userService,
+		public PrivateUsersController(
+			IPrivateUsersService userService,
 			IOptions<AppSettings> appSettings)
 		{
-			_userService = userService;
-			_appSettings = appSettings.Value;
+			this.userService = userService;
+			this.appSettings = appSettings.Value;
 		}
 
 		[AllowAnonymous]
-		[HttpPost("authenticate-business")]
-		public async Task<IActionResult> AuthenticateBusiness([FromBody]AuthenticateRequest dto)
+		[HttpGet("public-profile")]
+		public async Task<IActionResult> GetPublicProfile(int? id, string? login)
 		{
-			var user = await _userService.AuthenticateBusinessAsync(dto.Login, dto.Password);
+			return BadRequest("Not implemented");
+		}
+
+		[HttpGet("account-data")]
+		public async Task<IActionResult> GetAccountData()
+		{
+			return BadRequest("Not implemented");
+		}
+
+		[HttpGet("availiable-services")]
+		public async Task<IActionResult> GetAvailiableServices()
+		{
+			return BadRequest("Not implemented");
+		}
+
+		[HttpGet("availiable-services/{serviceId}")]
+		public async Task<IActionResult> GetAvailiableService(int serviceId)
+		{
+			return BadRequest("Not implemented");
+		}
+
+		[AllowAnonymous]
+		[HttpPost("authenticate-private")]
+		public async Task<IActionResult> AuthenticatePrivate([FromBody]AuthenticateRequest model)
+		{
+			var user = await userService.AuthenticatePrivateAsync(model.Login, model.Password);
 
 			if (user == null)
 				return BadRequest(new { message = "Username or password is incorrect" });
@@ -50,30 +75,18 @@ namespace APZ_BACKEND.Presentation.Controllers
 		}
 
 		[AllowAnonymous]
-		[HttpPost("register-business")]
-		public async Task<IActionResult> RegisterPrivate([FromBody]RegisterBusinessRequest dto)
+		[HttpPost("register-private")]
+		public async Task<IActionResult> RegisterPrivate([FromBody]RegisterPrivateRequest dto)
 		{
 			try
 			{
-				await _userService.RegisterBusinessAsync(dto);
+				await userService.RegisterPrivateAsync(dto);
 				return Ok();
 			}
 			catch (AppException ex)
 			{
 				return BadRequest(new { message = ex.Message });
 			}
-		}
-
-		[HttpGet("public-profile")]
-		public async Task<IActionResult> GetPublicProfile(int? id, string? login)
-		{
-			return BadRequest("Not implemented");
-		}
-
-		[HttpGet("account-data")]
-		public async Task<IActionResult> GetAccountData()
-		{
-			return BadRequest("Not implemented");
 		}
 
 		[HttpPut("{id}")]
@@ -88,30 +101,10 @@ namespace APZ_BACKEND.Presentation.Controllers
 			return BadRequest("Not implemented");
 		}
 
-		//[HttpPut("{id}")]
-		//public IActionResult Update(int id, [FromBody]UpdateModel model)
-		//{
-		//	// map model to entity and set id
-		//	var user = _mapper.Map<User>(model);
-		//	user.Id = id;
-
-		//	try
-		//	{
-		//		// update user 
-		//		_userService.Update(user, model.Password);
-		//		return Ok();
-		//	}
-		//	catch (AppException ex)
-		//	{
-		//		// return error message if there was an exception
-		//		return BadRequest(new { message = ex.Message });
-		//	}
-		//}
-
 		private string GetTokenString(int userId)
 		{
 			var tokenHandler = new JwtSecurityTokenHandler();
-			var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+			var key = Encoding.ASCII.GetBytes(appSettings.Secret);
 			var tokenDescriptor = new SecurityTokenDescriptor
 			{
 				Subject = new ClaimsIdentity(new Claim[]

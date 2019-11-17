@@ -5,9 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using APZ_BACKEND.Core.Helpers;
 using APZ_BACKEND.Core.Interfaces;
+using APZ_BACKEND.Core.Services.Employees;
 using APZ_BACKEND.Core.Services.Users;
+using APZ_BACKEND.Core.Services.Users.BusinessUsers;
+using APZ_BACKEND.Core.Services.Users.PrivateUsers;
 using APZ_BACKEND.Infrastructure.Data;
 using APZ_BACKEND.Infrastructure.Data.Repositories;
+using APZ_BACKEND.Infrastructure.Data.Repositories.Employees;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,14 +40,13 @@ namespace APZ_BACKEND.Presentation
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddCors();
-			services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
 			services.AddDbContext<ApplicationContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DevSqlServerConn")));
 			services.AddControllers();
 
 			ConfigureJwtAuth(services);
 			ConfigureSwagger(services);
 
-			services.AddScoped<IUserService, UserService>();
+			ConfigureInjection(services);
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -57,12 +60,13 @@ namespace APZ_BACKEND.Presentation
 
 			app.UseRouting();
 
+			app.UseAuthentication();
+			app.UseAuthorization();
+
 			app.UseCors(x => x
 				.AllowAnyOrigin()
 				.AllowAnyMethod()
 				.AllowAnyHeader());
-
-			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints =>
 			{
@@ -93,18 +97,20 @@ namespace APZ_BACKEND.Presentation
 			{
 				x.Events = new JwtBearerEvents
 				{
-					OnTokenValidated = context =>
+					OnTokenValidated = async context =>
 					{
-						var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+						var privateUsersService = context.HttpContext.RequestServices.GetRequiredService<IPrivateUsersService>();
+						var businessUsersService = context.HttpContext.RequestServices.GetRequiredService<IBusinessUsersService>();
+
 						var userId = int.Parse(context.Principal.Identity.Name);
-						var user = userService.GetByIdPrivateAsync(userId);
+						var user = await privateUsersService.GetByIdAsync(userId);
 						if (user == null)
 						{
-							var bUser = userService.GetByIdBusinessAsync(userId);
+							var bUser = await businessUsersService.GetByIdAsync(userId);
 							if (bUser == null)
 								context.Fail("Unauthorized");
 						}
-						return Task.CompletedTask;
+						await Task.CompletedTask;
 					}
 				};
 				x.RequireHttpsMetadata = false;
@@ -149,6 +155,16 @@ namespace APZ_BACKEND.Presentation
 					}
 				});
 			});
+		}
+
+		private void ConfigureInjection(IServiceCollection services)
+		{
+			services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
+			services.AddScoped<IEmployeesRepository, EmployeesRepository>();
+
+			services.AddScoped<IPrivateUsersService, PrivateUsersService>();
+			services.AddScoped<IBusinessUsersService, BusinessUsersService>();
+			services.AddScoped<IEmployeesService, EmployeesService>();
 		}
 	}
 }
