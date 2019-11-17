@@ -102,8 +102,8 @@ namespace APZ_BACKEND.Presentation.Controllers
 			}
 		}
 
-		[HttpPut("{id}")]
-		public async Task<IActionResult> Update([FromBody]EditBusinessUserDto businessUser)
+		[HttpPut]
+		public async Task<IActionResult> Update([FromBody]UpdateBusinessUserDto businessUser)
 		{
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 

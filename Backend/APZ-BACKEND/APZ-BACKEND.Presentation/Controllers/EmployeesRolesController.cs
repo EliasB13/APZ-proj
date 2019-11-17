@@ -14,6 +14,12 @@ namespace APZ_BACKEND.Presentation.Controllers
 	[Route("api/[controller]")]
 	public class EmployeesRolesController : Controller
 	{
+		[HttpGet("business-employees-roles")]
+		public async Task<IActionResult> GetBusinessEmployeesRoles()
+		{
+
+		}
+
 		[HttpPost("create-employees-role")]
 		public async Task<IActionResult> CreateEmployeesRole([FromBody]string employeesRoleRequest)
 		{

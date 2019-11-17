@@ -5,7 +5,7 @@ using System.Text;
 
 namespace APZ_BACKEND.Core.Dtos.Users
 {
-	public class EditBusinessUserDto
+	public class UpdateBusinessUserDto
 	{
 		[Required]
 		public string Login { get; set; }
