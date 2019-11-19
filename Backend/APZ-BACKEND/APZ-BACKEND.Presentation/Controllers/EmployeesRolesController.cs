@@ -52,12 +52,6 @@ namespace APZ_BACKEND.Presentation.Controllers
 			return Ok();
 		}
 
-		[HttpPost("add-employees-to-role")]
-		public async Task<IActionResult> AddEmployeesToRole(IEnumerable<int> userIds, int roleId)
-		{
-			return BadRequest("Not implemented");
-		}
-
 		[HttpPut("employees-role")]
 		public async Task<IActionResult> UpdateEmployeesRole(EmployeesRoleDto roleDto)
 		{

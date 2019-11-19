@@ -42,13 +42,7 @@ namespace APZ_BACKEND.Presentation.Controllers
 
 			return Ok();
 		}
-
-		[HttpPost("add-employees")]
-		public async Task<IActionResult> AddEmployees([FromBody]IEnumerable<int> userIds)
-		{
-			return BadRequest("Not implemented");
-		}
-
+		
 		[HttpDelete("employee")]
 		public async Task<IActionResult> DeleteEmployeeFromBusiness(int employeeId)
 		{
