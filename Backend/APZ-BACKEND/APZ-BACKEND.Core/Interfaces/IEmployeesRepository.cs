@@ -8,6 +8,6 @@ namespace APZ_BACKEND.Core.Interfaces
 {
 	public interface IEmployeesRepository : IAsyncRepository<Employee>
 	{
-		Task<IEnumerable<Employee>> GetEmployeesWithUsers(int businessUserId);
+		Task<IEnumerable<Employee>> GetEmployeesWithUsersAndRoles(int businessUserId);
 	}
 }

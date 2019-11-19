@@ -8,6 +8,7 @@ using APZ_BACKEND.Core.Entities;
 using APZ_BACKEND.Core.Interfaces;
 using APZ_BACKEND.Core.Mappers;
 using APZ_BACKEND.Core.Services.Communication;
+using APZ_BACKEND.Core.Services.Users.BusinessUsers;
 
 namespace APZ_BACKEND.Core.Services.EmployeesRoles
 {
@@ -15,12 +16,15 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 	{
 		private readonly IAsyncRepository<EmployeesRole> employeesRoleRepository;
 		private readonly IAsyncRepository<Employee> employeesRepository;
+		private readonly IBusinessUsersService businessUsersService;
 
 		public EmployeesRolesService(IAsyncRepository<EmployeesRole> employeesRoleRepository,
-			IAsyncRepository<Employee> employeesRepository)
+			IAsyncRepository<Employee> employeesRepository, 
+			IBusinessUsersService businessUsersService)
 		{
 			this.employeesRoleRepository = employeesRoleRepository;
 			this.employeesRepository = employeesRepository;
+			this.businessUsersService = businessUsersService;
 		}
 
 		public async Task<GenericServiceResponse<EmployeesRole>> AddEmployeeToRole(int employeeId, int roleId)
@@ -31,13 +35,13 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 				if (role == null)
 					return new GenericServiceResponse<EmployeesRole>($"Role with id: {roleId} wasn't found");
 
-				var employee = await employeesRepository.SingleOrDefaultAsync(e => e.Id == employeeId);
+				var employee = await employeesRepository.SingleOrDefaultWithIncludeAsync(e => e.Id == employeeId, e => e.EmployeesRole);
 				if (employee == null)
 					return new GenericServiceResponse<EmployeesRole>($"Employee with id: {employeeId} wasn't found");
 
-				var employeeInRole = await employeesRepository.AnyAsync(e => e.EmployeesRole.Id == roleId);
-				if (employeeInRole)
-					return new GenericServiceResponse<EmployeesRole>($"Employee with id: {employeeId} already in role with id: {roleId}");
+				if (employee.EmployeesRole != null)
+					if (employee.EmployeesRole.Id == roleId)
+						return new GenericServiceResponse<EmployeesRole>($"Employee with id: {employeeId} already in role with id: {roleId}");
 
 				employee.EmployeesRole = role;
 				await employeesRepository.UpdateAsync(employee);
@@ -54,8 +58,16 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 		{
 			try
 			{
+				var businessUser = await businessUsersService.GetByIdAsync(businessUserId);
+				if (businessUser == null)
+					return new GenericServiceResponse<EmployeesRole>($"BusinessUser with id: {businessUserId} wasn't found");
+
+				var isRoleNameTaken = await employeesRoleRepository.AnyAsync(er => er.Name == employeesRoleDto.Name);
+				if (isRoleNameTaken)
+					return new GenericServiceResponse<EmployeesRole>($"Employees role with name: {employeesRoleDto.Name} already exists");
+
 				var employeesRole = employeesRoleDto.ToRoleFromDto();
-				employeesRole.BusinessUser.Id = businessUserId;
+				employeesRole.BusinessUser = businessUser;
 
 				await employeesRoleRepository.AddAsync(employeesRole);
 
@@ -87,6 +99,9 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 		public async Task<IEnumerable<EmployeesRoleDto>> GetBusinessEmployeesRoles(int businessUserId)
 		{
 			var roles = await employeesRoleRepository.ListAllAsync();
+			if (roles.Count() <= 0)
+				return new List<EmployeesRoleDto>();
+
 			var roleDtos = roles.Select(r => r.ToDto());
 
 			return roleDtos;

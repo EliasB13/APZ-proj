@@ -13,6 +13,7 @@ namespace APZ_BACKEND.Core.Interfaces
 		Task<List<T>> ListAllAsync(Expression<Func<T, bool>> predicate, Expression<Func<T, object>> includeExpression);
 		Task<List<T>> ListAllAsync(Expression<Func<T, bool>> predicate);
 		Task<T> SingleOrDefaultAsync(Expression<Func<T, bool>> predicate);
+		Task<T> SingleOrDefaultWithIncludeAsync(Expression<Func<T, bool>> predicate, Expression<Func<T, object>> includeExpression);
 		Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
 		Task<T> AddAsync(T entity);
 		Task UpdateAsync(T entity);

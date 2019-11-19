@@ -15,10 +15,12 @@ namespace APZ_BACKEND.Infrastructure.Data.Repositories.Employees
 		{
 		}
 
-		public async Task<IEnumerable<Employee>> GetEmployeesWithUsers(int businessUserId)
+		public async Task<IEnumerable<Employee>> GetEmployeesWithUsersAndRoles(int businessUserId)
 		{
 			return await dbSet
 				//.Include(e => e.BusinessUser)
+				.AsNoTracking()
+				.Include(e => e.EmployeesRole)
 				.Include(e => e.PrivateUser)
 				.Where(e => e.BusinessUser.Id == businessUserId)
 				.ToListAsync();

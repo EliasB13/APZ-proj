@@ -16,19 +16,22 @@ namespace APZ_BACKEND.Core.Services.Employees
 		private readonly IEmployeesRepository employeesRepository;
 		private readonly IAsyncRepository<BusinessUser> businessUsersRepository;
 		private readonly IAsyncRepository<PrivateUser> privateUsersRepository;
+		private readonly IAsyncRepository<EmployeesRole> rolesRepository;
 
 		public EmployeesService(IEmployeesRepository employeesRepository,
 			IAsyncRepository<BusinessUser> businessUsersRepository,
-			IAsyncRepository<PrivateUser> privateUsersRepository)
+			IAsyncRepository<PrivateUser> privateUsersRepository,
+			IAsyncRepository<EmployeesRole> rolesRepository)
 		{
 			this.employeesRepository = employeesRepository;
 			this.businessUsersRepository = businessUsersRepository;
 			this.privateUsersRepository = privateUsersRepository;
+			this.rolesRepository = rolesRepository;
 		}
 
 		public async Task<IEnumerable<EmployeeDto>> GetBusinessEmployees(int businessUserId)
 		{
-			var employees = await employeesRepository.GetEmployeesWithUsers(businessUserId);
+			var employees = await employeesRepository.GetEmployeesWithUsersAndRoles(businessUserId);
 			if (employees.Count() > 0)
 			{
 				var businessUser = await businessUsersRepository.SingleOrDefaultAsync(bu => bu.Id == businessUserId);

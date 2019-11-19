@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using APZ_BACKEND.Core.Dtos.EmployeesRoles;
+using APZ_BACKEND.Core.Services.EmployeesRoles;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace APZ_BACKEND.Presentation.Controllers
 {
@@ -14,22 +14,42 @@ namespace APZ_BACKEND.Presentation.Controllers
 	[Route("api/[controller]")]
 	public class EmployeesRolesController : Controller
 	{
+		private readonly IEmployeesRolesService employeesRolesService;
+
+		public EmployeesRolesController(IEmployeesRolesService employeesRolesService)
+		{
+			this.employeesRolesService = employeesRolesService;
+		}
+
 		[HttpGet("business-employees-roles")]
 		public async Task<IActionResult> GetBusinessEmployeesRoles()
 		{
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
+			var employeesRoles = await employeesRolesService.GetBusinessEmployeesRoles(contextUserId);
+			return Ok(employeesRoles);
 		}
 
 		[HttpPost("create-employees-role")]
-		public async Task<IActionResult> CreateEmployeesRole([FromBody]string employeesRoleRequest)
+		public async Task<IActionResult> CreateEmployeesRole(CreateEmployeesRoleDto createDto)
 		{
-			return BadRequest("Not implemented");
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+
+			var result = await employeesRolesService.Create(contextUserId, createDto);
+			if (!result.Success)
+				return BadRequest(new { message = result.ErrorMessage });
+
+			return Ok();
 		}
 
 		[HttpPost("add-employee-to-role")]
-		public async Task<IActionResult> AddEmployeeToRole(int userId, int roleId)
+		public async Task<IActionResult> AddEmployeeToRole(AddEmployeeToRole addEmployeeToRoleDto)
 		{
-			return BadRequest("Not implemented");
+			var result = await employeesRolesService.AddEmployeeToRole(addEmployeeToRoleDto.EmployeeId, addEmployeeToRoleDto.RoleId);
+			if (!result.Success)
+				return BadRequest(new { message = result.ErrorMessage });
+
+			return Ok();
 		}
 
 		[HttpPost("add-employees-to-role")]
@@ -38,22 +58,34 @@ namespace APZ_BACKEND.Presentation.Controllers
 			return BadRequest("Not implemented");
 		}
 
-		[HttpPut("employees-role/{id}")]
-		public async Task<IActionResult> UpdateEmployeesRole(int roleId, [FromBody]string value)
+		[HttpPut("employees-role")]
+		public async Task<IActionResult> UpdateEmployeesRole(EmployeesRoleDto roleDto)
 		{
-			return BadRequest("Not implemented");
+			var result = await employeesRolesService.Update(roleDto);
+			if (!result.Success)
+				return BadRequest(new { message = result.ErrorMessage });
+
+			return Ok();
 		}
 
-		[HttpDelete("employees-role/{id}")]
+		[HttpDelete("employees-role/{roleId}")]
 		public async Task<IActionResult> DeleteEmployeesRole(int roleId)
 		{
-			return BadRequest("Not implemented");
+			var result = await employeesRolesService.Delete(roleId);
+			if (!result.Success)
+				return BadRequest(new { message = result.ErrorMessage });
+
+			return Ok();
 		}
 
-		[HttpDelete("employee-in-role")]
-		public async Task<IActionResult> DeleteEmployeeFromRole(int roleId, int userId)
+		[HttpDelete("employee-in-role/{roleId}/{employeeId}")]
+		public async Task<IActionResult> DeleteEmployeeFromRole(int roleId, int employeeId)
 		{
-			return BadRequest("Not implemented");
+			var result = await employeesRolesService.RemoveEmployeeFromRole(roleId, employeeId);
+			if (!result.Success)
+				return BadRequest(new { message = result.ErrorMessage });
+
+			return Ok();
 		}
 	}
 }

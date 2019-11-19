@@ -65,6 +65,11 @@ namespace APZ_BACKEND.Infrastructure.Data.Repositories
 			return await dbSet.SingleOrDefaultAsync(predicate);
 		}
 
+		public async Task<T> SingleOrDefaultWithIncludeAsync(Expression<Func<T, bool>> predicate, Expression<Func<T, object>> includeExpression)
+		{
+			return await dbSet.Include(includeExpression).SingleOrDefaultAsync(predicate);
+		}
+
 		public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
 		{
 			return await dbSet.AnyAsync(predicate);

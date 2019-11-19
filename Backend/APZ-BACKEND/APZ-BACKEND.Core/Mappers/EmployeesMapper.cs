@@ -8,16 +8,17 @@ namespace APZ_BACKEND.Core.Mappers
 {
 	public static class EmployeesMapper
 	{
-		public static EmployeeDto ToEmployeeDto(this Employee employeeDto, string companyName)
+		public static EmployeeDto ToEmployeeDto(this Employee employee, string companyName)
 		{
 			return new EmployeeDto
 			{
 				Company = companyName,
-				EmployeeId = employeeDto.Id,
-				FirstName = employeeDto.PrivateUser.FirstName,
-				LastName = employeeDto.PrivateUser.LastName,
-				Login = employeeDto.PrivateUser.Login,
-				UserId = employeeDto.PrivateUser.Id
+				EmployeeId = employee.Id,
+				FirstName = employee.PrivateUser.FirstName,
+				LastName = employee.PrivateUser.LastName,
+				Login = employee.PrivateUser.Login,
+				UserId = employee.PrivateUser.Id,
+				Role = employee.EmployeesRole == null ? null : employee.EmployeesRole.ToDto()
 			};
 		}
 	}
