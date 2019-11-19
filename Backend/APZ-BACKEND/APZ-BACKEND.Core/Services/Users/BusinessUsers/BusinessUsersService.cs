@@ -97,7 +97,7 @@ namespace APZ_BACKEND.Core.Services.Users.BusinessUsers
 			return new GenericServiceResponse<BusinessUserAccountData>(user.ToAccountData());
 		}
 
-		public async Task<GenericServiceResponse<BusinessUser>> UpdateBusinessUser(UpdateBusinessUserDto editData, int businessUserId)
+		public async Task<GenericServiceResponse<BusinessUser>> UpdateBusinessUser(UpdateBusinessUserRequest editData, int businessUserId)
 		{
 			var dbUser = await usersRepository.GetByIdAsync(businessUserId);
 			if (dbUser == null)

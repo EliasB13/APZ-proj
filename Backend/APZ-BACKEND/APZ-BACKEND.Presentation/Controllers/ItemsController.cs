@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using APZ_BACKEND.Core.Dtos.SharedItems;
+using APZ_BACKEND.Core.Services.Items;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,34 +14,67 @@ namespace APZ_BACKEND.Presentation.Controllers
 	[Route("api/[controller]")]
 	public class ItemsController : Controller
 	{
-		[HttpGet]
-		public async Task<IActionResult> GetBusinessItems(int businessId)
+		private readonly IItemsService itemsService;
+
+		public ItemsController(IItemsService itemsService)
 		{
-			return BadRequest("Not implemented");
+			this.itemsService = itemsService;
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> GetBusinessItems()
+		{
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+
+			var items = await itemsService.GetBusinessItems(contextUserId);
+			return Ok(items);
 		}
 
 		[HttpGet("{id}")]
 		public async Task<IActionResult> GetItem(int itemId)
 		{
-			return BadRequest("Not implemented");
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+
+			var result = await itemsService.GetItem(contextUserId, itemId);
+			if (!result.Success)
+				return BadRequest(new { message = result.ErrorMessage });
+
+			return Ok(result.Item);
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> AddItemToBusiness([FromBody]string value)
+		public async Task<IActionResult> AddItemToBusiness(AddSharedItemRequest addSharedItemRequest)
 		{
-			return BadRequest("Not implemented");
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+
+			var result = await itemsService.AddItemToBusiness(contextUserId, addSharedItemRequest);
+			if (!result.Success)
+				return BadRequest(new { message = result.ErrorMessage });
+
+			return Ok();
 		}
 
 		[HttpPut("{id}")]
-		public async Task<IActionResult> EditItem(int id, [FromBody]string value)
+		public async Task<IActionResult> EditItem(UpdateSharedItemRequest updateSharedItemRequest)
 		{
-			return BadRequest("Not implemented");
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+			// TODO: check whether owner editing item
+
+			var result = await itemsService.Update(updateSharedItemRequest);
+			if (!result.Success)
+				return BadRequest(new { message = result.ErrorMessage });
+
+			return Ok();
 		}
 
-		[HttpDelete("{id}")]
-		public async Task<IActionResult> DeleteItem(int id)
+		[HttpDelete("{itemId}")]
+		public async Task<IActionResult> DeleteItem(int itemId)
 		{
-			return BadRequest("Not implemented");
+			var result = await itemsService.Delete(itemId);
+			if (!result.Success)
+				return BadRequest(new { message = result.ErrorMessage });
+
+			return Ok();
 		}
 	}
 }

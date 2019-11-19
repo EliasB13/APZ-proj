@@ -36,7 +36,7 @@ namespace APZ_BACKEND.Core.Mappers
 			};
 		}
 
-		public static void UpdateUserFromDto(this BusinessUser user, UpdateBusinessUserDto userData)
+		public static void UpdateUserFromDto(this BusinessUser user, UpdateBusinessUserRequest userData)
 		{
 			user.Address = userData.Address;
 			user.CompanyName = userData.CompanyName;

@@ -69,13 +69,20 @@ namespace APZ_BACKEND.Core.Services.Employees
 
 		public async Task<GenericServiceResponse<Employee>> DeleteEmployee(int employeeId)
 		{
-			var employee = await employeesRepository.GetByIdAsync(employeeId);
-			if (employee == null)
-				return new GenericServiceResponse<Employee>("Employee with specified id wasn't found");
+			try
+			{
+				var employee = await employeesRepository.GetByIdAsync(employeeId);
+				if (employee == null)
+					return new GenericServiceResponse<Employee>("Employee with specified id wasn't found");
 
-			await employeesRepository.DeleteAsync(employee);
+				await employeesRepository.DeleteAsync(employee);
 
-			return new GenericServiceResponse<Employee>(employee);
+				return new GenericServiceResponse<Employee>(employee);
+			}
+			catch (Exception ex)
+			{
+				return new GenericServiceResponse<Employee>("Error | Deleting employee: " + ex.Message);
+			}
 		}
 	}
 }
