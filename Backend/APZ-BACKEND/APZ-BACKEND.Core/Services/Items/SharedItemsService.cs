@@ -17,16 +17,22 @@ namespace APZ_BACKEND.Core.Services.Items
 		private readonly IAsyncRepository<BusinessUser> businessUsersRepository;
 		private readonly IAsyncRepository<ItemTaking> itemTakingsRepository;
 		private readonly IAsyncRepository<ItemTakingLine> itemTakingLinesRepository;
+		private readonly IAsyncRepository<EmployeeRoleItem> employeesRoleItemsRepository;
+		private readonly IAsyncRepository<EmployeesRole> employeesRolesRepository;
 
 		public SharedItemsService(IAsyncRepository<SharedItem> sharedItemsRepository,
 			IAsyncRepository<BusinessUser> businessUsersRepository,
 			IAsyncRepository<ItemTaking> itemTakingsRepository,
-			IAsyncRepository<ItemTakingLine> itemTakingLinesRepository)
+			IAsyncRepository<ItemTakingLine> itemTakingLinesRepository,
+			IAsyncRepository<EmployeeRoleItem> employeesRoleItemsRepository,
+			IAsyncRepository<EmployeesRole> employeesRolesRepository)
 		{
 			this.sharedItemsRepository = sharedItemsRepository;
 			this.businessUsersRepository = businessUsersRepository;
 			this.itemTakingsRepository = itemTakingsRepository;
 			this.itemTakingLinesRepository = itemTakingLinesRepository;
+			this.employeesRoleItemsRepository = employeesRoleItemsRepository;
+			this.employeesRolesRepository = employeesRolesRepository;
 		}
 
 		public async Task<GenericServiceResponse<SharedItem>> AddItemToBusiness(int businessUserId, AddSharedItemRequest addItemDto)
@@ -48,23 +54,42 @@ namespace APZ_BACKEND.Core.Services.Items
 			}
 		}
 
-		public async Task<GenericServiceResponse<SharedItem>> Delete(int itemId, int businessUserId)
+		public async Task<GenericServiceResponse<SharedItem>> AddItemToEmployeesRole(int businessUserId, int itemId, int roleId)
 		{
 			try
 			{
-				var item = await sharedItemsRepository.SingleOrDefaultWithIncludeAsync(si => si.Id == itemId, si => si.BusinessUser);
+				var businessUser = await businessUsersRepository.GetByIdAsync(businessUserId);
+				if (businessUser == null)
+					return new GenericServiceResponse<SharedItem>($"Business user with id: {businessUserId} wasn't found");
+
+				var item = await sharedItemsRepository.SingleOrDefaultAsync(si => si.Id == itemId, si => si.BusinessUser);
 				if (item == null)
 					return new GenericServiceResponse<SharedItem>($"Shared item with id: {itemId} wasn't found");
 
-				if (item.BusinessUser.Id != businessUserId)
-					return new GenericServiceResponse<SharedItem>("You don't have permissions");
+				var role = await employeesRolesRepository.GetByIdAsync(roleId);
+				if (role == null)
+					return new GenericServiceResponse<SharedItem>($"Role with id: {roleId} wasn't found");
 
-				await sharedItemsRepository.DeleteAsync(item);
+				if (item.BusinessUser.Id != businessUserId)
+					return new GenericServiceResponse<SharedItem>("Item doesn't belong to business");
+
+				var isItemInRole = await employeesRoleItemsRepository.AnyAsync(eri => eri.EmployeesRole.Id == roleId && eri.SharedItem.Id == itemId);
+				if (isItemInRole)
+					return new GenericServiceResponse<SharedItem>($"Item with id: {itemId} already exists in role with id: {roleId}");
+
+				var employeeRoleItem = new EmployeeRoleItem
+				{
+					EmployeesRole = role,
+					SharedItem = item
+				};
+
+				await employeesRoleItemsRepository.AddAsync(employeeRoleItem);
+
 				return new GenericServiceResponse<SharedItem>(item);
 			}
 			catch (Exception ex)
 			{
-				return new GenericServiceResponse<SharedItem>("Error | Deleting shared item: " + ex.Message);
+				return new GenericServiceResponse<SharedItem>("Error | Adding item to role: " + ex.Message);
 			}
 		}
 
@@ -84,6 +109,23 @@ namespace APZ_BACKEND.Core.Services.Items
 			}
 
 			return new List<SharedItemDto>();
+		}
+
+		public async Task<IEnumerable<SharedRoleItemDto>> GetEmployeesRoleItems(int roleId, int businessUserId)
+		{
+			var roleItems = await employeesRoleItemsRepository.ListAllAsync(eri => eri.EmployeesRoleId == roleId, eri => eri.SharedItem);
+			var itemTakingLines = await itemTakingLinesRepository.ListAllAsync();
+			if (roleItems.Count() > 0)
+			{
+				var itemsDto = roleItems.Select(ri =>
+				{
+					var isItemTaken = itemTakingLines.Any(itl => itl.SharedItemId == ri.Id && itl.IsTaken);
+					return ri.SharedItem.ToDto(isItemTaken, ri.Id, roleId);
+				});
+
+				return itemsDto;
+			}
+			return new List<SharedRoleItemDto>();
 		}
 
 		public async Task<GenericServiceResponse<SharedItemDto>> GetItem(int businessUserId, int itemId)
@@ -107,12 +149,12 @@ namespace APZ_BACKEND.Core.Services.Items
 		{
 			try
 			{
-				var item = await sharedItemsRepository.SingleOrDefaultWithIncludeAsync(si => si.Id == id, si => si.BusinessUser);
+				var item = await sharedItemsRepository.SingleOrDefaultAsync(si => si.Id == id, si => si.BusinessUser);
 				if (item == null)
 					return new GenericServiceResponse<SharedItem>($"Shared item with id: {id} wasn't found");
 				
 				if (item.BusinessUser.Id != businessUserId)
-					return new GenericServiceResponse<SharedItem>("You don't have permissions");
+					return new GenericServiceResponse<SharedItem>("Item doesn't belong to business");
 
 				item.UpdateSharedItemFromDto(dto);
 				await sharedItemsRepository.UpdateAsync(item);
@@ -122,6 +164,51 @@ namespace APZ_BACKEND.Core.Services.Items
 			catch (Exception ex)
 			{
 				return new GenericServiceResponse<SharedItem>("Error | Updating shared item: " + ex.Message);
+			}
+		}
+
+		public async Task<GenericServiceResponse<SharedItem>> Delete(int itemId, int businessUserId)
+		{
+			try
+			{
+				var item = await sharedItemsRepository.SingleOrDefaultAsync(si => si.Id == itemId, si => si.BusinessUser);
+				if (item == null)
+					return new GenericServiceResponse<SharedItem>($"Shared item with id: {itemId} wasn't found");
+
+				if (item.BusinessUser.Id != businessUserId)
+					return new GenericServiceResponse<SharedItem>("Item doesn't belong to business");
+
+				await sharedItemsRepository.DeleteAsync(item);
+				return new GenericServiceResponse<SharedItem>(item);
+			}
+			catch (Exception ex)
+			{
+				return new GenericServiceResponse<SharedItem>("Error | Deleting shared item: " + ex.Message);
+			}
+		}
+
+		public async Task<GenericServiceResponse<EmployeeRoleItem>> RemoveItemFromEmployeesRole(int roleItemId, int businessUserId)
+		{
+			try
+			{
+				var roleItem = await employeesRoleItemsRepository.SingleOrDefaultAsync(ri => ri.Id == roleItemId);
+				if (roleItem == null)
+					return new GenericServiceResponse<EmployeeRoleItem>($"Role item with id: {roleItemId} wasn't found");
+
+				var item = await sharedItemsRepository.SingleOrDefaultAsync(si => si.Id == roleItem.SharedItemId, si => si.BusinessUser);
+				if (item == null)
+					return new GenericServiceResponse<EmployeeRoleItem>($"Shared item with id: {roleItem.SharedItemId} wasn't found");
+
+				if (item.BusinessUser.Id != businessUserId)
+					return new GenericServiceResponse<EmployeeRoleItem>("Item doesn't belong to business");
+
+				await employeesRoleItemsRepository.DeleteAsync(roleItem);
+				return new GenericServiceResponse<EmployeeRoleItem>(roleItem);
+
+			}
+			catch (Exception ex)
+			{
+				return new GenericServiceResponse<EmployeeRoleItem>("Error | Removing item from employees role: " + ex.Message);
 			}
 		}
 	}

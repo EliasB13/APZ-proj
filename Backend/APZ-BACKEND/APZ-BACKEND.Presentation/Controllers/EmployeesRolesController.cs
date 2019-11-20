@@ -21,19 +21,13 @@ namespace APZ_BACKEND.Presentation.Controllers
 			this.employeesRolesService = employeesRolesService;
 		}
 
-		[HttpGet("business-employees-roles")]
+		[HttpGet("business-roles")]
 		public async Task<IActionResult> GetBusinessEmployeesRoles()
 		{
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var employeesRoles = await employeesRolesService.GetBusinessEmployeesRoles(contextUserId);
 			return Ok(employeesRoles);
-		}
-
-		[HttpGet("employees-role-items")]
-		public async Task<IActionResult> GetEmployeesRoleItems()
-		{
-			return BadRequest("Not implemented");
 		}
 
 		[HttpPost("create-employees-role")]
@@ -56,12 +50,6 @@ namespace APZ_BACKEND.Presentation.Controllers
 				return BadRequest(new { message = result.ErrorMessage });
 
 			return Ok();
-		}
-
-		[HttpPost("add-item-to-role")]
-		public async Task<IActionResult> AddItemToRole(object dto)
-		{
-			return BadRequest("Not implemented");
 		}
 
 		[HttpPut("employees-role")]
@@ -92,12 +80,6 @@ namespace APZ_BACKEND.Presentation.Controllers
 				return BadRequest(new { message = result.ErrorMessage });
 
 			return Ok();
-		}
-
-		[HttpDelete("item-in-role/{roleId}/{itemId}")]
-		public async Task<IActionResult> RemoveItemFromRole(int roleId, int itemId)
-		{
-			return BadRequest("Not implemented");
 		}
 	}
 }

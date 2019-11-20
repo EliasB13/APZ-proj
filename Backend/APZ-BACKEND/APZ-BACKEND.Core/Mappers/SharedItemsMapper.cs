@@ -34,5 +34,18 @@ namespace APZ_BACKEND.Core.Mappers
 			item.Name = dto.Name;
 			item.Description = dto.Description;
 		}
+
+		public static SharedRoleItemDto ToDto(this SharedItem sharedItem, bool isTaken, int roleItemId, int roleId)
+		{
+			return new SharedRoleItemDto
+			{
+				Name = sharedItem.Name,
+				Description = sharedItem.Description,
+				SharedItemId = sharedItem.Id,
+				IsTaken = isTaken,
+				RoleId = roleId,
+				RoleItemId = roleItemId
+			};
+		}
 	}
 }

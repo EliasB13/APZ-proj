@@ -35,7 +35,7 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 				if (role == null)
 					return new GenericServiceResponse<EmployeesRole>($"Role with id: {roleId} wasn't found");
 
-				var employee = await employeesRepository.SingleOrDefaultWithIncludeAsync(e => e.Id == employeeId, e => e.EmployeesRole);
+				var employee = await employeesRepository.SingleOrDefaultAsync(e => e.Id == employeeId, e => e.EmployeesRole);
 				if (employee == null)
 					return new GenericServiceResponse<EmployeesRole>($"Employee with id: {employeeId} wasn't found");
 

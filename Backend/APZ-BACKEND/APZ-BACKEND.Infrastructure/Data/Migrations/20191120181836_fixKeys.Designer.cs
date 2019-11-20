@@ -4,14 +4,16 @@ using APZ_BACKEND.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace APZ_BACKEND.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20191120181836_fixKeys")]
+    partial class fixKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,10 +97,10 @@ namespace APZ_BACKEND.Infrastructure.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("EmployeesRoleId")
+                    b.Property<int?>("EmployeesRoleId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SharedItemId")
+                    b.Property<int?>("SharedItemId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -274,15 +276,11 @@ namespace APZ_BACKEND.Infrastructure.Data.Migrations
                 {
                     b.HasOne("APZ_BACKEND.Core.Entities.EmployeesRole", "EmployeesRole")
                         .WithMany()
-                        .HasForeignKey("EmployeesRoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EmployeesRoleId");
 
                     b.HasOne("APZ_BACKEND.Core.Entities.SharedItem", "SharedItem")
                         .WithMany("EmployeeRoleItems")
-                        .HasForeignKey("SharedItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SharedItemId");
                 });
 
             modelBuilder.Entity("APZ_BACKEND.Core.Entities.EmployeesRole", b =>

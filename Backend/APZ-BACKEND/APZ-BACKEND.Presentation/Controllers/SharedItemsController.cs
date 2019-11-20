@@ -12,11 +12,11 @@ namespace APZ_BACKEND.Presentation.Controllers
 	[Authorize]
 	[ApiController]
 	[Route("api/[controller]")]
-	public class ItemsController : Controller
+	public class SharedItemsController : Controller
 	{
 		private readonly ISharedItemsService itemsService;
 
-		public ItemsController(ISharedItemsService itemsService)
+		public SharedItemsController(ISharedItemsService itemsService)
 		{
 			this.itemsService = itemsService;
 		}
@@ -27,6 +27,15 @@ namespace APZ_BACKEND.Presentation.Controllers
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var items = await itemsService.GetBusinessItems(contextUserId);
+			return Ok(items);
+		}
+
+		[HttpGet("employees-role-items/{roleId}")]
+		public async Task<IActionResult> GetEmployeesRoleItems(int roleId)
+		{
+			var contextUserId = int.Parse(HttpContext.User.Identity.Name);
+
+			var items = await itemsService.GetEmployeesRoleItems(roleId, contextUserId);
 			return Ok(items);
 		}
 
@@ -54,6 +63,32 @@ namespace APZ_BACKEND.Presentation.Controllers
 			return Ok();
 		}
 
+		[HttpPost("take-item")]
+		public async Task<IActionResult> TakeItem(int itemId)
+		{
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+			return Ok();
+		}
+
+		[HttpPost("return-item")]
+		public async Task<IActionResult> ReturnItem(int itemId)
+		{
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+			return Ok();
+		}
+
+		[HttpPost("add-item-to-employees-role")]
+		public async Task<IActionResult> AddItemToRole(AddEmployeeRoleItemRequest dto)
+		{
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+
+			var result = await itemsService.AddItemToEmployeesRole(contextUserId, dto.SharedItemId, dto.RoleId);
+			if (!result.Success)
+				return BadRequest(new { message = result.ErrorMessage });
+
+			return Ok();
+		}
+
 		[HttpPut("{id}")]
 		public async Task<IActionResult> UpdateItem(UpdateSharedItemRequest updateSharedItemRequest, int id)
 		{
@@ -72,6 +107,18 @@ namespace APZ_BACKEND.Presentation.Controllers
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await itemsService.Delete(itemId, contextUserId);
+			if (!result.Success)
+				return BadRequest(new { message = result.ErrorMessage });
+
+			return Ok();
+		}
+
+		[HttpDelete("item-in-role/{roleItemId}")]
+		public async Task<IActionResult> RemoveItemFromRole(int roleItemId)
+		{
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+
+			var result = await itemsService.RemoveItemFromEmployeesRole(roleItemId, contextUserId);
 			if (!result.Success)
 				return BadRequest(new { message = result.ErrorMessage });
 
