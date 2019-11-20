@@ -14,9 +14,9 @@ namespace APZ_BACKEND.Presentation.Controllers
 	[Route("api/[controller]")]
 	public class ItemsController : Controller
 	{
-		private readonly IItemsService itemsService;
+		private readonly ISharedItemsService itemsService;
 
-		public ItemsController(IItemsService itemsService)
+		public ItemsController(ISharedItemsService itemsService)
 		{
 			this.itemsService = itemsService;
 		}
@@ -31,11 +31,11 @@ namespace APZ_BACKEND.Presentation.Controllers
 		}
 
 		[HttpGet("{id}")]
-		public async Task<IActionResult> GetItem(int itemId)
+		public async Task<IActionResult> GetItem(int id)
 		{
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
-			var result = await itemsService.GetItem(contextUserId, itemId);
+			var result = await itemsService.GetItem(contextUserId, id);
 			if (!result.Success)
 				return BadRequest(new { message = result.ErrorMessage });
 
@@ -55,12 +55,11 @@ namespace APZ_BACKEND.Presentation.Controllers
 		}
 
 		[HttpPut("{id}")]
-		public async Task<IActionResult> EditItem(UpdateSharedItemRequest updateSharedItemRequest)
+		public async Task<IActionResult> UpdateItem(UpdateSharedItemRequest updateSharedItemRequest, int id)
 		{
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
-			// TODO: check whether owner editing item
 
-			var result = await itemsService.Update(updateSharedItemRequest);
+			var result = await itemsService.Update(updateSharedItemRequest, id, contextUserId);
 			if (!result.Success)
 				return BadRequest(new { message = result.ErrorMessage });
 
@@ -70,7 +69,9 @@ namespace APZ_BACKEND.Presentation.Controllers
 		[HttpDelete("{itemId}")]
 		public async Task<IActionResult> DeleteItem(int itemId)
 		{
-			var result = await itemsService.Delete(itemId);
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+
+			var result = await itemsService.Delete(itemId, contextUserId);
 			if (!result.Success)
 				return BadRequest(new { message = result.ErrorMessage });
 

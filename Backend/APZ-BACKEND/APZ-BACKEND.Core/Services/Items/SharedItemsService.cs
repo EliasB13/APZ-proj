@@ -11,14 +11,14 @@ using APZ_BACKEND.Core.Services.Communication;
 
 namespace APZ_BACKEND.Core.Services.Items
 {
-	public class ItemsService : IItemsService
+	public class SharedItemsService : ISharedItemsService
 	{
 		private readonly IAsyncRepository<SharedItem> sharedItemsRepository;
 		private readonly IAsyncRepository<BusinessUser> businessUsersRepository;
 		private readonly IAsyncRepository<ItemTaking> itemTakingsRepository;
 		private readonly IAsyncRepository<ItemTakingLine> itemTakingLinesRepository;
 
-		public ItemsService(IAsyncRepository<SharedItem> sharedItemsRepository,
+		public SharedItemsService(IAsyncRepository<SharedItem> sharedItemsRepository,
 			IAsyncRepository<BusinessUser> businessUsersRepository,
 			IAsyncRepository<ItemTaking> itemTakingsRepository,
 			IAsyncRepository<ItemTakingLine> itemTakingLinesRepository)
@@ -37,7 +37,7 @@ namespace APZ_BACKEND.Core.Services.Items
 				if (businessUser == null)
 					return new GenericServiceResponse<SharedItem>($"Business user with id: {businessUserId} wasn't found");
 
-				var item = addItemDto.ToSharedItem();
+				var item = addItemDto.ToSharedItem(businessUser);
 
 				await sharedItemsRepository.AddAsync(item);
 				return new GenericServiceResponse<SharedItem>(item);
@@ -48,13 +48,16 @@ namespace APZ_BACKEND.Core.Services.Items
 			}
 		}
 
-		public async Task<GenericServiceResponse<SharedItem>> Delete(int itemId)
+		public async Task<GenericServiceResponse<SharedItem>> Delete(int itemId, int businessUserId)
 		{
 			try
 			{
-				var item = await sharedItemsRepository.GetByIdAsync(itemId);
+				var item = await sharedItemsRepository.SingleOrDefaultWithIncludeAsync(si => si.Id == itemId, si => si.BusinessUser);
 				if (item == null)
 					return new GenericServiceResponse<SharedItem>($"Shared item with id: {itemId} wasn't found");
+
+				if (item.BusinessUser.Id != businessUserId)
+					return new GenericServiceResponse<SharedItem>("You don't have permissions");
 
 				await sharedItemsRepository.DeleteAsync(item);
 				return new GenericServiceResponse<SharedItem>(item);
@@ -100,13 +103,16 @@ namespace APZ_BACKEND.Core.Services.Items
 
 		}
 
-		public async Task<GenericServiceResponse<SharedItem>> Update(UpdateSharedItemRequest dto)
+		public async Task<GenericServiceResponse<SharedItem>> Update(UpdateSharedItemRequest dto, int id, int businessUserId)
 		{
 			try
 			{
-				var item = await sharedItemsRepository.GetByIdAsync(dto.Id);
+				var item = await sharedItemsRepository.SingleOrDefaultWithIncludeAsync(si => si.Id == id, si => si.BusinessUser);
 				if (item == null)
-					return new GenericServiceResponse<SharedItem>($"Shared item with id: {dto.Id} wasn't found");
+					return new GenericServiceResponse<SharedItem>($"Shared item with id: {id} wasn't found");
+				
+				if (item.BusinessUser.Id != businessUserId)
+					return new GenericServiceResponse<SharedItem>("You don't have permissions");
 
 				item.UpdateSharedItemFromDto(dto);
 				await sharedItemsRepository.UpdateAsync(item);

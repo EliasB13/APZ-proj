@@ -8,12 +8,13 @@ namespace APZ_BACKEND.Core.Mappers
 {
 	public static class SharedItemsMapper
 	{
-		public static SharedItem ToSharedItem(this AddSharedItemRequest sharedItemDto)
+		public static SharedItem ToSharedItem(this AddSharedItemRequest sharedItemDto, BusinessUser businessUser)
 		{
 			return new SharedItem
 			{
 				Name = sharedItemDto.Name,
-				Description = sharedItemDto.Description
+				Description = sharedItemDto.Description,
+				BusinessUser = businessUser
 			};
 		}
 

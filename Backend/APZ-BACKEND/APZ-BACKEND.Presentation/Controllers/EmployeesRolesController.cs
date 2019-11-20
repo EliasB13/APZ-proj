@@ -30,6 +30,12 @@ namespace APZ_BACKEND.Presentation.Controllers
 			return Ok(employeesRoles);
 		}
 
+		[HttpGet("employees-role-items")]
+		public async Task<IActionResult> GetEmployeesRoleItems()
+		{
+			return BadRequest("Not implemented");
+		}
+
 		[HttpPost("create-employees-role")]
 		public async Task<IActionResult> CreateEmployeesRole(CreateEmployeesRoleDto createDto)
 		{
@@ -50,6 +56,12 @@ namespace APZ_BACKEND.Presentation.Controllers
 				return BadRequest(new { message = result.ErrorMessage });
 
 			return Ok();
+		}
+
+		[HttpPost("add-item-to-role")]
+		public async Task<IActionResult> AddItemToRole(object dto)
+		{
+			return BadRequest("Not implemented");
 		}
 
 		[HttpPut("employees-role")]
@@ -73,13 +85,19 @@ namespace APZ_BACKEND.Presentation.Controllers
 		}
 
 		[HttpDelete("employee-in-role/{roleId}/{employeeId}")]
-		public async Task<IActionResult> DeleteEmployeeFromRole(int roleId, int employeeId)
+		public async Task<IActionResult> RemoveEmployeeFromRole(int roleId, int employeeId)
 		{
 			var result = await employeesRolesService.RemoveEmployeeFromRole(roleId, employeeId);
 			if (!result.Success)
 				return BadRequest(new { message = result.ErrorMessage });
 
 			return Ok();
+		}
+
+		[HttpDelete("item-in-role/{roleId}/{itemId}")]
+		public async Task<IActionResult> RemoveItemFromRole(int roleId, int itemId)
+		{
+			return BadRequest("Not implemented");
 		}
 	}
 }

@@ -8,8 +8,6 @@ namespace APZ_BACKEND.Core.Dtos.SharedItems
 	public class UpdateSharedItemRequest
 	{
 		[Required]
-		public int Id { get; set; }
-		[Required]
 		public string Name { get; set; }
 		[Required]
 		public string Description { get; set; }
