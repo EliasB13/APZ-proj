@@ -4,14 +4,16 @@ using APZ_BACKEND.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace APZ_BACKEND.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20191120212403_addEmployeeForeignKeys")]
+    partial class addEmployeeForeignKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,22 +70,22 @@ namespace APZ_BACKEND.Infrastructure.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("BusinessUserId")
+                    b.Property<int?>("BusinessUserId1")
                         .HasColumnType("int");
 
                     b.Property<int?>("EmployeesRoleId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PrivateUserId")
+                    b.Property<int?>("PrivateUserId1")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BusinessUserId");
+                    b.HasIndex("BusinessUserId1");
 
                     b.HasIndex("EmployeesRoleId");
 
-                    b.HasIndex("PrivateUserId");
+                    b.HasIndex("PrivateUserId1");
 
                     b.ToTable("Employees");
                 });
@@ -259,9 +261,7 @@ namespace APZ_BACKEND.Infrastructure.Data.Migrations
                 {
                     b.HasOne("APZ_BACKEND.Core.Entities.BusinessUser", "BusinessUser")
                         .WithMany("Employees")
-                        .HasForeignKey("BusinessUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BusinessUserId1");
 
                     b.HasOne("APZ_BACKEND.Core.Entities.EmployeesRole", "EmployeesRole")
                         .WithMany("Employees")
@@ -269,9 +269,7 @@ namespace APZ_BACKEND.Infrastructure.Data.Migrations
 
                     b.HasOne("APZ_BACKEND.Core.Entities.PrivateUser", "PrivateUser")
                         .WithMany("Employees")
-                        .HasForeignKey("PrivateUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PrivateUserId1");
                 });
 
             modelBuilder.Entity("APZ_BACKEND.Core.Entities.EmployeeRoleItem", b =>

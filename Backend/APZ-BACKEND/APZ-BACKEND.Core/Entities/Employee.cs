@@ -8,6 +8,8 @@ namespace APZ_BACKEND.Core.Entities
 	public class Employee
 	{
 		public int Id { get; set; }
+		public int PrivateUserId { get; set; }
+		public int BusinessUserId { get; set; }
 
 		public PrivateUser PrivateUser { get; set; }
 		public BusinessUser BusinessUser { get; set; }

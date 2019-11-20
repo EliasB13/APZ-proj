@@ -89,7 +89,7 @@ namespace APZ_BACKEND.Presentation.Controllers
 
 		[AllowAnonymous]
 		[HttpPost("register-business")]
-		public async Task<IActionResult> RegisterPrivate([FromBody]RegisterBusinessRequest dto)
+		public async Task<IActionResult> RegisterBusiness([FromBody]RegisterBusinessRequest dto)
 		{
 			try
 			{

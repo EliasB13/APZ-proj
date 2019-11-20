@@ -22,6 +22,20 @@ namespace APZ_BACKEND.Core.Mappers
 			};
 		}
 
+		public static PrivateUserProfile ToUserProfile(this PrivateUser user)
+		{
+			return new PrivateUserProfile
+			{
+				Email = user.Email,
+				FirstName = user.FirstName,
+				Id = user.Id,
+				LastName = user.LastName,
+				Login = user.Login,
+				Phone = user.Phone,
+				Photo = user.Photo
+			};
+		}
+
 		public static BusinessUserAccountData ToAccountData(this BusinessUser user)
 		{
 			return new BusinessUserAccountData
@@ -36,6 +50,20 @@ namespace APZ_BACKEND.Core.Mappers
 			};
 		}
 
+		public static PrivateUserAccountData ToAccountData(this PrivateUser user)
+		{
+			return new PrivateUserAccountData
+			{
+				Email = user.Email,
+				FirstName = user.FirstName,
+				Id = user.Id,
+				LastName = user.LastName,
+				Login = user.Login,
+				Phone = user.Phone,
+				Photo = user.Photo
+			};
+		}
+
 		public static void UpdateUserFromDto(this BusinessUser user, UpdateBusinessUserRequest userData)
 		{
 			user.Address = userData.Address;
@@ -45,6 +73,16 @@ namespace APZ_BACKEND.Core.Mappers
 			user.Login = userData.Login;
 			user.Phone = userData.Phone;
 			user.Photo = userData.Photo;
+		}
+
+		public static void UpdateUserFromDto(this PrivateUser user, UpdatePrivateUserRequest userData)
+		{
+			user.Photo = userData.Photo;
+			user.Email = userData.Email;
+			user.FirstName = userData.FirstName;
+			user.LastName = userData.LastName;
+			user.Login = userData.Login;
+			user.Phone = userData.Phone;
 		}
 	}
 }

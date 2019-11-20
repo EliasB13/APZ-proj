@@ -1,4 +1,5 @@
 ﻿using APZ_BACKEND.Core.Dtos.Auth;
+using APZ_BACKEND.Core.Dtos.Users;
 using APZ_BACKEND.Core.Exceptions;
 using APZ_BACKEND.Core.Helpers;
 using APZ_BACKEND.Core.Services.Users.PrivateUsers;
@@ -32,27 +33,47 @@ namespace APZ_BACKEND.Presentation.Controllers
 
 		[AllowAnonymous]
 		[HttpGet("public-profile")]
-		public async Task<IActionResult> GetPublicProfile(int? id, string? login)
+		public async Task<IActionResult> GetPublicProfile(int? id, string login)
 		{
-			return BadRequest("Not implemented");
+			if (id.HasValue && !string.IsNullOrEmpty(login))
+				return BadRequest(new { message = "Provide only 1 parameter" });
+			if (id.HasValue)
+			{
+				var result = await userService.GetPublicProfile(id.Value);
+				if (!result.Success)
+					return BadRequest(new { message = result.ErrorMessage });
+				return Ok(result.Item);
+			}
+			if (!string.IsNullOrEmpty(login))
+			{
+				var result = await userService.GetPublicProfile(login);
+				if (!result.Success)
+					return BadRequest(new { message = result.ErrorMessage });
+				return Ok(result.Item);
+			}
+			return BadRequest(new { message = "You should provide at least 1 parameter" });
 		}
 
 		[HttpGet("account-data")]
 		public async Task<IActionResult> GetAccountData()
 		{
-			return BadRequest("Not implemented");
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+
+			var result = await userService.GetAccountData(contextUserId);
+			if (!result.Success)
+				return BadRequest(new { message = result.ErrorMessage });
+
+			return Ok(result.Item);
 		}
 
 		[HttpGet("availiable-services")]
 		public async Task<IActionResult> GetAvailiableServices()
 		{
-			return BadRequest("Not implemented");
-		}
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
-		[HttpGet("availiable-services/{serviceId}")]
-		public async Task<IActionResult> GetAvailiableService(int serviceId)
-		{
-			return BadRequest("Not implemented");
+			var services = await userService.GetAvailableServices(contextUserId);
+
+			return Ok(services);
 		}
 
 		[AllowAnonymous]
@@ -89,16 +110,28 @@ namespace APZ_BACKEND.Presentation.Controllers
 			}
 		}
 
-		[HttpPut("{id}")]
-		public async Task<IActionResult> Update(int id, [FromBody]string businessUser)
+		[HttpPut]
+		public async Task<IActionResult> Update(UpdatePrivateUserRequest privateUser)
 		{
-			return BadRequest("Not implemented");
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+
+			var result = await userService.UpdatePrivateUser(privateUser, contextUserId);
+			if (!result.Success)
+				return BadRequest(new { message = result.ErrorMessage });
+
+			return Ok();
 		}
 
-		[HttpDelete("{id}")]
-		public async Task<IActionResult> Delete(int id)
+		[HttpDelete]
+		public async Task<IActionResult> Delete()
 		{
-			return BadRequest("Not implemented");
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+
+			var result = await userService.DeletePrivateUser(contextUserId);
+			if (!result.Success)
+				return BadRequest(new { message = result.ErrorMessage });
+
+			return Ok();
 		}
 
 		private string GetTokenString(int userId)
