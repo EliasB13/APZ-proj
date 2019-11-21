@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using APZ_BACKEND.Core.Dtos.SharedItems;
 using APZ_BACKEND.Core.Services.Items;
+using APZ_BACKEND.Core.Services.Users.BusinessUsers;
+using APZ_BACKEND.Core.Services.Users.PrivateUsers;
+using APZ_BACKEND.Presentation.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,24 +18,44 @@ namespace APZ_BACKEND.Presentation.Controllers
 	public class SharedItemsController : Controller
 	{
 		private readonly ISharedItemsService itemsService;
+		private readonly IBusinessUsersService businessUsersService;
+		private readonly IPrivateUsersService privateUsersService;
 
-		public SharedItemsController(ISharedItemsService itemsService)
+		public SharedItemsController(ISharedItemsService itemsService,
+			IBusinessUsersService businessUsersService,
+			IPrivateUsersService privateUsersService)
 		{
 			this.itemsService = itemsService;
+			this.businessUsersService = businessUsersService;
+			this.privateUsersService = privateUsersService;
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> GetBusinessItems()
+		public async Task<IActionResult> GetBusinessItems(int? businessUserId)
 		{
+			bool isBusinessUser = ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims);
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
-			var items = await itemsService.GetBusinessItems(contextUserId);
-			return Ok(items);
+			if (!isBusinessUser && !businessUserId.HasValue)
+				return BadRequest("You should provide businessUserId");
+			else if (!isBusinessUser && businessUserId.HasValue)
+			{
+				var items = await itemsService.GetBusinessItems(businessUserId.Value, contextUserId);
+				return Ok(items);
+			}
+			else
+			{
+				var items = await itemsService.GetBusinessItems(contextUserId);
+				return Ok(items);
+			}
 		}
 
 		[HttpGet("employees-role-items/{roleId}")]
 		public async Task<IActionResult> GetEmployeesRoleItems(int roleId)
 		{
+			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+				return BadRequest(new { message = "Current user is not a businessUser" });
+
 			var contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var items = await itemsService.GetEmployeesRoleItems(roleId, contextUserId);
@@ -43,17 +66,32 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> GetItem(int id)
 		{
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+			bool isBusinessUser = ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims);
 
-			var result = await itemsService.GetItem(contextUserId, id);
-			if (!result.Success)
-				return BadRequest(new { message = result.ErrorMessage });
+			if (isBusinessUser)
+			{
+				var result = await itemsService.GetItem(contextUserId, id);
+				if (!result.Success)
+					return BadRequest(new { message = result.ErrorMessage });
 
-			return Ok(result.Item);
+				return Ok(result.Item);
+			}
+			else
+			{
+				var result = await itemsService.GetItemPrivateUser(contextUserId, id);
+				if (!result.Success)
+					return BadRequest(new { message = result.ErrorMessage });
+
+				return Ok(result.Item);
+			}
 		}
 
 		[HttpPost]
 		public async Task<IActionResult> AddItemToBusiness(AddSharedItemRequest addSharedItemRequest)
 		{
+			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+				return BadRequest(new { message = "Current user is not a businessUser" });
+
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await itemsService.AddItemToBusiness(contextUserId, addSharedItemRequest);
@@ -80,6 +118,9 @@ namespace APZ_BACKEND.Presentation.Controllers
 		[HttpPost("add-item-to-employees-role")]
 		public async Task<IActionResult> AddItemToRole(AddEmployeeRoleItemRequest dto)
 		{
+			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+				return BadRequest(new { message = "Current user is not a businessUser" });
+
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await itemsService.AddItemToEmployeesRole(contextUserId, dto.SharedItemId, dto.RoleId);
@@ -92,6 +133,9 @@ namespace APZ_BACKEND.Presentation.Controllers
 		[HttpPut("{id}")]
 		public async Task<IActionResult> UpdateItem(UpdateSharedItemRequest updateSharedItemRequest, int id)
 		{
+			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+				return BadRequest(new { message = "Current user is not a businessUser" });
+
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await itemsService.Update(updateSharedItemRequest, id, contextUserId);
@@ -104,6 +148,9 @@ namespace APZ_BACKEND.Presentation.Controllers
 		[HttpDelete("{itemId}")]
 		public async Task<IActionResult> DeleteItem(int itemId)
 		{
+			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+				return BadRequest(new { message = "Current user is not a businessUser" });
+
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await itemsService.Delete(itemId, contextUserId);
@@ -116,6 +163,9 @@ namespace APZ_BACKEND.Presentation.Controllers
 		[HttpDelete("item-in-role/{roleItemId}")]
 		public async Task<IActionResult> RemoveItemFromRole(int roleItemId)
 		{
+			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+				return BadRequest(new { message = "Current user is not a businessUser" });
+
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await itemsService.RemoveItemFromEmployeesRole(roleItemId, contextUserId);

@@ -11,8 +11,10 @@ namespace APZ_BACKEND.Core.Services.Items
 	public interface ISharedItemsService
 	{
 		Task<IEnumerable<SharedItemDto>> GetBusinessItems(int businessUserId);
+		Task<IEnumerable<SharedItemDto>> GetBusinessItems(int businessUserId, int privateUserId);
 		Task<IEnumerable<SharedRoleItemDto>> GetEmployeesRoleItems(int roleId, int businessUserId);
 		Task<GenericServiceResponse<SharedItemDto>> GetItem(int businessUserId, int itemId);
+		Task<GenericServiceResponse<SharedItemDto>> GetItemPrivateUser(int privatUserId, int itemId);
 		Task<GenericServiceResponse<SharedItem>> AddItemToBusiness(int businessUserId, AddSharedItemRequest addItemDto);
 		Task<GenericServiceResponse<SharedItem>> AddItemToEmployeesRole(int businessUserId, int itemId, int roleId);
 		Task<GenericServiceResponse<SharedItem>> Update(UpdateSharedItemRequest sharedItemDto, int id, int businessUserId);

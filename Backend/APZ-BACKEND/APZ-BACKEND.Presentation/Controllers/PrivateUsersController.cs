@@ -3,6 +3,7 @@ using APZ_BACKEND.Core.Dtos.Users;
 using APZ_BACKEND.Core.Exceptions;
 using APZ_BACKEND.Core.Helpers;
 using APZ_BACKEND.Core.Services.Users.PrivateUsers;
+using APZ_BACKEND.Presentation.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -57,6 +58,9 @@ namespace APZ_BACKEND.Presentation.Controllers
 		[HttpGet("account-data")]
 		public async Task<IActionResult> GetAccountData()
 		{
+			if (ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+				return BadRequest(new { message = "Current user is not a privateUser" });
+
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await userService.GetAccountData(contextUserId);
@@ -69,6 +73,9 @@ namespace APZ_BACKEND.Presentation.Controllers
 		[HttpGet("availiable-services")]
 		public async Task<IActionResult> GetAvailiableServices()
 		{
+			if (ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+				return BadRequest(new { message = "Current user is not a privateUser" });
+
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var services = await userService.GetAvailableServices(contextUserId);
@@ -113,6 +120,9 @@ namespace APZ_BACKEND.Presentation.Controllers
 		[HttpPut]
 		public async Task<IActionResult> Update(UpdatePrivateUserRequest privateUser)
 		{
+			if (ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+				return BadRequest(new { message = "Current user is not a privateUser" });
+
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await userService.UpdatePrivateUser(privateUser, contextUserId);
@@ -125,6 +135,9 @@ namespace APZ_BACKEND.Presentation.Controllers
 		[HttpDelete]
 		public async Task<IActionResult> Delete()
 		{
+			if (ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+				return BadRequest(new { message = "Current user is not a privateUser" });
+
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await userService.DeletePrivateUser(contextUserId);
@@ -142,7 +155,8 @@ namespace APZ_BACKEND.Presentation.Controllers
 			{
 				Subject = new ClaimsIdentity(new Claim[]
 				{
-					new Claim(ClaimTypes.Name, userId.ToString())
+					new Claim(ClaimTypes.Name, userId.ToString()),
+					new Claim(ClaimTypes.Role, Constants.Users.PrivateUserFlag.ToString())
 				}),
 				Expires = DateTime.UtcNow.AddDays(7),
 				SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using APZ_BACKEND.Core.Dtos.Employee;
 using APZ_BACKEND.Core.Services.Employees;
+using APZ_BACKEND.Presentation.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,9 @@ namespace APZ_BACKEND.Presentation.Controllers
 		[HttpGet("businessEmployees")]
 		public async Task<IActionResult> GetAllBusinessEmployees()
 		{
+			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+				return BadRequest(new { message = "Current user is not a businessUser" });
+
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var employees = await employeesService.GetBusinessEmployees(contextUserId);
@@ -32,6 +36,9 @@ namespace APZ_BACKEND.Presentation.Controllers
 		[HttpPost("add-employee")]
 		public async Task<IActionResult> AddEmployee([FromBody]AddEmployeeDto addEmployeeDto)
 		{
+			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+				return BadRequest(new { message = "Current user is not a businessUser" });
+
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await employeesService.AddEmployee(contextUserId, addEmployeeDto.Login);
@@ -44,6 +51,9 @@ namespace APZ_BACKEND.Presentation.Controllers
 		[HttpDelete("employee")]
 		public async Task<IActionResult> DeleteEmployeeFromBusiness(int employeeId)
 		{
+			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+				return BadRequest(new { message = "Current user is not a businessUser" });
+
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await employeesService.DeleteEmployee(employeeId);

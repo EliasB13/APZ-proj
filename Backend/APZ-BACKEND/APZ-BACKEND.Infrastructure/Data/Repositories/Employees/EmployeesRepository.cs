@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace APZ_BACKEND.Infrastructure.Data.Repositories.Employees
 {
-	public class EmployeesRepository : EfRepository<Employee>, IEmployeesRepository
+	public class EmployeesRepository : GenericEfRepository<Employee>, IEmployeesRepository
 	{
 		public EmployeesRepository(ApplicationContext dbContext) : base(dbContext)
 		{
@@ -18,7 +18,6 @@ namespace APZ_BACKEND.Infrastructure.Data.Repositories.Employees
 		public async Task<IEnumerable<Employee>> GetEmployeesWithUsersAndRoles(int businessUserId)
 		{
 			return await dbSet
-				//.Include(e => e.BusinessUser)
 				.AsNoTracking()
 				.Include(e => e.EmployeesRole)
 				.Include(e => e.PrivateUser)

@@ -277,7 +277,7 @@ namespace APZ_BACKEND.Infrastructure.Data.Migrations
             modelBuilder.Entity("APZ_BACKEND.Core.Entities.EmployeeRoleItem", b =>
                 {
                     b.HasOne("APZ_BACKEND.Core.Entities.EmployeesRole", "EmployeesRole")
-                        .WithMany()
+                        .WithMany("EmployeeRoleItems")
                         .HasForeignKey("EmployeesRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

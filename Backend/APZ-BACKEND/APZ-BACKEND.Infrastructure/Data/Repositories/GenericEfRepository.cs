@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace APZ_BACKEND.Infrastructure.Data.Repositories
 {
-	public class EfRepository<T> : IAsyncRepository<T> where T : class
+	public class GenericEfRepository<T> : IAsyncRepository<T> where T : class
 	{
 		protected readonly ApplicationContext dbContext;
 		protected DbSet<T> dbSet;
 
-		public EfRepository(ApplicationContext dbContext)
+		public GenericEfRepository(ApplicationContext dbContext)
 		{
 			this.dbContext = dbContext;
 			dbSet = dbContext.Set<T>();

@@ -98,7 +98,7 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 
 		public async Task<IEnumerable<EmployeesRoleDto>> GetBusinessEmployeesRoles(int businessUserId)
 		{
-			var roles = await employeesRoleRepository.ListAllAsync();
+			var roles = await employeesRoleRepository.ListAllAsync(er => er.BusinessUser.Id == businessUserId, er => er.BusinessUser);
 			if (roles.Count() <= 0)
 				return new List<EmployeesRoleDto>();
 

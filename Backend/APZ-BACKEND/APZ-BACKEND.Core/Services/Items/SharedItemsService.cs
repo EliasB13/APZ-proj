@@ -13,26 +13,29 @@ namespace APZ_BACKEND.Core.Services.Items
 {
 	public class SharedItemsService : ISharedItemsService
 	{
-		private readonly IAsyncRepository<SharedItem> sharedItemsRepository;
+		private readonly ISharedItemsRepository sharedItemsRepository;
 		private readonly IAsyncRepository<BusinessUser> businessUsersRepository;
-		private readonly IAsyncRepository<ItemTaking> itemTakingsRepository;
 		private readonly IAsyncRepository<ItemTakingLine> itemTakingLinesRepository;
 		private readonly IAsyncRepository<EmployeeRoleItem> employeesRoleItemsRepository;
 		private readonly IAsyncRepository<EmployeesRole> employeesRolesRepository;
+		private readonly IAsyncRepository<Employee> employeesRepository;
+		private readonly IAsyncRepository<PrivateUser> privateUsersRepository;
 
-		public SharedItemsService(IAsyncRepository<SharedItem> sharedItemsRepository,
+		public SharedItemsService(ISharedItemsRepository sharedItemsRepository,
 			IAsyncRepository<BusinessUser> businessUsersRepository,
-			IAsyncRepository<ItemTaking> itemTakingsRepository,
 			IAsyncRepository<ItemTakingLine> itemTakingLinesRepository,
 			IAsyncRepository<EmployeeRoleItem> employeesRoleItemsRepository,
-			IAsyncRepository<EmployeesRole> employeesRolesRepository)
+			IAsyncRepository<EmployeesRole> employeesRolesRepository,
+			IAsyncRepository<Employee> employeesRepository,
+			IAsyncRepository<PrivateUser> privateUsersRepository)
 		{
 			this.sharedItemsRepository = sharedItemsRepository;
 			this.businessUsersRepository = businessUsersRepository;
-			this.itemTakingsRepository = itemTakingsRepository;
 			this.itemTakingLinesRepository = itemTakingLinesRepository;
 			this.employeesRoleItemsRepository = employeesRoleItemsRepository;
 			this.employeesRolesRepository = employeesRolesRepository;
+			this.employeesRepository = employeesRepository;
+			this.privateUsersRepository = privateUsersRepository;
 		}
 
 		public async Task<GenericServiceResponse<SharedItem>> AddItemToBusiness(int businessUserId, AddSharedItemRequest addItemDto)
@@ -111,6 +114,36 @@ namespace APZ_BACKEND.Core.Services.Items
 			return new List<SharedItemDto>();
 		}
 
+		public async Task<IEnumerable<SharedItemDto>> GetBusinessItems(int businessUserId, int privateUserId)
+		{
+			var employee = await employeesRepository
+				.SingleOrDefaultAsync(e => e.BusinessUserId == businessUserId && e.PrivateUserId == privateUserId, e => e.EmployeesRole);
+			if (employee == null)
+				return new List<SharedItemDto>();
+
+			var businessItems = await sharedItemsRepository.ListAllAsync(si => si.BusinessUser.Id == businessUserId);
+			if (businessItems.Count <= 0)
+				return new List<SharedItemDto>();
+
+			var sharedItemsInRole = await employeesRoleItemsRepository.ListAllAsync(eri => eri.EmployeesRoleId == employee.EmployeesRole.Id);
+			var sharedItemsInRoleIds = sharedItemsInRole.Select(eri => eri.SharedItemId);
+
+			var availiableUserItems = businessItems.Where(bi => sharedItemsInRoleIds.Contains(bi.Id));
+			if (availiableUserItems.Count() > 0)
+			{
+				var itemTakingLines = await itemTakingLinesRepository.ListAllAsync();
+				var itemDtos = availiableUserItems.Select(i =>
+				{
+					var isItemTaken = itemTakingLines.Any(itl => itl.SharedItemId == i.Id && itl.IsTaken);
+					return i.ToDto(isItemTaken);
+				}).ToList();
+
+				return itemDtos;
+			}
+
+			return new List<SharedItemDto>();
+		}
+
 		public async Task<IEnumerable<SharedRoleItemDto>> GetEmployeesRoleItems(int roleId, int businessUserId)
 		{
 			var roleItems = await employeesRoleItemsRepository.ListAllAsync(eri => eri.EmployeesRoleId == roleId, eri => eri.SharedItem);
@@ -142,7 +175,26 @@ namespace APZ_BACKEND.Core.Services.Items
 			var itemDto = item.ToDto(isTaken);
 
 			return new GenericServiceResponse<SharedItemDto>(itemDto);
+		}
 
+		public async Task<GenericServiceResponse<SharedItemDto>> GetItemPrivateUser(int privatUserId, int itemId)
+		{
+			var privateUser = await privateUsersRepository.GetByIdAsync(privatUserId);
+			if (privateUser == null)
+				return new GenericServiceResponse<SharedItemDto>($"Private user with id: {privatUserId} wasn't found");
+			
+			var item = await sharedItemsRepository.GetByIdAsync(itemId);
+			if (item == null)
+				return new GenericServiceResponse<SharedItemDto>($"Item with id: {itemId} wasn't found");
+
+			var isItemAvailiableForUser = await sharedItemsRepository.IsItemAvailableForUser(itemId, privatUserId);
+			if (!isItemAvailiableForUser)
+				return new GenericServiceResponse<SharedItemDto>("You don't have permissions");
+
+			var isTaken = await itemTakingLinesRepository.AnyAsync(itl => itl.SharedItemId == item.Id && itl.IsTaken);
+			var itemDto = item.ToDto(isTaken);
+
+			return new GenericServiceResponse<SharedItemDto>(itemDto);
 		}
 
 		public async Task<GenericServiceResponse<SharedItem>> Update(UpdateSharedItemRequest dto, int id, int businessUserId)

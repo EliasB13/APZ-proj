@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using APZ_BACKEND.Core.Helpers;
@@ -14,6 +15,8 @@ using APZ_BACKEND.Core.Services.Users.PrivateUsers;
 using APZ_BACKEND.Infrastructure.Data;
 using APZ_BACKEND.Infrastructure.Data.Repositories;
 using APZ_BACKEND.Infrastructure.Data.Repositories.Employees;
+using APZ_BACKEND.Infrastructure.Data.Repositories.SharedItems;
+using APZ_BACKEND.Presentation.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -104,12 +107,18 @@ namespace APZ_BACKEND.Presentation
 						var privateUsersService = context.HttpContext.RequestServices.GetRequiredService<IPrivateUsersService>();
 						var businessUsersService = context.HttpContext.RequestServices.GetRequiredService<IBusinessUsersService>();
 
-						var userId = int.Parse(context.Principal.Identity.Name);
-						var user = await privateUsersService.GetByIdAsync(userId);
-						if (user == null)
+						var userId = ContextAuthHelper.GetUserIdFromClaim(context.Principal.Identity.Name);
+						var isBusinessUser = ContextAuthHelper.IsBusinessUser(context.Principal.Claims);
+
+						if (isBusinessUser)
 						{
-							var bUser = await businessUsersService.GetByIdAsync(userId);
-							if (bUser == null)
+							var user = await businessUsersService.GetByIdAsync(userId);
+							if (user == null)
+								context.Fail("Unauthorized");
+						} else
+						{
+							var user = await privateUsersService.GetByIdAsync(userId);
+							if (user == null)
 								context.Fail("Unauthorized");
 						}
 						await Task.CompletedTask;
@@ -161,8 +170,9 @@ namespace APZ_BACKEND.Presentation
 
 		private void ConfigureInjection(IServiceCollection services)
 		{
-			services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
+			services.AddScoped(typeof(IAsyncRepository<>), typeof(GenericEfRepository<>));
 			services.AddScoped<IEmployeesRepository, EmployeesRepository>();
+			services.AddScoped<ISharedItemsRepository, SharedItemsRepository>();
 
 			services.AddScoped<IPrivateUsersService, PrivateUsersService>();
 			services.AddScoped<IBusinessUsersService, BusinessUsersService>();

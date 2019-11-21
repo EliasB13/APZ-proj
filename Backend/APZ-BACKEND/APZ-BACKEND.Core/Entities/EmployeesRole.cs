@@ -13,5 +13,6 @@ namespace APZ_BACKEND.Core.Entities
 
 		public IEnumerable<Employee> Employees { get; set; }
 		public BusinessUser BusinessUser { get; set; }
+		public IEnumerable<EmployeeRoleItem> EmployeeRoleItems { get; set; }
 	}
 }
