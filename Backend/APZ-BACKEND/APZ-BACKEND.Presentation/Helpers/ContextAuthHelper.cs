@@ -19,7 +19,7 @@ namespace APZ_BACKEND.Presentation.Helpers
 		{
 			return int.Parse(claims
 				.Where(c => c.Type == ClaimTypes.Role)
-				.FirstOrDefault().Value) == Constants.Users.BusinessUserFlag ? true : false;
+				.FirstOrDefault().Value) == (int)UserType.BusinessUser ? true : false;
 		}
 	}
 }

@@ -20,5 +20,6 @@ namespace APZ_BACKEND.Core.Services.Users.BusinessUsers
 		Task<GenericServiceResponse<BusinessUserAccountData>> GetAccountData(int id);
 		Task<GenericServiceResponse<BusinessUser>> UpdateBusinessUser(UpdateBusinessUserRequest editBusinessUserDto, int businessUserId);
 		Task<GenericServiceResponse<BusinessUser>> DeleteBusinessUser(int businessUserId);
+		Task<GenericServiceResponse<BusinessUser>> UpdatePhotoPath(string path, int userId);
 	}
 }

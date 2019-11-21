@@ -14,6 +14,7 @@ namespace APZ_BACKEND.Core.Services.Items
 	public class SharedItemsService : ISharedItemsService
 	{
 		private readonly ISharedItemsRepository sharedItemsRepository;
+		private readonly IItemsTakingsRepository itemTakingsRepository;
 		private readonly IAsyncRepository<BusinessUser> businessUsersRepository;
 		private readonly IAsyncRepository<ItemTakingLine> itemTakingLinesRepository;
 		private readonly IAsyncRepository<EmployeeRoleItem> employeesRoleItemsRepository;
@@ -27,7 +28,8 @@ namespace APZ_BACKEND.Core.Services.Items
 			IAsyncRepository<EmployeeRoleItem> employeesRoleItemsRepository,
 			IAsyncRepository<EmployeesRole> employeesRolesRepository,
 			IAsyncRepository<Employee> employeesRepository,
-			IAsyncRepository<PrivateUser> privateUsersRepository)
+			IAsyncRepository<PrivateUser> privateUsersRepository,
+			IItemsTakingsRepository itemTakingsRepository)
 		{
 			this.sharedItemsRepository = sharedItemsRepository;
 			this.businessUsersRepository = businessUsersRepository;
@@ -36,6 +38,7 @@ namespace APZ_BACKEND.Core.Services.Items
 			this.employeesRolesRepository = employeesRolesRepository;
 			this.employeesRepository = employeesRepository;
 			this.privateUsersRepository = privateUsersRepository;
+			this.itemTakingsRepository = itemTakingsRepository;
 		}
 
 		public async Task<GenericServiceResponse<SharedItem>> AddItemToBusiness(int businessUserId, AddSharedItemRequest addItemDto)
@@ -123,6 +126,9 @@ namespace APZ_BACKEND.Core.Services.Items
 
 			var businessItems = await sharedItemsRepository.ListAllAsync(si => si.BusinessUser.Id == businessUserId);
 			if (businessItems.Count <= 0)
+				return new List<SharedItemDto>();
+
+			if (employee.EmployeesRole == null)
 				return new List<SharedItemDto>();
 
 			var sharedItemsInRole = await employeesRoleItemsRepository.ListAllAsync(eri => eri.EmployeesRoleId == employee.EmployeesRole.Id);
@@ -261,6 +267,85 @@ namespace APZ_BACKEND.Core.Services.Items
 			catch (Exception ex)
 			{
 				return new GenericServiceResponse<EmployeeRoleItem>("Error | Removing item from employees role: " + ex.Message);
+			}
+		}
+
+		public async Task<GenericServiceResponse<SharedItem>> TakeItem(TakeItemRequest takeItemRequest)
+		{
+			try
+			{
+				var user = await privateUsersRepository.SingleOrDefaultAsync(pu => pu.RfidNumber == Encoding.UTF8.GetBytes(takeItemRequest.UserRfid));
+				if (user == null)
+					return new GenericServiceResponse<SharedItem>("User wasn't found");
+
+				var item = await sharedItemsRepository.SingleOrDefaultAsync(si => si.RfidNumber == Encoding.UTF8.GetBytes(takeItemRequest.ItemRfid));
+				if (item == null)
+					return new GenericServiceResponse<SharedItem>("Item wasn't found");
+
+				var isItemTaken = await itemTakingLinesRepository.AnyAsync(itl => itl.SharedItemId == item.Id && itl.IsTaken);
+				if (isItemTaken)
+					return new GenericServiceResponse<SharedItem>("Item already taken");
+
+				var isItemAvailiableForUser = await sharedItemsRepository.IsItemAvailableForUser(item.Id, user.Id);
+				if (!isItemAvailiableForUser)
+					return new GenericServiceResponse<SharedItem>("You don't have permissions");
+
+				var itemTaking = new ItemTaking
+				{
+					TakingTime = DateTime.Now,
+					PrivateUser = user,
+					ItemTakingLines = new List<ItemTakingLine>
+					{
+						new ItemTakingLine()
+						{
+							IsTaken = true,
+							SharedItem = item
+						}
+					}
+				};
+
+				await itemTakingsRepository.AddAsync(itemTaking);
+				return new GenericServiceResponse<SharedItem>(item);
+			}
+			catch (Exception ex)
+			{
+				return new GenericServiceResponse<SharedItem>("Error | Taking item: " + ex.Message);
+			}
+		}
+
+		public async Task<GenericServiceResponse<SharedItem>> ReturnItem(ReturnItemRequest returnItemRequest)
+		{
+			try
+			{
+				var user = await privateUsersRepository
+					.SingleOrDefaultAsync(pu => pu.RfidNumber == Encoding.UTF8.GetBytes(returnItemRequest.UserRfid));
+				if (user == null)
+					return new GenericServiceResponse<SharedItem>("User wasn't found");
+
+				var item = await sharedItemsRepository
+					.SingleOrDefaultAsync(si => si.RfidNumber == Encoding.UTF8.GetBytes(returnItemRequest.ItemRfid));
+				if (user == null)
+					return new GenericServiceResponse<SharedItem>("Item wasn't found");
+
+				var isItemAvailiableForUser = await sharedItemsRepository.IsItemAvailableForUser(item.Id, user.Id);
+				if (!isItemAvailiableForUser)
+					return new GenericServiceResponse<SharedItem>("You don't have permissions");
+
+				var itemTaking = await itemTakingsRepository.GetItemTakingByUserAndItem(user.Id, item.Id);
+				if (itemTaking == null)
+					return new GenericServiceResponse<SharedItem>("This item wasn't taken by this user");
+
+				var itemTakingLine = itemTaking.ItemTakingLines.SingleOrDefault(itl => itl.SharedItemId == item.Id);
+				itemTakingLine.IsReturned = true;
+				itemTakingLine.IsTaken = false;
+				itemTakingLine.ReturningTime = DateTime.Now;
+
+				await itemTakingLinesRepository.UpdateAsync(itemTakingLine);
+				return new GenericServiceResponse<SharedItem>(item);
+			}
+			catch (Exception ex)
+			{
+				return new GenericServiceResponse<SharedItem>("Error | Taking item: " + ex.Message);
 			}
 		}
 	}

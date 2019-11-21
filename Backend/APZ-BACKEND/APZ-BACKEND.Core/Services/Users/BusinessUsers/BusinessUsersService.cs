@@ -119,5 +119,23 @@ namespace APZ_BACKEND.Core.Services.Users.BusinessUsers
 
 			return new GenericServiceResponse<BusinessUser>(dbUser);
 		}
+
+		public async Task<GenericServiceResponse<BusinessUser>> UpdatePhotoPath(string path, int userId)
+		{
+			try
+			{
+				var user = await usersRepository.GetByIdAsync(userId);
+				if (user == null)
+					return new GenericServiceResponse<BusinessUser>($"Business user with id: {userId} wasn't found");
+
+				user.Photo = path;
+				await usersRepository.UpdateAsync(user);
+				return new GenericServiceResponse<BusinessUser>(user);
+			}
+			catch (Exception ex)
+			{
+				return new GenericServiceResponse<BusinessUser>("Error | Updating photo path business user: " + ex.Message);
+			}
+		}
 	}
 }

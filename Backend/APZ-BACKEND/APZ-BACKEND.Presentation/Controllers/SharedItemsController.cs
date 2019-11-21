@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using APZ_BACKEND.Core.Dtos.SharedItems;
+using APZ_BACKEND.Core.Entities;
+using APZ_BACKEND.Core.Interfaces;
 using APZ_BACKEND.Core.Services.Items;
 using APZ_BACKEND.Core.Services.Users.BusinessUsers;
 using APZ_BACKEND.Core.Services.Users.PrivateUsers;
@@ -15,19 +17,16 @@ namespace APZ_BACKEND.Presentation.Controllers
 	[Authorize]
 	[ApiController]
 	[Route("api/[controller]")]
-	public class SharedItemsController : Controller
+	public class SharedItemsController : ControllerBase
 	{
 		private readonly ISharedItemsService itemsService;
-		private readonly IBusinessUsersService businessUsersService;
-		private readonly IPrivateUsersService privateUsersService;
+		private readonly IAsyncRepository<PrivateUser> privateUsersRepository;
 
 		public SharedItemsController(ISharedItemsService itemsService,
-			IBusinessUsersService businessUsersService,
-			IPrivateUsersService privateUsersService)
+			IAsyncRepository<PrivateUser> privateUsersRepository)
 		{
 			this.itemsService = itemsService;
-			this.businessUsersService = businessUsersService;
-			this.privateUsersService = privateUsersService;
+			this.privateUsersRepository = privateUsersRepository;
 		}
 
 		[HttpGet]
@@ -101,17 +100,25 @@ namespace APZ_BACKEND.Presentation.Controllers
 			return Ok();
 		}
 
+		[AllowAnonymous]
 		[HttpPost("take-item")]
-		public async Task<IActionResult> TakeItem(int itemId)
+		public async Task<IActionResult> TakeItem(TakeItemRequest takeItemDto)
 		{
-			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+			var result = await itemsService.TakeItem(takeItemDto);
+			if (!result.Success)
+				return BadRequest(new { message = result.ErrorMessage });
+
 			return Ok();
 		}
 
+		[AllowAnonymous]
 		[HttpPost("return-item")]
-		public async Task<IActionResult> ReturnItem(int itemId)
+		public async Task<IActionResult> ReturnItem(ReturnItemRequest returnItemRequest)
 		{
-			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+			var result = await itemsService.ReturnItem(returnItemRequest);
+			if (!result.Success)
+				return BadRequest(new { message = result.ErrorMessage });
+			
 			return Ok();
 		}
 

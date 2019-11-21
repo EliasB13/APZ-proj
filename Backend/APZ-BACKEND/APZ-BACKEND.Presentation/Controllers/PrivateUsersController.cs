@@ -156,7 +156,7 @@ namespace APZ_BACKEND.Presentation.Controllers
 				Subject = new ClaimsIdentity(new Claim[]
 				{
 					new Claim(ClaimTypes.Name, userId.ToString()),
-					new Claim(ClaimTypes.Role, Constants.Users.PrivateUserFlag.ToString())
+					new Claim(ClaimTypes.Role, ((int)UserType.PrivateUser).ToString())
 				}),
 				Expires = DateTime.UtcNow.AddDays(7),
 				SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

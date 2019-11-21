@@ -143,5 +143,23 @@ namespace APZ_BACKEND.Core.Services.Users.PrivateUsers
 
 			return new List<BusinessUserProfile>();
 		}
+
+		public async Task<GenericServiceResponse<PrivateUser>> UpdatePhotoPath(string path, int userId)
+		{
+			try
+			{
+				var user = await usersRepository.GetByIdAsync(userId);
+				if (user == null)
+					return new GenericServiceResponse<PrivateUser>($"Private user with id: {userId} wasn't found");
+
+				user.Photo = path;
+				await usersRepository.UpdateAsync(user);
+				return new GenericServiceResponse<PrivateUser>(user);
+			}
+			catch (Exception ex)
+			{
+				return new GenericServiceResponse<PrivateUser>("Error | Updating photo path private user: " + ex.Message);
+			}
+		}
 	}
 }

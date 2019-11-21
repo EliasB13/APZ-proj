@@ -18,5 +18,6 @@ namespace APZ_BACKEND.Core.Services.Users.PrivateUsers
 		Task<GenericServiceResponse<PrivateUser>> UpdatePrivateUser(UpdatePrivateUserRequest editBusinessUserDto, int businessUserId);
 		Task<GenericServiceResponse<PrivateUser>> DeletePrivateUser(int privateUserId);
 		Task<IEnumerable<BusinessUserProfile>> GetAvailableServices(int privateUserId);
+		Task<GenericServiceResponse<PrivateUser>> UpdatePhotoPath(string path, int userId);
 	}
 }
