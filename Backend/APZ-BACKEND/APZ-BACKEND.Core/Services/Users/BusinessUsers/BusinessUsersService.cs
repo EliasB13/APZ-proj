@@ -41,7 +41,7 @@ namespace APZ_BACKEND.Core.Services.Users.BusinessUsers
 		{
 			return await usersRepository.GetByIdAsync(id);
 		}
-
+		 
 		public async Task<BusinessUser> RegisterBusinessAsync(RegisterBusinessRequest userDto)
 		{
 			if (string.IsNullOrWhiteSpace(userDto.Password))
