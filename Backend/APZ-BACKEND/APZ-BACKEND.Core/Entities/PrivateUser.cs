@@ -19,6 +19,7 @@ namespace APZ_BACKEND.Core.Entities
 		public byte[] RfidNumber { get; set; }
 		public int SearchId { get; set; }
 		public string Photo { get; set; }
+		public bool IsAdmin { get; set; }
 
 		public IEnumerable<ItemTaking> ItemTakings { get; set; }
 		public IEnumerable<Employee> Employees { get; set; }
