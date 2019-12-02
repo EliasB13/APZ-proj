@@ -82,11 +82,11 @@ namespace APZ_BACKEND.Presentation
 				endpoints.MapControllers();
 			});
 
-			//app.UseStaticFiles(new StaticFileOptions()
-			//{
-			//	FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
-			//	RequestPath = new PathString("/Resources")
-			//});
+			app.UseStaticFiles(new StaticFileOptions()
+			{
+				FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+				RequestPath = new PathString("/Resources")
+			});
 
 			app.UseSwagger();
 			app.UseSwaggerUI(c =>
