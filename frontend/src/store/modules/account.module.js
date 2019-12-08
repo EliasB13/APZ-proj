@@ -24,16 +24,33 @@ const actions = {
     userService.logout();
     commit("logout");
   },
-  register({ dispatch, commit }, user) {
+  registerPrivate({ dispatch, commit }, user) {
     commit("registerRequest", user);
 
-    userService.register(user).then(
+    userService.register(user, false).then(
       user => {
         commit("registerSuccess", user);
         router.push("/login");
         setTimeout(() => {
           // display success message after route change completes
           dispatch("alert/success", "Registration successful", { root: true });
+        });
+      },
+      error => {
+        commit("registerFailure", error);
+        dispatch("alert/error", error, { root: true });
+      }
+    );
+  },
+  registerBusiness({ dispatch, commit }, user) {
+    commit("registerRequest", user);
+
+    userService.register(user, true).then(
+      user => {
+        commit("registerSuccess", user);
+        router.push("/login");
+        setTimeout(() => {
+          dispatch("alert/sucess", "Registration sucessful", { root: true });
         });
       },
       error => {

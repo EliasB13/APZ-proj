@@ -7,30 +7,16 @@
             <small>Sign in as</small>
           </div>
           <div class="btn-wrapper text-center">
-            <!-- <a href="#" class="btn btn-neutral btn-icon">
-              <span class="btn-inner--icon">
-                <img src="img/icons/common/github.svg" />
-              </span>
-              <span class="btn-inner--text">PrivateUser</span>
-            </a>
-            <a href="#" class="btn btn-neutral btn-icon">
-              <span class="btn-inner--icon">
-                <img src="img/icons/common/google.svg" />
-              </span>
-              <span class="btn-inner--text">BusinessUser</span>
-            </a> -->
             <base-button
               :type="privateUserSelected ? 'primary' : 'secondary'"
               icon="ni ni-single-02"
               @click="privateUserClick"
-              >Private user</base-button
-            >
+            >Private user</base-button>
             <base-button
               :type="businessUserSelected ? 'primary' : 'secondary'"
               icon="ni ni-building"
               @click="businessUserClick"
-              >Business user</base-button
-            >
+            >Business user</base-button>
           </div>
         </div>
         <div class="card-body px-lg-5 py-lg-5">
@@ -58,18 +44,14 @@
               <span class="text-muted">Remember me</span>
             </base-checkbox>
             <div class="text-center">
-              <base-button @click="handleSignIn" type="primary" class="my-4"
-                >Sign in</base-button
-              >
+              <base-button @click="handleSignIn" type="primary" class="my-4">Sign in</base-button>
             </div>
             <div class="alert-div">
               <b-alert
                 :show="showAlert"
                 dismissible
                 @dismissed="clearStoreAlerts"
-              >
-                {{ alert.message }}
-              </b-alert>
+              >{{ alert.message }}</b-alert>
             </div>
           </form>
         </div>
@@ -119,16 +101,18 @@ export default {
         return "Login must be more than 4 letters and less than 24";
       if (this.loginInput.charAt(0) >= "0" && this.loginInput.charAt(0) <= "9")
         return "Login can't starts with digit";
-      if (!this.loginInput.match("^[a-zA-z0-9]+$"))
+      if (!/^[a-zA-z0-9]+$/.test(this.loginInput))
         return "Login can contain only latin chars";
       return "";
     },
     isPasswordValid() {
       if (this.passwordInput === "" && !this.isSubmitted) return null;
-      return this.passwordInput.length > 5 && this.loginInput.length < 24;
+      if (this.passwordInput.length < 5 && this.passwordInput.length > 23)
+        return false;
+      return true;
     },
     getPasswordError() {
-      if (this.passwordInput === "") return "";
+      if (this.passwordInput === "" && !this.isSubmitted) return "";
       if (this.passwordInput.length < 6 || this.passwordInput.length > 23)
         return "Password must be more than 6 symbols and less than 24";
       return "";

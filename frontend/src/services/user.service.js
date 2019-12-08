@@ -39,17 +39,19 @@ function logout() {
   localStorage.removeItem("user");
 }
 
-function register(user) {
+function register(user, isBusinessUser) {
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(user)
   };
 
-  return fetch(
-    `${process.env.VUE_APP_DEV_BACKEND_URL}/users/register`,
-    requestOptions
-  ).then(handleResponse);
+  var registerEndpoint = isBusinessUser
+    ? "BusinessUsers/register-business"
+    : "PrivateUsers/register-private";
+  const requestString = `${process.env.VUE_APP_DEV_BACKEND_URL}/${registerEndpoint}`;
+
+  return fetch(requestString, requestOptions).then(handleResponse);
 }
 
 function getById(id) {
