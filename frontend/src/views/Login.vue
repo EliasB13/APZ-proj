@@ -100,7 +100,8 @@ export default {
       loginInput: "",
       passwordInput: "",
       privateUserSelected: true,
-      businessUserSelected: false
+      businessUserSelected: false,
+      isSubmitted: false
     };
   },
   computed: {
@@ -109,6 +110,7 @@ export default {
       alert: state => state.alert
     }),
     isLoginValid() {
+      if (this.loginInput === "" && !this.isSubmitted) return null;
       return this.loginInput.length > 4 && this.loginInput.length < 24;
     },
     getLoginError() {
@@ -122,6 +124,7 @@ export default {
       return "";
     },
     isPasswordValid() {
+      if (this.passwordInput === "" && !this.isSubmitted) return null;
       return this.passwordInput.length > 5 && this.loginInput.length < 24;
     },
     getPasswordError() {
@@ -141,6 +144,7 @@ export default {
     ...mapActions("account", ["login", "logout"]),
     ...mapActions("alert", ["clear"]),
     handleSignIn() {
+      this.isSubmitted = true;
       const { loginInput, passwordInput } = this;
       if (loginInput && passwordInput) {
         this.login({
