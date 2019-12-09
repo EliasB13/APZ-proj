@@ -27,6 +27,7 @@ function login(login, password, isBusinessUser) {
       // login successful if there's a jwt token in the response
       if (user.token) {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
+        user.isBusinessUser = isBusinessUser;
         localStorage.setItem("user", JSON.stringify(user));
       }
 

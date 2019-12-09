@@ -1,4 +1,4 @@
-import clickOutside from "../helpers/globalDirectives.js";
+import clickOutside from "../helpers/dropDown-click-outside.js";
 
 const GlobalDirectives = {
   install(Vue) {

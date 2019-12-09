@@ -12,7 +12,8 @@ const actions = {
     userService.login(login, password, isBusinessUser).then(
       user => {
         commit("loginSuccess", user);
-        router.push("/");
+        if (isBusinessUser) router.push("/items");
+        else router.push("/availableServices");
       },
       error => {
         commit("loginFailure", error);

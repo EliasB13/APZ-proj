@@ -11,12 +11,14 @@
               :type="privateUserSelected ? 'primary' : 'secondary'"
               icon="ni ni-single-02"
               @click="privateUserClick"
-            >Private user</base-button>
+              >Private user</base-button
+            >
             <base-button
               :type="businessUserSelected ? 'primary' : 'secondary'"
               icon="ni ni-building"
               @click="businessUserClick"
-            >Business user</base-button>
+              >Business user</base-button
+            >
           </div>
         </div>
         <div v-if="businessUserSelected">
@@ -80,7 +82,9 @@
                 </div>
               </div>
               <div class="text-center">
-                <base-button type="primary" @click="handleSignUp" class="my-4">Create account</base-button>
+                <base-button type="primary" @click="handleSignUp" class="my-4"
+                  >Create account</base-button
+                >
               </div>
             </form>
           </div>
@@ -156,14 +160,17 @@
                 </div>
               </div>
               <div class="text-center">
-                <base-button type="primary" @click="handleSignUp" class="my-4">Create account</base-button>
+                <base-button type="primary" @click="handleSignUp" class="my-4"
+                  >Create account</base-button
+                >
               </div>
               <div class="alert-div">
                 <b-alert
                   :show="showAlert"
                   dismissible
                   @dismissed="clearStoreAlerts"
-                >{{ alert.message }}</b-alert>
+                  >{{ alert.message }}</b-alert
+                >
               </div>
             </form>
           </div>

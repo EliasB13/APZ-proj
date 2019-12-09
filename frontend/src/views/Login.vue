@@ -11,12 +11,14 @@
               :type="privateUserSelected ? 'primary' : 'secondary'"
               icon="ni ni-single-02"
               @click="privateUserClick"
-            >Private user</base-button>
+              >Private user</base-button
+            >
             <base-button
               :type="businessUserSelected ? 'primary' : 'secondary'"
               icon="ni ni-building"
               @click="businessUserClick"
-            >Business user</base-button>
+              >Business user</base-button
+            >
           </div>
         </div>
         <div class="card-body px-lg-5 py-lg-5">
@@ -44,14 +46,17 @@
               <span class="text-muted">Remember me</span>
             </base-checkbox>
             <div class="text-center">
-              <base-button @click="handleSignIn" type="primary" class="my-4">Sign in</base-button>
+              <base-button @click="handleSignIn" type="primary" class="my-4"
+                >Sign in</base-button
+              >
             </div>
             <div class="alert-div">
               <b-alert
                 :show="showAlert"
                 dismissible
                 @dismissed="clearStoreAlerts"
-              >{{ alert.message }}</b-alert>
+                >{{ alert.message }}</b-alert
+              >
             </div>
           </form>
         </div>

@@ -9,10 +9,12 @@ import App from "./App";
 import BootstrapVue from "bootstrap-vue";
 import GlobalComponents from "./helpers/globalComponents";
 import GlobalDirectives from "./helpers/globalDirectives";
+import Sidebar from "./components/sidebar/index";
 
 Vue.use(BootstrapVue);
 Vue.use(GlobalComponents);
 Vue.use(GlobalDirectives);
+Vue.use(Sidebar);
 
 //Vue.use(VeeValidate);
 

@@ -1,17 +1,64 @@
 import Vue from "vue";
 import Router from "vue-router";
-
-import HomePage from "../components/home/HomePage";
-import LoginPage from "../components/login/LoginPage";
-import RegisterPage from "../components/register/RegisterPage";
 import AuthLayout from "../layout/AuthLayout.vue";
+import DashboardLayoutBusiness from "../layout/DashboardLayoutBusiness.vue";
+import DashboardLayoutPrivate from "../layout/DashboardLayoutPrivate.vue";
 
 Vue.use(Router);
 
 export const router = new Router({
   mode: "history",
   routes: [
-    { path: "/", component: HomePage },
+    {
+      path: "/",
+      redirect: "business-items",
+      component: DashboardLayoutBusiness,
+      children: [
+        {
+          path: "/business-items",
+          name: "business-items",
+          component: () => import("../views/businessUsers/Items.vue")
+        },
+        {
+          path: "/consumers",
+          name: "consumers",
+          component: () => import("../views/businessUsers/Consumers.vue")
+        },
+        {
+          path: "/business-profile",
+          name: "business-profile",
+          component: () => import("../views/businessUsers/Profile.vue")
+        },
+        {
+          path: "/roles",
+          name: "roles",
+          component: () => import("../views/businessUsers/Roles.vue")
+        }
+      ]
+    },
+    {
+      path: "/",
+      redirect: "availableServices",
+      component: DashboardLayoutPrivate,
+      children: [
+        {
+          path: "/availableServices",
+          name: "availableServices",
+          component: () =>
+            import("../views/privateUsers/AvailiableServices.vue")
+        },
+        {
+          path: "/private-items",
+          name: "private-items",
+          component: () => import("../views/privateUsers/Items.vue")
+        },
+        {
+          path: "/profile",
+          name: "profile",
+          component: () => import("../views/privateUsers/Profile.vue")
+        }
+      ]
+    },
     {
       path: "/",
       redirect: "login",
@@ -29,7 +76,6 @@ export const router = new Router({
         }
       ]
     },
-    { path: "/register", component: RegisterPage },
 
     // otherwise redirect to home
     { path: "*", redirect: "/" }
@@ -40,11 +86,13 @@ router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
   const publicPages = ["/login", "/register"];
   const authRequired = !publicPages.includes(to.path);
-  const loggedIn = localStorage.getItem("user");
+  const user = localStorage.getItem("user");
 
-  if (authRequired && !loggedIn) {
+  if (authRequired && !user) {
     return next("/login");
   }
+
+  // TODO: error page when acessing business pages from private and vice versa
 
   next();
 });
