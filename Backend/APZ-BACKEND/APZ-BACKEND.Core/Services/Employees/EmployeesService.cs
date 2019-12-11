@@ -42,19 +42,19 @@ namespace APZ_BACKEND.Core.Services.Employees
 			return new List<EmployeeDto>();
 		}
 
-		public async Task<GenericServiceResponse<Employee>> AddEmployee(int businessUserId, string login)
+		public async Task<GenericServiceResponse<EmployeeDto>> AddEmployee(int businessUserId, string login)
 		{
 			var privateUser = await privateUsersRepository.SingleOrDefaultAsync(pu => pu.Login == login);
 			if (privateUser == null)
-				return new GenericServiceResponse<Employee>("User \"" + login + "\" was not found.");
+				return new GenericServiceResponse<EmployeeDto>("User \"" + login + "\" was not found.");
 
 			var businessUser = await businessUsersRepository.SingleOrDefaultAsync(bu => bu.Id == businessUserId);
 			if (businessUser == null)
-				return new GenericServiceResponse<Employee>("BusinessUser was not found.");
+				return new GenericServiceResponse<EmployeeDto>("BusinessUser was not found.");
 
 			var isEmployeeExits = await employeesRepository.AnyAsync(e => e.PrivateUser.Id == privateUser.Id && e.BusinessUser.Id == businessUser.Id);
 			if (isEmployeeExits)
-				return new GenericServiceResponse<Employee>("Such employee already exists");
+				return new GenericServiceResponse<EmployeeDto>("Such employee already exists");
 
 			var employee = new Employee
 			{
@@ -63,8 +63,8 @@ namespace APZ_BACKEND.Core.Services.Employees
 				PrivateUser = privateUser
 			};
 
-			await employeesRepository.AddAsync(employee);
-			return new GenericServiceResponse<Employee>(employee);
+			var addedEmpl = await employeesRepository.AddAsync(employee);
+			return new GenericServiceResponse<EmployeeDto>(addedEmpl.ToEmployeeDto(businessUser.CompanyName));
 		}
 
 		public async Task<GenericServiceResponse<Employee>> DeleteEmployee(int employeeId)
