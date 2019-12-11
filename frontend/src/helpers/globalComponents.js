@@ -6,6 +6,9 @@ import BaseCheckbox from "../components/BaseCheckbox";
 import BaseButton from "../components/BaseButton";
 import BaseDropdown from "../components/BaseDropdown";
 import BaseHeader from "../components/BaseHeader";
+import BaseCard from "../components/BaseCard";
+import UserCard from "../components/UserCard";
+import RoleCard from "../components/RoleCard";
 
 export default {
   install(Vue) {
@@ -15,5 +18,8 @@ export default {
     Vue.component(BaseButton.name, BaseButton);
     Vue.component(BaseDropdown.name, BaseDropdown);
     Vue.component(BaseHeader.name, BaseHeader);
+    Vue.component(BaseCard.name, BaseCard);
+    Vue.component(UserCard.name, UserCard);
+    Vue.component(RoleCard.name, RoleCard);
   }
 };

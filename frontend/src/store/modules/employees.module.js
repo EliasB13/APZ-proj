@@ -36,12 +36,12 @@ const actions = {
 
     employeesService.removeEmployee(id).then(
       () => {
-        commit("deleteEmployeeSuccess", id);
-        commit("removeSelectedItem", id);
-        dispatch("alert/success", "Item was added", { root: true });
+        commit("removeEmployeeSuccess", id);
+        dispatch("alert/success", "Employee was removed", { root: true });
+        dispatch("selectedItems/resetSelectedItems", {}, { root: true });
       },
       error => {
-        commit("deleteItemFailure", { id, error: error.toString() });
+        commit("removeEmployeeFailure", { id, error: error.toString() });
         dispatch("alert/error", error, { root: true });
       }
     );
@@ -85,7 +85,7 @@ const mutations = {
   removeEmployeeSuccess(state, id) {
     state.status.employeeRemoved = true;
     state.status.employeeRemoving = false;
-    state.employees = state.employees.filter(empl => empl.id !== id);
+    state.employees = state.employees.filter(empl => empl.employeeId !== id);
   },
   removeEmployeeFailure(state, { id, error }) {
     state.status.employeeRemoved = false;

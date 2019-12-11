@@ -48,7 +48,7 @@ namespace APZ_BACKEND.Presentation.Controllers
 			return Ok(result.Item);
 		}
 		
-		[HttpDelete("employee")]
+		[HttpDelete("employee/{employeeId}")]
 		public async Task<IActionResult> DeleteEmployeeFromBusiness(int employeeId)
 		{
 			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))

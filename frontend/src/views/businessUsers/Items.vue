@@ -1,12 +1,12 @@
 <template>
   <div>
-    <base-header type="gradient-success" class="pb-6 pb-8 pt-5 pt-md-7">
+    <base-header type="gradient-success" class="pb-6 pb-8 pt-5 pt-md-8">
       <div class="container-fluid d-flex align-items-center">
         <div class="row">
-          <div>
-            <p class="text-white mt-0 mb-2">
-              This is your items page. Here you can explore or manage your items
-            </p>
+          <div class="col-lg-7 col-md-10">
+            <p
+              class="text-white mt-0 mb-5"
+            >This is your items page. Here you can explore or manage your items</p>
           </div>
         </div>
       </div>
@@ -14,15 +14,10 @@
 
     <div class="container-fluid mt--7 mb-5">
       <b-row class="px-3">
-        <b-col
-          class="manage-bar"
-          style="background-color: white; border-radius: 0.375rem"
-        >
+        <b-col class="manage-bar" style="background-color: white; border-radius: 0.375rem">
           <b-row>
             <b-col align-self="center">
-              <h2 class="pl-3">
-                {{ selectionMode ? "Select items for removing" : "Manage" }}
-              </h2>
+              <h2 class="pl-3">{{ selectionMode ? "Select items for removing" : "Manage" }}</h2>
             </b-col>
             <b-col cols="auto" class="p-3">
               <base-button
@@ -31,15 +26,13 @@
                 type="success"
                 icon="ni ni-fat-add"
                 @click="showAddingModal = true"
-                >Add</base-button
-              >
+              >Add</base-button>
               <base-button
                 v-if="selectionMode"
                 class="float-right"
                 type="link"
                 @click="resetClick"
-                >Reset</base-button
-              >
+              >Reset</base-button>
             </b-col>
             <b-col cols="auto" class="p-3">
               <base-button
@@ -47,8 +40,7 @@
                 type="danger"
                 icon="ni ni-fat-remove"
                 @click="removeClick"
-                >Remove</base-button
-              >
+              >Remove</base-button>
             </b-col>
           </b-row>
         </b-col>
@@ -57,6 +49,7 @@
 
     <div class="container-fluid">
       <base-cards-list
+        cardType="base-card"
         :selectionMode="selectionMode"
         v-if="showItems"
         :itemsList="items"
@@ -65,17 +58,19 @@
 
     <modal
       :show.sync="showAddingModal"
+      header-classes="border"
+      footer-classes="border"
       body-classes="p-0"
       modal-classes="modal-dialog-centered modal-sm"
+      :showClose="false"
     >
+      <div slot="header" class="modal-title">Add new item</div>
       <card
         type="secondary"
-        shadow
         header-classes="bg-white text-default"
         body-classes="px-lg-5 py-lg-5"
         class="border-0"
       >
-        <div slot="header" class="modal-title">Add new item</div>
         <template>
           <form role="form">
             <base-input
@@ -84,32 +79,25 @@
               placeholder="Item name"
               label="Name"
               v-model="itemToAdd.name"
-            >
-            </base-input>
+            ></base-input>
             <base-input
               alternative
               placeholder="Description"
               label="Description"
               v-model="itemToAdd.description"
-            >
-            </base-input>
+            ></base-input>
           </form>
         </template>
       </card>
       <template slot="footer">
-        <base-button type="link" @click="showAddingModal = false"
-          >Close</base-button
-        >
-        <base-button type="success" class="ml-auto" @click="addItemClick"
-          >Add
-        </base-button>
+        <base-button type="link" @click="showAddingModal = false">Close</base-button>
+        <base-button type="success" class="ml-auto" @click="addItemClick">Add</base-button>
       </template>
     </modal>
 
     <div id="overlay" v-if="showSpinner">
       <b-spinner class="spinner-scaled" label="loading"></b-spinner>
-      <br />
-      Loading
+      <br />Loading
     </div>
   </div>
 </template>
@@ -140,7 +128,9 @@ export default {
     ...mapState({
       items: state => state.businessItems.items,
       status: state => state.businessItems.status,
-      selectedItems: state => state.businessItems.selectedItems
+      selectedItems: state => state.selectedItems.selectedItems,
+      isSelectedItemsReseted: state =>
+        state.selectedItems.isSelectedItemsReseted
     }),
     showSpinner() {
       return (
@@ -154,15 +144,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions("businessItems", [
-      "getItems",
-      "addItem",
-      "removeItem",
-      "resetSelectedItems"
-    ]),
+    ...mapActions("businessItems", ["getItems", "addItem", "removeItem"]),
+    ...mapActions("selectedItems", ["resetSelectedItems"]),
     addItemClick() {
       if (this.itemToAdd.name && this.itemToAdd.description) {
         this.addItem(this.itemToAdd);
+        this.showAddingModal = false;
       }
     },
     removeClick() {
@@ -185,24 +172,4 @@ export default {
 };
 </script>
 <style>
-#overlay {
-  background: #ffffff;
-  color: #666666;
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  z-index: 5000;
-  top: 0;
-  left: 0;
-  float: left;
-  text-align: center;
-  padding-top: 25%;
-  opacity: 0.8;
-}
-.spinner-scaled {
-  margin: 0 auto;
-  height: 5rem;
-  width: 5rem;
-  border-width: 0.5rem;
-}
 </style>

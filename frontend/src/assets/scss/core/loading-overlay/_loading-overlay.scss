@@ -1,0 +1,20 @@
+#overlay {
+  background: #ffffff;
+  color: #666666;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 5000;
+  top: 0;
+  left: 0;
+  float: left;
+  text-align: center;
+  padding-top: 25%;
+  opacity: 0.8;
+}
+.spinner-scaled {
+  margin: 0 auto;
+  height: 5rem;
+  width: 5rem;
+  border-width: 0.5rem;
+}

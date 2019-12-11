@@ -7,6 +7,7 @@ import DashboardLayoutPrivate from "../layout/DashboardLayoutPrivate.vue";
 Vue.use(Router);
 
 export const router = new Router({
+  linkExactActiveClass: "active",
   mode: "history",
   routes: [
     {
@@ -75,10 +76,10 @@ export const router = new Router({
           component: () => import("../views/Register.vue")
         }
       ]
-    },
+    }
 
     // otherwise redirect to home
-    { path: "*", redirect: "/" }
+    //{ path: "*", redirect: "/" }
   ]
 });
 
