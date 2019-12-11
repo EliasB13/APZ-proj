@@ -74,12 +74,13 @@ const mutations = {
   addEmployeeFailure(state, error) {
     state.status.employeeAdded = false;
     state.status.employeeAdding = false;
+    state.error = error;
   },
 
   removeEmployeeRequest(state, id) {
     state.status.employeeRemoving = true;
     state.employees = state.employees.map(empl =>
-      empl.id === id ? { ...empl, employeeRemoving: true } : empl
+      empl.employeeId === id ? { ...empl, employeeRemoving: true } : empl
     );
   },
   removeEmployeeSuccess(state, id) {
@@ -91,7 +92,7 @@ const mutations = {
     state.status.employeeRemoved = false;
     state.status.employeeRemoving = false;
     state.employees = state.employees.map(empl => {
-      if (empl.id === id) {
+      if (empl.employeeId === id) {
         const { employeeRemoving, ...emplCopy } = empl;
         return { ...emplCopy, removeError: error };
       }
