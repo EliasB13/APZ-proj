@@ -25,6 +25,7 @@ const actions = {
       () => {
         commit("addItemSuccess", item);
         dispatch("alert/success", "Item was added", { root: true });
+        dispatch("getItems");
       },
       error => {
         commit("addItemFailure", error);
@@ -32,26 +33,20 @@ const actions = {
       }
     );
   },
-  removeItem({ commit }, id) {
+  removeItem({ commit, dispatch }, id) {
     commit("deleteItemRequest", id);
 
     businessItemsService.delete(id).then(
       () => {
         commit("deleteItemSuccess", id);
-        commit("removeSelectedItem", id);
+        dispatch("alert/success", "Item was removed", { root: true });
+        dispatch("selectedItems/resetSelectedItems", {}, { root: true });
       },
-      error => commit("deleteItemFailure", { id, error: error.toString() })
+      error => {
+        commit("deleteItemFailure", { id, error: error.toString() });
+        dispatch("alert/error", error, { root: true });
+      }
     );
-  },
-
-  addSelectedItem({ commit }, id) {
-    commit("addSelectedItem", id);
-  },
-  removeSelectedItem({ commit }, id) {
-    commit("removeSelectedItem", id);
-  },
-  resetSelectedItems({ commit }) {
-    commit("resetSelectedItems");
   }
 };
 
@@ -96,25 +91,12 @@ const mutations = {
     state.status = { ...state.status, itemRemoved: false, itemRemoving: false };
     state.items = state.items.map(item => {
       if (item.id === id) {
-        const { deleting, ...userCopy } = item;
-        return { ...userCopy, deleteError: error };
+        const { itemRemoving, ...itemCopy } = item;
+        return { ...itemCopy, deleteError: error };
       }
 
       return item;
     });
-  },
-
-  addSelectedItem(state, id) {
-    state.isSelectedItemsReseted = false;
-    state.selectedItems.push(id);
-  },
-  removeSelectedItem(state, id) {
-    state.isSelectedItemsReseted = false;
-    state.selectedItems = state.selectedItems.filter(idl => idl !== id);
-  },
-  resetSelectedItems(state) {
-    state.selectedItems = [];
-    state.isSelectedItemsReseted = true;
   }
 };
 

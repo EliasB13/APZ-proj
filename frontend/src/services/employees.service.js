@@ -1,43 +1,57 @@
 import { authHeader } from "../helpers";
-export const businessItemsService = {
-  getItems,
-  addItem,
-  delete: _delete
+
+export const employeesService = {
+  getEmployees,
+  addEmployee,
+  removeEmployee,
+  getUserByLogin
 };
 
-function getItems() {
+function getEmployees() {
   const requestOptions = {
     method: "GET",
     headers: authHeader()
   };
 
   return fetch(
-    `${process.env.VUE_APP_DEV_BACKEND_URL}/api/SharedItems`,
+    `${process.env.VUE_APP_DEV_BACKEND_URL}/api/Employees/businessEmployees`,
     requestOptions
   ).then(handleResponse);
 }
 
-function addItem(item) {
+function addEmployee(login) {
   const requestOptions = {
     method: "POST",
     headers: { ...authHeader(), "Content-Type": "application/json" },
-    body: JSON.stringify({ name: item.name, description: item.description })
+    body: JSON.stringify({ login })
   };
 
   return fetch(
-    `${process.env.VUE_APP_DEV_BACKEND_URL}/api/SharedItems`,
+    `${process.env.VUE_APP_DEV_BACKEND_URL}/api/Employees/add-employee`,
     requestOptions
   ).then(handleResponse);
 }
 
-function _delete(id) {
+function removeEmployee(id) {
   const requestOptions = {
     method: "DELETE",
     headers: authHeader()
   };
 
   return fetch(
-    `${process.env.VUE_APP_DEV_BACKEND_URL}/api/SharedItems/${id}`,
+    `${process.env.VUE_APP_DEV_BACKEND_URL}/api/Employees/employee/${id}`,
+    requestOptions
+  ).then(handleResponse);
+}
+
+function getUserByLogin(login) {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader()
+  };
+
+  return fetch(
+    `${process.env.VUE_APP_DEV_BACKEND_URL}/api/PrivateUsers/public-profile?login=${login}`,
     requestOptions
   ).then(handleResponse);
 }
