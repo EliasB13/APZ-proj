@@ -54,28 +54,28 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 			}
 		}
 
-		public async Task<GenericServiceResponse<EmployeesRole>> Create(int businessUserId, CreateEmployeesRoleDto employeesRoleDto)
+		public async Task<GenericServiceResponse<EmployeesRoleDto>> Create(int businessUserId, CreateEmployeesRoleDto employeesRoleDto)
 		{
 			try
 			{
 				var businessUser = await businessUsersService.GetByIdAsync(businessUserId);
 				if (businessUser == null)
-					return new GenericServiceResponse<EmployeesRole>($"BusinessUser with id: {businessUserId} wasn't found");
+					return new GenericServiceResponse<EmployeesRoleDto>($"BusinessUser with id: {businessUserId} wasn't found");
 
 				var isRoleNameTaken = await employeesRoleRepository.AnyAsync(er => er.Name == employeesRoleDto.Name);
 				if (isRoleNameTaken)
-					return new GenericServiceResponse<EmployeesRole>($"Employees role with name: {employeesRoleDto.Name} already exists");
+					return new GenericServiceResponse<EmployeesRoleDto>($"Employees role with name: {employeesRoleDto.Name} already exists");
 
 				var employeesRole = employeesRoleDto.ToRoleFromDto();
 				employeesRole.BusinessUser = businessUser;
 
-				await employeesRoleRepository.AddAsync(employeesRole);
+				var dbRole = await employeesRoleRepository.AddAsync(employeesRole);
 
-				return new GenericServiceResponse<EmployeesRole>(employeesRole);
+				return new GenericServiceResponse<EmployeesRoleDto>(dbRole.ToDto());
 			}
 			catch (Exception ex)
 			{
-				return new GenericServiceResponse<EmployeesRole>("Creating employees role: " + ex.Message);
+				return new GenericServiceResponse<EmployeesRoleDto>("Creating employees role: " + ex.Message);
 			}
 		}
 

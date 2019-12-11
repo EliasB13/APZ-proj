@@ -46,7 +46,7 @@ namespace APZ_BACKEND.Presentation.Controllers
 			if (!result.Success)
 				return BadRequest(new { message = result.ErrorMessage });
 
-			return Ok();
+			return Ok(result.Item);
 		}
 
 		[HttpPost("add-employee-to-role")]
