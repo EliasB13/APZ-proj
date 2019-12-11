@@ -46,7 +46,8 @@
       "no-unused-vars": "off",
       "no-debugger": "off",
       "bracketSpacing": true,
-      "no-useless-escape": "off"
+      "no-useless-escape": "off",
+      "no-console": "off"
     },
     "parserOptions": {
       "parser": "babel-eslint"

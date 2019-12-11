@@ -1,43 +1,75 @@
 <template>
-  <div class="card-container">
-    <a class="card-link" href="#">
-      <article class="blog-card">
+  <div class="card-container" @click="handleClick">
+    <a class="card-link">
+      <article class="blog-card" :class="selected ? 'item-selected' : ''">
         <img class="post-image" :src="itemImage" />
         <div class="article-details">
           <h3 class="post-title">{{ itemName }}</h3>
           <p class="post-description">{{ itemDesc }}</p>
           <p class="post-author">
-            Status
-            <span class="text-success font-weight-700">{{ isTaken }}</span>
+            Status:
+            <span
+              :class="isTaken ? 'text-danger' : 'text-success'"
+              class="font-weight-700"
+              >{{ isTaken ? "Taken" : "Available" }}</span
+            >
           </p>
         </div>
+        <i
+          v-if="selectionMode"
+          :class="
+            `far ${
+              selected ? icon.checkedSquare : icon.square
+            } fa-lg selection-box`
+          "
+        ></i>
       </article>
     </a>
   </div>
 </template>
 <script>
+import { mapActions, mapState } from "vuex";
 export default {
   name: "base-card",
+  computed: {
+    ...mapState({
+      isSelectionReseted: state => state.businessItems.isSelectedItemsReseted
+    })
+  },
+  watch: {
+    isSelectionReseted(newV, oldV) {
+      if (newV) this.selected = false;
+    }
+  },
+  data() {
+    return {
+      icon: {
+        checkedSquare: "fa-check-square",
+        square: "fa-square"
+      },
+      selected: false
+    };
+  },
   props: {
-    itemName: {
-      type: String,
-      default: "Default item name",
-      description: "Item name"
-    },
-    itemDesc: {
-      type: String,
-      default: "Default item description",
-      description: "Item description"
-    },
-    isTaken: {
-      type: Boolean,
-      default: false,
-      description: "Whether item taken now"
-    },
+    itemName: String,
+    itemDesc: String,
+    isTaken: Boolean,
     itemImage: {
       type: String,
-      default: "img/theme/item.png",
-      description: "Link to item image"
+      default: "img/theme/item.png"
+    },
+    itemId: Number,
+    selectionMode: Boolean
+  },
+  methods: {
+    ...mapActions("businessItems", ["addSelectedItem", "removeSelectedItem"]),
+    handleClick() {
+      if (this.selectionMode) {
+        this.selected = !this.selected;
+        this.selected
+          ? this.addSelectedItem(this.itemId)
+          : this.removeSelectedItem(this.itemId);
+      }
     }
   }
 };
@@ -57,6 +89,16 @@ $shadow: rgba(0, 0, 0, 0.2);
   transition: $args;
 }
 
+.item-selected {
+  box-shadow: 3rem 3rem 2rem $shadow !important;
+}
+
+.selection-box {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
 * {
   box-sizing: border-box;
   &::before,
@@ -70,6 +112,7 @@ $shadow: rgba(0, 0, 0, 0.2);
 }
 
 .card-container {
+  height: 100%;
   font-family: "Roboto", sans-serif;
   font-weight: 400;
   color: $text;
@@ -79,15 +122,17 @@ $shadow: rgba(0, 0, 0, 0.2);
 }
 
 .blog-card {
+  height: 100%;
   display: flex;
   flex-direction: row;
   background: $white;
-  box-shadow: 0 0.1875rem 1.5rem $shadow;
+  box-shadow: 0 0rem 1rem $shadow;
   border-radius: 0.375rem;
   overflow: hidden;
 }
 
 .card-link {
+  height: 100%;
   position: relative;
   display: block;
   color: inherit;

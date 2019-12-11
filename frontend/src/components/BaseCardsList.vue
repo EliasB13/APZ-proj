@@ -5,6 +5,8 @@
         :itemName="item.name"
         :itemDesc="item.description"
         :isTaken="item.isTaken"
+        :itemId="item.id"
+        :selectionMode="selectionMode"
       ></base-card>
     </b-col>
   </b-row>
@@ -19,7 +21,8 @@ export default {
     baseCard
   },
   props: {
-    itemsList: Array
+    itemsList: Array,
+    selectionMode: Boolean
   }
 };
 </script>

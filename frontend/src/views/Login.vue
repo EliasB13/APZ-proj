@@ -112,7 +112,7 @@ export default {
     },
     isPasswordValid() {
       if (this.passwordInput === "" && !this.isSubmitted) return null;
-      if (this.passwordInput.length < 5 && this.passwordInput.length > 23)
+      if (this.passwordInput.length < 5 || this.passwordInput.length > 23)
         return false;
       return true;
     },

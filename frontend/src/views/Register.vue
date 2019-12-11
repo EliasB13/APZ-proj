@@ -238,7 +238,7 @@ export default {
     },
     isPasswordValid() {
       if (this.password === "" && !this.isSubmitted) return null;
-      if (this.password.length < 5 && this.password.length > 24) return false;
+      if (this.password.length < 5 || this.password.length > 24) return false;
       return true;
     },
     isPasswordConfirmationValid() {

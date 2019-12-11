@@ -25,12 +25,25 @@ export default {
   // methods: {
   //   ...mapActions({
   //     clearAlert: "alert/clear"
-  //   })
+  //   }),
+  //   makeToast(message, variant) {
+  //     this.$bvToast.toast(message, {
+  //       title: "Notification",
+  //       variant: variant,
+  //       autoHideDelay: 5000
+  //     });
+  //   }
   // },
   // watch: {
   //   $route(to, from) {
   //     // clear alert on location change
   //     this.clearAlert();
+  //   },
+  //   alert(newV, oldV) {
+  //     console.log(newV);
+  //     if (alert.message) {
+  //       this.makeToast(this.alert.message, this.alert.type);
+  //     }
   //   }
   // }
 };

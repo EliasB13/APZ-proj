@@ -1,12 +1,10 @@
 import Vue from "vue";
-//import VeeValidate from "vee-validate";
-//import BootstrapVue from "bootstrap-vue";
-//import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap-vue/dist/bootstrap-vue.css";
 import { store } from "./store";
 import { router } from "./helpers";
 import App from "./App";
 import BootstrapVue from "bootstrap-vue";
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
 import GlobalComponents from "./helpers/globalComponents";
 import GlobalDirectives from "./helpers/globalDirectives";
 import Sidebar from "./components/sidebar/index";
