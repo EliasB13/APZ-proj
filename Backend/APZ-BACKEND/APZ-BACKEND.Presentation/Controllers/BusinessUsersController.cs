@@ -87,7 +87,8 @@ namespace APZ_BACKEND.Presentation.Controllers
 			{
 				Id = user.Id,
 				Login = user.Login,
-				Token = token
+				Token = token,
+				Photo = user.Photo
 			});
 		}
 

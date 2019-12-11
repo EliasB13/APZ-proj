@@ -48,7 +48,10 @@ namespace APZ_BACKEND.Presentation
 
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddCors();
+			services.AddCors(options =>
+			{
+				options.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+			});
 			services.AddDbContext<ApplicationContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DevSqlServerConn")));
 			services.AddControllers();
 
@@ -65,17 +68,18 @@ namespace APZ_BACKEND.Presentation
 				app.UseDeveloperExceptionPage();
 			}
 
-			app.UseHttpsRedirection();
 
 			app.UseRouting();
 
+
+
+			app.UseCors("CorsPolicy");
+
 			app.UseAuthentication();
 			app.UseAuthorization();
+			//app.UseCors("CorsPolicy");
 
-			app.UseCors(x => x
-				.AllowAnyOrigin()
-				.AllowAnyMethod()
-				.AllowAnyHeader());
+			app.UseHttpsRedirection();
 
 			app.UseEndpoints(endpoints =>
 			{

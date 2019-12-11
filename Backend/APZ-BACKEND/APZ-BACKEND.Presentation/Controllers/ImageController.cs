@@ -24,12 +24,12 @@ namespace APZ_BACKEND.Presentation.Controllers
 		}
 
 		[HttpPost("upload-profile-photo")]
-		public async Task<IActionResult> UploadProfilePicture(IFormFile file, int userId)
+		public async Task<IActionResult> UploadProfilePicture(IFormFile file)
 		{
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 			bool isBusinessUser = ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims);
 
-			var result = await imagesService.UploadProfilePicture(file, userId, isBusinessUser ? UserType.BusinessUser : UserType.PrivateUser);
+			var result = await imagesService.UploadProfilePicture(file, contextUserId, isBusinessUser ? UserType.BusinessUser : UserType.PrivateUser);
 			if (!result.Success)
 				return BadRequest(result.ErrorMessage);
 
