@@ -17,7 +17,7 @@
         <b-col class="manage-bar" style="background-color: white; border-radius: 0.375rem">
           <b-row>
             <b-col align-self="center">
-              <h2 class="pl-3">{{ selectionMode ? "Select employees for removing" : "Manage" }}</h2>
+              <h2 class="pl-3">{{ selectionMode ? "Select roles for removing" : "Manage" }}</h2>
             </b-col>
             <b-col cols="auto" class="p-3">
               <base-button
@@ -80,7 +80,7 @@
             <base-input
               alternative
               class="mb-3"
-              placeholder="Login"
+              placeholder="Name"
               label="Role name"
               v-model="roleToAdd.name"
             ></base-input>
@@ -88,7 +88,7 @@
               alternative
               class="mb-3"
               placeholder="Login"
-              label="Role description"
+              label="Description"
               v-model="roleToAdd.description"
             ></base-input>
           </form>

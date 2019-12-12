@@ -1,5 +1,5 @@
 <template>
-  <div class="card-container" @click="handleClick">
+  <div class="card-container pointer" @click="handleClick">
     <a class="card-link">
       <article class="blog-card" :class="selected ? 'item-selected' : ''">
         <img class="post-image" :src="itemImage" />

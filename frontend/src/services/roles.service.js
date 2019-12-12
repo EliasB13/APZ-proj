@@ -6,7 +6,8 @@ export const rolesService = {
   addRole,
   removeRole,
   addEmployeeToRole,
-  removeEmployeeFromRole
+  removeEmployeeFromRole,
+  getEmployeesByRole
 };
 
 function getRoles() {
@@ -42,6 +43,18 @@ function removeRole(id) {
 
   return fetch(
     `${process.env.VUE_APP_DEV_BACKEND_URL}/api/EmployeesRoles/employees-role/${id}`,
+    requestOptions
+  ).then(handleResponse);
+}
+
+function getEmployeesByRole(roleId) {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader()
+  };
+
+  return fetch(
+    `${process.env.VUE_APP_DEV_BACKEND_URL}/api/EmployeesRoles/employees-in-role/${roleId}`,
     requestOptions
   ).then(handleResponse);
 }

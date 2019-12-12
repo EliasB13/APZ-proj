@@ -1,6 +1,6 @@
 <template>
   <div
-    class="card card-profile"
+    class="card card-profile pointer"
     style="box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);"
     @click="handleClick"
     :class="selected ? 'item-selected-moved' : ''"

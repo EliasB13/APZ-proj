@@ -31,15 +31,11 @@ $shadow: rgba(0, 0, 0, 0.15);
   box-shadow: 3rem 3rem 2rem $shadow !important;
 }
 
-.card-hover {
+.role-card-hover {
   transition: $transition-base;
   &:hover h3 {
     @include transition(color 0.3s ease);
     color: $red;
-  }
-  &:hover {
-    //@include transition(all 0.15s ease);
-    //transform: translate(-1%, 0%);
   }
 }
 
