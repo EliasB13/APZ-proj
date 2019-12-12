@@ -48,25 +48,15 @@
     </div>
 
     <div class="container-fluid">
-      <base-cards-list
-        class="mt-7"
-        cardType="user-card"
-        :selectionMode="selectionMode"
-        v-if="showEmployees"
-        :itemsList="employees"
-      ></base-cards-list>
-
       <div v-if="showRoles">
-        <b-row v-for="role in roles" :key="role.id">
-          <b-col>
-            <role-card
-              :selectionMode="selectionMode"
-              :roleId="role.id"
-              :description="role.description"
-              :name="role.name"
-            ></role-card>
-          </b-col>
-        </b-row>
+        <role-card
+          v-for="role in roles"
+          :key="role.id"
+          :selectionMode="selectionMode"
+          :roleId="role.id"
+          :description="role.description"
+          :name="role.name"
+        ></role-card>
       </div>
     </div>
 
@@ -91,8 +81,15 @@
               alternative
               class="mb-3"
               placeholder="Login"
-              label="Employee login"
-              v-model="employeeToAdd.login"
+              label="Role name"
+              v-model="roleToAdd.name"
+            ></base-input>
+            <base-input
+              alternative
+              class="mb-3"
+              placeholder="Login"
+              label="Role description"
+              v-model="roleToAdd.description"
             ></base-input>
           </form>
         </template>
@@ -110,55 +107,50 @@
   </div>
 </template>
 <script>
-import BaseCardsList from "../../components/BaseCardsList";
 import Card from "../../components/Card";
 import Modal from "../../components/Modal";
 import { mapState, mapActions } from "vuex";
 
 export default {
   components: {
-    BaseCardsList,
     Card,
     Modal
   },
   data() {
     return {
       showAddingModal: false,
-      employeeToAdd: {
-        login: ""
+      roleToAdd: {
+        name: "",
+        description: ""
       },
       selectionMode: false
     };
   },
   computed: {
     ...mapState({
-      employees: state => state.employees.employees,
-      status: state => state.employees.status,
+      roles: state => state.roles.roles,
+      status: state => state.roles.status,
       selectedEmployees: state => state.selectedItems.selectedItems,
       isSelectedItemsReseted: state =>
         state.selectedItems.isSelectedItemsReseted
     }),
     showSpinner() {
       return (
-        this.status.employeesLoading ||
-        this.status.employeeAdding ||
-        this.status.employeeRemoving
+        this.status.rolesLoading ||
+        this.status.roleAdding ||
+        this.status.roleRemoving
       );
     },
     showRoles() {
-      return this.status.employeesLoaded;
+      return this.status.rolesLoaded;
     }
   },
   methods: {
-    ...mapActions("employees", [
-      "getEmployees",
-      "addEmployee",
-      "removeEmployee"
-    ]),
+    ...mapActions("roles", ["getRoles", "addRole", "removeRole"]),
     ...mapActions("selectedItems", ["resetSelectedItems"]),
     addItemClick() {
-      if (this.employeeToAdd.login) {
-        this.addEmployee(this.employeeToAdd.login);
+      if (this.roleToAdd.name && this.roleToAdd.description) {
+        this.addRole(this.roleToAdd);
         this.showAddingModal = false;
       }
     },
@@ -166,7 +158,7 @@ export default {
       if (!this.selectionMode) {
         this.selectionMode = true;
       } else {
-        this.selectedEmployees.forEach(id => this.removeEmployee(id));
+        this.selectedEmployees.forEach(id => this.removeRole(id));
       }
     },
     resetClick() {
@@ -177,7 +169,7 @@ export default {
     }
   },
   mounted() {
-    this.getEmployees();
+    this.getRoles();
   }
 };
 </script>

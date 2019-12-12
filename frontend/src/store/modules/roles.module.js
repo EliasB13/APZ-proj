@@ -101,33 +101,29 @@ const mutations = {
 
   addRoleRequest(state, role) {
     state.roleToAdd = role;
-    state.status.roleAdding = true;
+    state.status = { ...state.status, roleAdding: true };
   },
   addRoleSuccess(state, role) {
-    state.status.roleAdded = true;
-    state.status.roleAdding = false;
+    state.status = { ...state.status, roleAdded: true, roleAdding: false };
     state.roles.push(role);
   },
   addRoleFailure(state, error) {
-    state.status.roleAdded = false;
-    state.status.roleAdding = false;
+    state.status = { ...state.status, roleAdded: false, roleAdding: false };
     state.error = error;
   },
 
   removeRoleRequest(state, id) {
-    state.status.roleRemoving = true;
-    state.roles = state.roles.map(role => {
-      role.id === id ? { ...role, roleRemoving: true } : role;
-    });
+    state.status = { ...state.status, roleRemoving: true };
+    state.roles = state.roles.map(role =>
+      role.id === id ? { ...role, roleRemoving: true } : role
+    );
   },
   removeRoleSuccess(state, id) {
-    state.status.roleRemoving = false;
-    state.status.roleRemoved = true;
+    state.status = { ...state.status, roleRemoving: false, roleRemoved: true };
     state.roles = state.roles.filter(role => role.id !== id);
   },
   removeRoleFailure(state, { id, error }) {
-    state.status.roleRemoving = false;
-    state.status.roleRemoved = false;
+    state.status = { ...state.status, roleRemoving: false, roleRemoved: false };
     state.roles = state.roles.map(role => {
       if (role.id === id) {
         const { roleRemoving, ...roleCopy } = role;
@@ -137,29 +133,41 @@ const mutations = {
   },
 
   addEmployeeToRoleRequest(state, emplId, roleId) {
-    state.status.employeeToRoleAdding = true;
+    state.status = { ...state.status, employeeToRoleAdding: true };
     state.addEmployeeToRole = { roleId, emplId };
   },
   addEmployeeToRoleSuccess(state, emplId, roleId) {
-    state.status.employeeToRoleAdding = false;
-    state.status.employeeToRoleAdded = true;
+    state.status = {
+      ...state.status,
+      employeeToRoleAdding: false,
+      employeeToRoleAdded: true
+    };
     state.addEmployeeToRole = { roleId, emplId };
   },
   addEmployeeToRoleFailure(state, error) {
-    state.status.employeeToRoleAdding = false;
-    state.status.employeeToRoleAdded = false;
+    state.status = {
+      ...state.status,
+      employeeToRoleAdding: false,
+      employeeToRoleAdded: false
+    };
     state.error = error;
   },
   removeEmployeeFromRoleRequest(state, emplId, roleId) {
-    state.status.removingEmployeeFromRole = true;
+    state.status = { ...state.status, removingEmployeeFromRole: true };
   },
   removeEmployeeFromRoleSuccess(state, emplId, roleId) {
-    state.status.removingEmployeeFromRole = false;
-    state.status.removedEmployeeFromRole = true;
+    state.status = {
+      ...state.status,
+      removingEmployeeFromRole: false,
+      removedEmployeeFromRole: true
+    };
   },
   removeEmployeeFromRoleFailure(state, emplId, roleId, error) {
-    state.status.removingEmployeeFromRole = false;
-    state.status.removedEmployeeFromRole = false;
+    state.status = {
+      ...state.status,
+      removingEmployeeFromRole: false,
+      removedEmployeeFromRole: false
+    };
   }
 };
 

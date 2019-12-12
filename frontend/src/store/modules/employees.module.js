@@ -63,34 +63,46 @@ const mutations = {
   },
 
   addEmployeeRequest(state, login) {
+    state.status = { ...state.status, employeeAdding: true };
     state.emloyeeToAdd = { login };
-    state.status.employeeAdding = true;
   },
   addEmployeeSuccess(state, employee) {
-    state.status.employeeAdded = true;
-    state.status.employeeAdding = false;
+    state.status = {
+      ...state.status,
+      employeeAdding: false,
+      employeeAdded: true
+    };
     state.employees.push(employee);
   },
   addEmployeeFailure(state, error) {
-    state.status.employeeAdded = false;
-    state.status.employeeAdding = false;
+    state.status = {
+      ...state.status,
+      employeeAdding: false,
+      employeeAdded: false
+    };
     state.error = error;
   },
 
   removeEmployeeRequest(state, id) {
-    state.status.employeeRemoving = true;
+    state.status = { ...state.status, employeeRemoving: true };
     state.employees = state.employees.map(empl =>
       empl.employeeId === id ? { ...empl, employeeRemoving: true } : empl
     );
   },
   removeEmployeeSuccess(state, id) {
-    state.status.employeeRemoved = true;
-    state.status.employeeRemoving = false;
+    state.status = {
+      ...state.status,
+      employeeRemoving: false,
+      employeeRemoved: true
+    };
     state.employees = state.employees.filter(empl => empl.employeeId !== id);
   },
   removeEmployeeFailure(state, { id, error }) {
-    state.status.employeeRemoved = false;
-    state.status.employeeRemoving = false;
+    state.status = {
+      ...state.status,
+      employeeRemoving: false,
+      employeeRemoved: false
+    };
     state.employees = state.employees.map(empl => {
       if (empl.employeeId === id) {
         const { employeeRemoving, ...emplCopy } = empl;
