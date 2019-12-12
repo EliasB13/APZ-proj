@@ -34,6 +34,18 @@ namespace APZ_BACKEND.Presentation.Controllers
 			return Ok(employeesRoles);
 		}
 
+		[HttpGet("employees-in-role/{roleId}")]
+		public async Task<IActionResult> GetEmployeesInRole(int roleId)
+		{
+			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+				return BadRequest(new { message = "Current user is not a businessUser" });
+
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+
+			var employeesRoles = await employeesRolesService.GetEmployeesInRole(contextUserId, roleId);
+			return Ok(employeesRoles);
+		}
+
 		[HttpPost("create-employees-role")]
 		public async Task<IActionResult> CreateEmployeesRole(CreateEmployeesRoleDto createDto)
 		{

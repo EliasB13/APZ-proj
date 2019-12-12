@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using APZ_BACKEND.Core.Dtos.Employee;
 using APZ_BACKEND.Core.Dtos.EmployeesRoles;
 using APZ_BACKEND.Core.Entities;
 using APZ_BACKEND.Core.Interfaces;
@@ -105,6 +106,20 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 			var roleDtos = roles.Select(r => r.ToDto());
 
 			return roleDtos;
+		}
+
+		public async Task<IEnumerable<EmployeeDto>> GetEmployeesInRole(int businessUserId, int roleId)
+		{
+			var role = await employeesRoleRepository.SingleOrDefaultAsync(r => r.Id == roleId, r => r.BusinessUser);
+			if (role != null)
+			{
+				if (role.BusinessUser.Id == businessUserId)
+				{
+					var employees = await employeesRepository.ListAllAsync(e => e.EmployeesRole.Id == roleId, e => e.PrivateUser);
+					return employees.Select(e => e.ToEmployeeDto(role.BusinessUser.CompanyName)).ToList();
+				}
+			}
+			return new List<EmployeeDto>();
 		}
 
 		public async Task<GenericServiceResponse<EmployeesRole>> RemoveEmployeeFromRole(int employeesRoleId, int employeeId)

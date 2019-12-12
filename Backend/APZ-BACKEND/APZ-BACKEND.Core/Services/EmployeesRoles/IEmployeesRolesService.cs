@@ -1,4 +1,5 @@
-﻿using APZ_BACKEND.Core.Dtos.EmployeesRoles;
+﻿using APZ_BACKEND.Core.Dtos.Employee;
+using APZ_BACKEND.Core.Dtos.EmployeesRoles;
 using APZ_BACKEND.Core.Entities;
 using APZ_BACKEND.Core.Services.Communication;
 using System;
@@ -11,6 +12,7 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 	public interface IEmployeesRolesService
 	{
 		Task<IEnumerable<EmployeesRoleDto>> GetBusinessEmployeesRoles(int businessUserId);
+		Task<IEnumerable<EmployeeDto>> GetEmployeesInRole(int businessUserId, int roleId); 
 		Task<GenericServiceResponse<EmployeesRoleDto>> Create(int businessUserId, CreateEmployeesRoleDto employeesRoleDto);
 		Task<GenericServiceResponse<EmployeesRole>> AddEmployeeToRole(int employeeId, int roleId);
 		Task<GenericServiceResponse<EmployeesRole>> Update(EmployeesRoleDto updateEmployeesRole);
