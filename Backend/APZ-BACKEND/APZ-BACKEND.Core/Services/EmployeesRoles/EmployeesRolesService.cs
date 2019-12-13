@@ -28,30 +28,30 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 			this.businessUsersService = businessUsersService;
 		}
 
-		public async Task<GenericServiceResponse<EmployeesRole>> AddEmployeeToRole(int employeeId, int roleId)
+		public async Task<GenericServiceResponse<EmployeeDto>> AddEmployeeToRole(int employeeId, int roleId)
 		{
 			try
 			{
 				var role = await employeesRoleRepository.SingleOrDefaultAsync(er => er.Id == roleId);
 				if (role == null)
-					return new GenericServiceResponse<EmployeesRole>($"Role with id: {roleId} wasn't found");
+					return new GenericServiceResponse<EmployeeDto>($"Role with id: {roleId} wasn't found");
 
-				var employee = await employeesRepository.SingleOrDefaultAsync(e => e.Id == employeeId, e => e.EmployeesRole);
+				var employee = await employeesRepository.SingleOrDefaultAsync(e => e.Id == employeeId, e => e.PrivateUser);
 				if (employee == null)
-					return new GenericServiceResponse<EmployeesRole>($"Employee with id: {employeeId} wasn't found");
+					return new GenericServiceResponse<EmployeeDto>($"Employee with id: {employeeId} wasn't found");
 
 				if (employee.EmployeesRole != null)
 					if (employee.EmployeesRole.Id == roleId)
-						return new GenericServiceResponse<EmployeesRole>($"Employee with id: {employeeId} already in role with id: {roleId}");
+						return new GenericServiceResponse<EmployeeDto>($"Employee with id: {employeeId} already in role with id: {roleId}");
 
 				employee.EmployeesRole = role;
 				await employeesRepository.UpdateAsync(employee);
 
-				return new GenericServiceResponse<EmployeesRole>(role);
+				return new GenericServiceResponse<EmployeeDto>(employee.ToEmployeeDto(employee.BusinessUser.CompanyName));
 			}
 			catch (Exception ex)
 			{
-				return new GenericServiceResponse<EmployeesRole>("Adding employee to role: " + ex.Message);
+				return new GenericServiceResponse<EmployeeDto>("Adding employee to role: " + ex.Message);
 			}
 		}
 
