@@ -12,7 +12,9 @@
         </div>
       </div>
     </div>
-    <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4"></div>
+    <div
+      class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4"
+    ></div>
     <div class="card-body pt-0 pt-md-4">
       <div class="text-center mt-6">
         <h3>{{ firstName + " " + lastName }}</h3>
@@ -24,10 +26,8 @@
     <i
       v-if="selectionMode"
       :class="
-            `far ${
-              selected ? icon.checkedSquare : icon.square
-            } fa-lg selection-box`
-          "
+        `far ${selected ? icon.checkedSquare : icon.square} fa-lg selection-box`
+      "
     ></i>
   </div>
 </template>

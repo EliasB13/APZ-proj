@@ -11,10 +11,8 @@
             <i
               v-if="selectionMode"
               :class="
-            `far ${
-              selected ? icon.checkedSquare : icon.square
-            } fa-lg`
-          "
+                `far ${selected ? icon.checkedSquare : icon.square} fa-lg`
+              "
             ></i>
           </b-col>
           <b-col class="auto" align-self="center">
@@ -31,11 +29,7 @@
           <hr />
           <b-row>
             <b-col>
-              <base-button
-                v-if="!selectionMode"
-                type="primary"
-                @click="showEmployeesClick"
-              >Show employees</base-button>
+              <base-button type="primary" @click="showEmployeesClick">Show employees</base-button>
             </b-col>
           </b-row>
         </b-card>
@@ -45,68 +39,20 @@
         v-model="employeesCollapseVisible"
         class="mt-2"
       >
-        <b-card>
-          <template v-slot:header>
-            <b-row>
-              <b-col>
-                <form
-                  class="navbar-search navbar-search-light form-inline mr-3 d-none d-md-flex ml-lg-auto"
-                >
-                  <div class="form-group mb-0">
-                    <base-input
-                      placeholder="Search"
-                      class="input-group-alternative"
-                      alternative
-                      addon-right-icon="fas fa-search"
-                    ></base-input>
-                  </div>
-                </form>
-              </b-col>
-              <b-col cols="auto" align-self="center">
-                <base-button
-                  v-if="employeesSelectionMode"
-                  type="link"
-                  @click="resetEmployeesClick"
-                >Reset</base-button>
-                <base-button type="success" size="sm" icon="fas fa-plus" @click="addEmployeesClick"></base-button>
-                <base-button
-                  type="danger"
-                  size="sm"
-                  icon="fas fa-minus"
-                  @click="removeEmployeesClick"
-                ></base-button>
-              </b-col>
-            </b-row>
-          </template>
-
-          <div
-            class="card p-2 px-4 mb-2 role-card-hover"
-            style="background-color: #FFFAFA;"
-            v-for="employee in employeesInRole"
-            :key="employee.id"
-          >
-            <b-row>
-              <b-col cols="auto" align-self="center">
-                <div class="avatar">
-                  <img src="img/theme/team-4-800x800.jpg" class="rounded-circle" />
-                </div>
-              </b-col>
-              <b-col>
-                <h3>{{ employee.firstName + " " + employee.lastName }}</h3>
-                <div class="h5 font-weight-300">{{ employee.login }}</div>
-              </b-col>
-            </b-row>
-          </div>
-        </b-card>
+        <employees-in-role-list :showEmployees="employeesCollapseVisible" :roleId="roleId"></employees-in-role-list>
       </b-collapse>
     </b-col>
   </b-row>
 </template>
 <script>
 import { mapActions, mapState } from "vuex";
+import EmployeesInRoleList from "../components/EmployeesInRoleList";
 
 export default {
   name: "role-card",
+  components: {
+    EmployeesInRoleList
+  },
   props: {
     roleId: Number,
     description: String,
@@ -156,14 +102,11 @@ export default {
       }
     },
     showEmployeesClick() {
-      if (!this.employeesCollapseVisible) {
-        this.getEmployeesInRole(this.roleId);
-      }
+      // if (!this.employeesCollapseVisible) {
+      //   this.getEmployeesInRole(this.roleId);
+      // }
       this.employeesCollapseVisible = !this.employeesCollapseVisible;
-    },
-    addEmployesClick() {},
-    removeEmployeesClick() {},
-    resetEmployeesClick() {}
+    }
   }
 };
 </script>

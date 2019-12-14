@@ -12,7 +12,7 @@ const actions = {
     userService.login(login, password, isBusinessUser).then(
       user => {
         commit("loginSuccess", user);
-        if (isBusinessUser) router.push("/items");
+        if (isBusinessUser) router.push("/business-items");
         else router.push("/availableServices");
       },
       error => {

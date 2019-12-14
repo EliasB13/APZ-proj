@@ -9,6 +9,8 @@ import BaseHeader from "../components/BaseHeader";
 import BaseCard from "../components/BaseCard";
 import UserCard from "../components/UserCard";
 import RoleCard from "../components/RoleCard";
+import Card from "../components/Card";
+import Modal from "../components/Modal";
 
 export default {
   install(Vue) {
@@ -21,5 +23,7 @@ export default {
     Vue.component(BaseCard.name, BaseCard);
     Vue.component(UserCard.name, UserCard);
     Vue.component(RoleCard.name, RoleCard);
+    Vue.component(Card.name, Card);
+    Vue.component(Modal.name, Modal);
   }
 };
