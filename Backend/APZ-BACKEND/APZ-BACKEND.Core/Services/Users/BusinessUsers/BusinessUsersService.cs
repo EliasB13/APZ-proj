@@ -97,16 +97,16 @@ namespace APZ_BACKEND.Core.Services.Users.BusinessUsers
 			return new GenericServiceResponse<BusinessUserAccountData>(user.ToAccountData());
 		}
 
-		public async Task<GenericServiceResponse<BusinessUser>> UpdateBusinessUser(UpdateBusinessUserRequest editData, int businessUserId)
+		public async Task<GenericServiceResponse<BusinessUserAccountData>> UpdateBusinessUser(UpdateBusinessUserRequest editData, int businessUserId)
 		{
 			var dbUser = await usersRepository.GetByIdAsync(businessUserId);
 			if (dbUser == null)
-				return new GenericServiceResponse<BusinessUser>("User with specified id wasn't found.");
+				return new GenericServiceResponse<BusinessUserAccountData>("User with specified id wasn't found.");
 
 			dbUser.UpdateUserFromDto(editData);
 			await usersRepository.UpdateAsync(dbUser);
 
-			return new GenericServiceResponse<BusinessUser>(dbUser);
+			return new GenericServiceResponse<BusinessUserAccountData>(dbUser.ToAccountData());
 		}
 
 		public async Task<GenericServiceResponse<BusinessUser>> DeleteBusinessUser(int businessUserId)
