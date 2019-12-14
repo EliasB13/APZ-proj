@@ -19,7 +19,12 @@
           </form>
         </b-col>
         <b-col cols="auto" align-self="center">
-          <base-button v-if="employeesSelectionMode" type="link" @click="resetEmployeesClick">Reset</base-button>
+          <base-button
+            v-if="employeesSelectionMode"
+            type="link"
+            @click="resetEmployeesClick"
+            >Reset</base-button
+          >
           <base-button
             v-if="!employeesSelectionMode"
             type="success"
@@ -27,7 +32,12 @@
             icon="fas fa-plus"
             @click="showAddingModal = true"
           ></base-button>
-          <base-button type="danger" size="sm" icon="fas fa-minus" @click="removeEmployeeClick"></base-button>
+          <base-button
+            type="danger"
+            size="sm"
+            icon="fas fa-minus"
+            @click="removeEmployeeClick"
+          ></base-button>
         </b-col>
       </b-row>
     </template>
@@ -43,15 +53,22 @@
             <b-col cols="auto" v-if="employeesSelectionMode">
               <i
                 :class="
-                      `far ${employee.selected ? icon.checkedSquare : icon.square} fa-lg`
-                    "
+                  `far ${
+                    employee.selected ? icon.checkedSquare : icon.square
+                  } fa-lg`
+                "
               ></i>
             </b-col>
             <b-col cols="auto">
-              <img src="img/theme/team-4-800x800.jpg" class="rounded-circle avatar" />
+              <img
+                src="img/theme/team-4-800x800.jpg"
+                class="rounded-circle avatar"
+              />
             </b-col>
             <b-col>
-              <h3 class="mt-1">{{ employee.firstName + " " + employee.lastName }}</h3>
+              <h3 class="mt-1">
+                {{ employee.firstName + " " + employee.lastName }}
+              </h3>
               <div class="h5 font-weight-300 mb-1">{{ employee.login }}</div>
             </b-col>
           </b-row>
@@ -67,7 +84,9 @@
       modal-classes="modal-dialog-centered modal-lg"
       :showClose="false"
     >
-      <div slot="header" class="modal-title">Select employee to add in role</div>
+      <div slot="header" class="modal-title">
+        Select employee to add in role
+      </div>
       <card
         type="secondary"
         header-classes="bg-white text-default"
@@ -100,16 +119,25 @@
                   <b-col cols="auto">
                     <i
                       :class="
-                      `far ${mEmployee.selected ? icon.checkedSquare : icon.square} fa-lg`
-                    "
+                        `far ${
+                          mEmployee.selected ? icon.checkedSquare : icon.square
+                        } fa-lg`
+                      "
                     ></i>
                   </b-col>
                   <b-col cols="auto">
-                    <img src="img/theme/team-4-800x800.jpg" class="rounded-circle avatar" />
+                    <img
+                      src="img/theme/team-4-800x800.jpg"
+                      class="rounded-circle avatar"
+                    />
                   </b-col>
                   <b-col>
-                    <h3 class="mt-1">{{ mEmployee.firstName + " " + mEmployee.lastName }}</h3>
-                    <div class="h5 font-weight-300 mb-1">{{ mEmployee.login }}</div>
+                    <h3 class="mt-1">
+                      {{ mEmployee.firstName + " " + mEmployee.lastName }}
+                    </h3>
+                    <div class="h5 font-weight-300 mb-1">
+                      {{ mEmployee.login }}
+                    </div>
                   </b-col>
                 </b-row>
               </div>
@@ -122,8 +150,12 @@
         </template>
       </card>
       <template slot="footer">
-        <base-button type="link" @click="showAddingModal = false">Close</base-button>
-        <base-button type="success" class="ml-auto" @click="addEmployeeClick">Add</base-button>
+        <base-button type="link" @click="showAddingModal = false"
+          >Close</base-button
+        >
+        <base-button type="success" class="ml-auto" @click="addEmployeeClick"
+          >Add</base-button
+        >
       </template>
     </modal>
     <div v-if="showSpinner" class="text-center">

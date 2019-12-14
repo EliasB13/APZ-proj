@@ -6,7 +6,8 @@ export const userService = {
   register,
   getById,
   update,
-  delete: _delete
+  delete: _delete,
+  getAccountData
 };
 
 function login(login, password, isBusinessUser) {
@@ -55,6 +56,20 @@ function register(user, isBusinessUser) {
   return fetch(requestString, requestOptions).then(handleResponse);
 }
 
+function getAccountData(isBusinessUser) {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader()
+  };
+
+  var endpointString = isBusinessUser
+    ? "BusinessUsers/account-data"
+    : "PrivateUsers/account-data";
+  const requestString = `${process.env.VUE_APP_DEV_BACKEND_URL}/${endpointString}`;
+
+  return fetch(requestString, requestOptions).then(handleResponse);
+}
+
 function getById(id) {
   const requestOptions = {
     method: "GET",
@@ -67,15 +82,17 @@ function getById(id) {
   ).then(handleResponse);
 }
 
-function update(user) {
+function update(user, isBusinessUser) {
   const requestOptions = {
     method: "PUT",
     headers: { ...authHeader(), "Content-Type": "application/json" },
     body: JSON.stringify(user)
   };
 
+  var endpoint = isBusinessUser ? "BusinessUsers" : "PrivateUsers";
+
   return fetch(
-    `${process.env.VUE_APP_DEV_BACKEND_URL}/users/${user.id}`,
+    `${process.env.VUE_APP_DEV_BACKEND_URL}/${endpoint}`,
     requestOptions
   ).then(handleResponse);
 }

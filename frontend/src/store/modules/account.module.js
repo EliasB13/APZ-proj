@@ -3,8 +3,8 @@ import { router } from "../../helpers";
 
 const user = JSON.parse(localStorage.getItem("user"));
 const state = user
-  ? { status: { loggedIn: true }, user }
-  : { status: {}, user: null };
+  ? { status: { loggedIn: true }, user, userToUpdate: {} }
+  : { status: {}, user: null, userToUpdate: {} };
 
 const actions = {
   login({ dispatch, commit }, { login, password, isBusinessUser }) {
@@ -59,6 +59,39 @@ const actions = {
         dispatch("alert/error", error, { root: true });
       }
     );
+  },
+  getAccountData({ commit, dispatch }, isBusinessUser) {
+    commit("getAccountDataRequest", isBusinessUser);
+
+    userService.getAccountData(isBusinessUser).then(
+      accountData => {
+        commit("getAccountDataSuccess", accountData);
+        dispatch("alert/success", "Account data were successfuly loaded", {
+          root: true
+        });
+      },
+      error => {
+        commit("getAccountDataFailure", error);
+        dispatch("alert/error", "Account data weren't loaded", { root: true });
+      }
+    );
+  },
+
+  updateUser({ commit, dispatch }, { user, isBusinessUser }) {
+    commit("updateUserRequest", user);
+
+    userService.update(user, isBusinessUser).then(
+      updatedUser => {
+        commit("updateUserSuccess", updatedUser);
+        dispatch("alert/success", "User was successfuly updated", {
+          root: true
+        });
+      },
+      error => {
+        commit("updateUserFailure", error);
+        dispatch("alert/error", error, { root: true });
+      }
+    );
   }
 };
 
@@ -71,14 +104,17 @@ const mutations = {
     state.status = { loggedIn: true };
     state.user = user;
   },
-  loginFailure(state) {
+  loginFailure(state, error) {
     state.status = {};
     state.user = null;
+    state.error = error;
   },
+
   logout(state) {
     state.status = {};
     state.user = null;
   },
+
   registerRequest(state, user) {
     state.status = { registering: true };
   },
@@ -87,6 +123,37 @@ const mutations = {
   },
   registerFailure(state, error) {
     state.status = {};
+    state.error = error;
+  },
+
+  getAccountDataRequest(state, isBusinessUser) {
+    state.status = { ...state.status, accountDataLoading: true };
+  },
+  getAccountDataSuccess(state, accountData) {
+    state.status = {
+      ...state.status,
+      accountDataLoading: false,
+      accountDataLoaded: false
+    };
+    state.user = { ...state.user, ...accountData };
+  },
+  getAccountDataFailure(state, error) {
+    state.status = {};
+    state.error = error;
+  },
+
+  updateUserRequest(state, user) {
+    state.status = { ...state.status, userUpdating: true };
+    state.userToUpdate = user;
+  },
+  updateUserSuccess(state, updatedUser) {
+    state.status = { ...state.status, userUpdating: false, userUpdated: true };
+    state.user = { ...state.user, ...updatedUser };
+  },
+  updateUserFailure(state, error) {
+    state.status = { ...state.status, userUpdating: false, userUpdated: false };
+    state.userToUpdate = {};
+    state.error = error;
   }
 };
 

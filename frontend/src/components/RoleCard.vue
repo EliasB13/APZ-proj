@@ -23,13 +23,19 @@
           </b-col>
         </b-row>
       </div>
-      <b-collapse :id="`collapse-${roleId}`" v-model="collapseVisible" class="mt-2">
+      <b-collapse
+        :id="`collapse-${roleId}`"
+        v-model="collapseVisible"
+        class="mt-2"
+      >
         <b-card>
           <p class="card-text">Description: {{ description }}</p>
           <hr />
           <b-row>
             <b-col>
-              <base-button type="primary" @click="showEmployeesClick">Show employees</base-button>
+              <base-button type="primary" @click="showEmployeesClick"
+                >Show employees</base-button
+              >
             </b-col>
           </b-row>
         </b-card>
@@ -39,7 +45,10 @@
         v-model="employeesCollapseVisible"
         class="mt-2"
       >
-        <employees-in-role-list :showEmployees="employeesCollapseVisible" :roleId="roleId"></employees-in-role-list>
+        <employees-in-role-list
+          :showEmployees="employeesCollapseVisible"
+          :roleId="roleId"
+        ></employees-in-role-list>
       </b-collapse>
     </b-col>
   </b-row>
