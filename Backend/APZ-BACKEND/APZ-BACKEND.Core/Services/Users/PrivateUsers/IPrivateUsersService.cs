@@ -15,7 +15,7 @@ namespace APZ_BACKEND.Core.Services.Users.PrivateUsers
 		Task<GenericServiceResponse<PrivateUserProfile>> GetPublicProfile(int id);
 		Task<GenericServiceResponse<PrivateUserProfile>> GetPublicProfile(string login);
 		Task<GenericServiceResponse<PrivateUserAccountData>> GetAccountData(int id);
-		Task<GenericServiceResponse<PrivateUser>> UpdatePrivateUser(UpdatePrivateUserRequest editBusinessUserDto, int businessUserId);
+		Task<GenericServiceResponse<PrivateUserAccountData>> UpdatePrivateUser(UpdatePrivateUserRequest editBusinessUserDto, int businessUserId);
 		Task<GenericServiceResponse<PrivateUser>> DeletePrivateUser(int privateUserId);
 		Task<IEnumerable<BusinessUserProfile>> GetAvailableServices(int privateUserId);
 		Task<GenericServiceResponse<PrivateUser>> UpdatePhotoPath(string path, int userId);

@@ -105,16 +105,16 @@ namespace APZ_BACKEND.Core.Services.Users.PrivateUsers
 			return new GenericServiceResponse<PrivateUserProfile>(user.ToUserProfile());
 		}
 
-		public async Task<GenericServiceResponse<PrivateUser>> UpdatePrivateUser(UpdatePrivateUserRequest editData, int businessUserId)
+		public async Task<GenericServiceResponse<PrivateUserAccountData>> UpdatePrivateUser(UpdatePrivateUserRequest editData, int businessUserId)
 		{
 			var dbUser = await usersRepository.GetByIdAsync(businessUserId);
 			if (dbUser == null)
-				return new GenericServiceResponse<PrivateUser>("User with specified id wasn't found.");
+				return new GenericServiceResponse<PrivateUserAccountData>("User with specified id wasn't found.");
 
 			dbUser.UpdateUserFromDto(editData);
 			await usersRepository.UpdateAsync(dbUser);
 
-			return new GenericServiceResponse<PrivateUser>(dbUser);
+			return new GenericServiceResponse<PrivateUserAccountData>(dbUser.ToAccountData());
 		}
 
 		public async Task<GenericServiceResponse<PrivateUser>> DeletePrivateUser(int businessUserId)

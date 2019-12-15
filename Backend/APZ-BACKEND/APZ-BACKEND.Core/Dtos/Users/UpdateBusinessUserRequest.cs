@@ -19,7 +19,5 @@ namespace APZ_BACKEND.Core.Dtos.Users
 		public string Address { get; set; }
 		[Required]
 		public string Phone { get; set; }
-		[Required]
-		public string Photo { get; set; }
 	}
 }

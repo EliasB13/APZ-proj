@@ -72,12 +72,10 @@ namespace APZ_BACKEND.Core.Mappers
 			user.Email = userData.Email;
 			user.Login = userData.Login;
 			user.Phone = userData.Phone;
-			user.Photo = userData.Photo;
 		}
 
 		public static void UpdateUserFromDto(this PrivateUser user, UpdatePrivateUserRequest userData)
 		{
-			user.Photo = userData.Photo;
 			user.Email = userData.Email;
 			user.FirstName = userData.FirstName;
 			user.LastName = userData.LastName;

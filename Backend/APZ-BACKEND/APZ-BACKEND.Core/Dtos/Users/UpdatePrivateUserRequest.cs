@@ -8,8 +8,6 @@ namespace APZ_BACKEND.Core.Dtos.Users
 	public class UpdatePrivateUserRequest
 	{
 		[Required]
-		public int Id { get; set; }
-		[Required]
 		public string Login { get; set; }
 		[Required]
 		public string Email { get; set; }
@@ -19,7 +17,5 @@ namespace APZ_BACKEND.Core.Dtos.Users
 		public string LastName { get; set; }
 		[Required]
 		public string Phone { get; set; }
-		[Required]
-		public string Photo { get; set; }
 	}
 }
