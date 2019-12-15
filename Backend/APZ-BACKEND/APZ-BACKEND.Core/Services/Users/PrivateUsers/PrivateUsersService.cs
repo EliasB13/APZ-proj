@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using APZ_BACKEND.Core.Dtos.Auth;
+using APZ_BACKEND.Core.Dtos.SharedItems;
 using APZ_BACKEND.Core.Dtos.Users;
 using APZ_BACKEND.Core.Entities;
 using APZ_BACKEND.Core.Exceptions;
@@ -17,14 +18,17 @@ namespace APZ_BACKEND.Core.Services.Users.PrivateUsers
 		private readonly IAsyncRepository<PrivateUser> usersRepository;
 		private readonly IAsyncRepository<Employee> employeesRepository;
 		private readonly IAsyncRepository<BusinessUser> businessUsersRepository;
+		private readonly ISharedItemsRepository sharedItemsRepository;
 
 		public PrivateUsersService(IAsyncRepository<PrivateUser> privateUserRepository,
 			IAsyncRepository<Employee> employeesRepository,
-			IAsyncRepository<BusinessUser> businessUsersRepository)
+			IAsyncRepository<BusinessUser> businessUsersRepository,
+			ISharedItemsRepository sharedItemsRepository)
 		{
 			this.usersRepository = privateUserRepository;
 			this.employeesRepository = employeesRepository;
 			this.businessUsersRepository = businessUsersRepository;
+			this.sharedItemsRepository = sharedItemsRepository;
 		}
 
 		public async Task<PrivateUser> AuthenticatePrivateAsync(string login, string password)
@@ -142,6 +146,12 @@ namespace APZ_BACKEND.Core.Services.Users.PrivateUsers
 			}
 
 			return new List<BusinessUserProfile>();
+		}
+
+		public async Task<IEnumerable<SharedItemDto>> GetActiveItems(int privateUserId)
+		{
+			var items = await sharedItemsRepository.GetActiveItemsByUser(privateUserId);
+			return items.Select(si => si.ToDto(true));
 		}
 
 		public async Task<GenericServiceResponse<PrivateUser>> UpdatePhotoPath(string path, int userId)

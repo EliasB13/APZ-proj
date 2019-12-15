@@ -274,6 +274,7 @@ namespace APZ_BACKEND.Core.Services.Items
 		{
 			try
 			{
+				var a = Encoding.UTF8.GetBytes(takeItemRequest.UserRfid);
 				var user = await privateUsersRepository.SingleOrDefaultAsync(pu => pu.RfidNumber == Encoding.UTF8.GetBytes(takeItemRequest.UserRfid));
 				if (user == null)
 					return new GenericServiceResponse<SharedItem>("User wasn't found");

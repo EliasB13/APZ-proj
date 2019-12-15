@@ -83,6 +83,20 @@ namespace APZ_BACKEND.Presentation.Controllers
 			return Ok(services);
 		}
 
+		[HttpGet("active-items")]
+		public async Task<IActionResult> GetActiveItems()
+		{
+			if (ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+				return BadRequest(new { message = "Current user is not a private user" });
+
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+
+			var items = await userService.GetActiveItems(contextUserId);
+
+			return Ok(items);
+
+		}
+
 		[AllowAnonymous]
 		[HttpPost("authenticate-private")]
 		public async Task<IActionResult> AuthenticatePrivate([FromBody]AuthenticateRequest model)

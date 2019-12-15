@@ -9,5 +9,6 @@ namespace APZ_BACKEND.Core.Interfaces
 	public interface ISharedItemsRepository : IAsyncRepository<SharedItem>
 	{
 		Task<bool> IsItemAvailableForUser(int itemId, int privateUserId);
+		Task<IEnumerable<SharedItem>> GetActiveItemsByUser(int privateUserId);
 	}
 }
