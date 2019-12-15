@@ -1,59 +1,27 @@
 <template>
   <div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }">
-    <side-bar
-      :background-color="sidebarBackground"
-      short-title="Argon"
-      title="Argon"
-    >
+    <side-bar :background-color="sidebarBackground" short-title="GetIt" title="GetIt">
       <template slot="links">
         <sidebar-item
           :link="{
-            name: 'Dashboard',
+            name: 'Available services',
             icon: 'ni ni-tv-2 text-primary',
-            path: '/dashboard'
+            path: '/availableServices'
           }"
         />
 
         <sidebar-item
           :link="{
-            name: 'Icons',
+            name: 'Active items',
             icon: 'ni ni-planet text-blue',
-            path: '/icons'
+            path: '/active-items'
           }"
         />
         <sidebar-item
           :link="{
-            name: 'Maps',
+            name: 'Profile',
             icon: 'ni ni-pin-3 text-orange',
-            path: '/maps'
-          }"
-        />
-        <sidebar-item
-          :link="{
-            name: 'User Profile',
-            icon: 'ni ni-single-02 text-yellow',
             path: '/profile'
-          }"
-        />
-        <sidebar-item
-          :link="{
-            name: 'Tables',
-            icon: 'ni ni-bullet-list-67 text-red',
-            path: '/tables'
-          }"
-        />
-        <sidebar-item
-          :link="{
-            name: 'Login',
-            icon: 'ni ni-key-25 text-info',
-            path: '/login'
-          }"
-        />
-        <sidebar-item
-          :link="{
-            name: 'Register',
-            icon: 'ni ni-circle-08 text-pink',
-            path: '/register'
           }"
         />
       </template>
@@ -84,7 +52,7 @@ export default {
   },
   data() {
     return {
-      sidebarBackground: "vue" //vue|blue|orange|green|red|primary
+      sidebarBackground: "vue"
     };
   },
   methods: {

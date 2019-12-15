@@ -5,9 +5,10 @@
         <div class="row">
           <div class="col-lg-7 col-md-10">
             <h1 class="display-2 text-white">Hello, {{ user.login }}</h1>
-            <p
-              class="text-white mt-0 mb-5"
-            >This is your profile page. Here you can edit information about you.</p>
+            <p class="text-white mt-0 mb-5">
+              This is your profile page. Here you can edit information about
+              you.
+            </p>
           </div>
         </div>
       </div>
@@ -77,7 +78,7 @@
                   <div class="row">
                     <div class="col-lg-6">
                       <label class="form-control-label">Address</label>
-                      <p>{{ user.address ? user.address : '-' }}</p>
+                      <p>{{ user.address ? user.address : "-" }}</p>
                     </div>
                     <div class="col-lg-6">
                       <label class="form-control-label">Phone</label>
@@ -119,8 +120,8 @@
                     <div class="col-lg-6">
                       <base-input
                         alternative
-                        label="Username"
-                        placeholder="Username"
+                        label="Login"
+                        placeholder="Login"
                         input-classes="form-control-alternative"
                         v-model="model.login"
                       />

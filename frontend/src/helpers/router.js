@@ -17,7 +17,7 @@ export const router = new Router({
       children: [
         {
           path: "/business-items",
-          name: "business-items",
+          name: "business items",
           component: () => import("../views/businessUsers/Items.vue")
         },
         {
@@ -27,7 +27,7 @@ export const router = new Router({
         },
         {
           path: "/business-profile",
-          name: "business-profile",
+          name: "business profile",
           component: () => import("../views/businessUsers/Profile.vue")
         },
         {
@@ -44,13 +44,13 @@ export const router = new Router({
       children: [
         {
           path: "/availableServices",
-          name: "availableServices",
+          name: "available services",
           component: () =>
             import("../views/privateUsers/AvailiableServices.vue")
         },
         {
-          path: "/private-items",
-          name: "private-items",
+          path: "/active-items",
+          name: "active items",
           component: () => import("../views/privateUsers/Items.vue")
         },
         {
