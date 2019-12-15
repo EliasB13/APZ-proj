@@ -15,7 +15,12 @@
     <div class="container-fluid mt--7 mb-5"></div>
 
     <div class="container-fluid">
-      <base-cards-list cardType="base-card" v-if="showItems" :itemsList="activeItems"></base-cards-list>
+      <base-cards-list
+        colsClasses="col-xl-4 col-lg-6"
+        cardType="base-card"
+        v-if="showItems"
+        :itemsList="activeItems"
+      ></base-cards-list>
     </div>
 
     <div id="overlay" v-if="showSpinner">

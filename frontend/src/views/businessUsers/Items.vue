@@ -4,9 +4,9 @@
       <div class="container-fluid d-flex align-items-center">
         <div class="row">
           <div class="col-lg-7 col-md-10">
-            <p class="text-white mt-0 mb-5">
-              This is your items page. Here you can explore or manage your items
-            </p>
+            <p
+              class="text-white mt-0 mb-5"
+            >This is your items page. Here you can explore or manage your items</p>
           </div>
         </div>
       </div>
@@ -14,15 +14,10 @@
 
     <div class="container-fluid mt--7 mb-5">
       <b-row class="px-3">
-        <b-col
-          class="manage-bar"
-          style="background-color: white; border-radius: 0.375rem"
-        >
+        <b-col class="manage-bar" style="background-color: white; border-radius: 0.375rem">
           <b-row>
             <b-col align-self="center">
-              <h2 class="pl-3">
-                {{ selectionMode ? "Select items for removing" : "Manage" }}
-              </h2>
+              <h2 class="pl-3">{{ selectionMode ? "Select items for removing" : "Manage" }}</h2>
             </b-col>
             <b-col cols="auto" class="p-3">
               <base-button
@@ -31,15 +26,13 @@
                 type="success"
                 icon="ni ni-fat-add"
                 @click="showAddingModal = true"
-                >Add</base-button
-              >
+              >Add</base-button>
               <base-button
                 v-if="selectionMode"
                 class="float-right"
                 type="link"
                 @click="resetClick"
-                >Reset</base-button
-              >
+              >Reset</base-button>
             </b-col>
             <b-col cols="auto" class="p-3">
               <base-button
@@ -47,8 +40,7 @@
                 type="danger"
                 icon="ni ni-fat-remove"
                 @click="removeClick"
-                >Remove</base-button
-              >
+              >Remove</base-button>
             </b-col>
           </b-row>
         </b-col>
@@ -57,6 +49,7 @@
 
     <div class="container-fluid">
       <base-cards-list
+        colsClasses="col-lg-6 col-xl-4"
         cardType="base-card"
         :selectionMode="selectionMode"
         v-if="showItems"
@@ -98,12 +91,8 @@
         </template>
       </card>
       <template slot="footer">
-        <base-button type="link" @click="showAddingModal = false"
-          >Close</base-button
-        >
-        <base-button type="success" class="ml-auto" @click="addItemClick"
-          >Add</base-button
-        >
+        <base-button type="link" @click="showAddingModal = false">Close</base-button>
+        <base-button type="success" class="ml-auto" @click="addItemClick">Add</base-button>
       </template>
     </modal>
 

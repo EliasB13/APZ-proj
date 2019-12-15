@@ -3,8 +3,8 @@ import { router } from "../../helpers";
 
 const user = JSON.parse(localStorage.getItem("user"));
 const state = user
-  ? { status: { loggedIn: true }, user, userToUpdate: {} }
-  : { status: {}, user: null, userToUpdate: {} };
+  ? { status: { loggedIn: true }, user, userToUpdate: {}, publicProfile: {} }
+  : { status: {}, user: null, userToUpdate: {}, publicProfile: {} };
 
 const actions = {
   login({ dispatch, commit }, { login, password, isBusinessUser }) {
@@ -74,6 +74,18 @@ const actions = {
     );
   },
 
+  getPublicProfile({ commit, dispatch }, { isBusinessUser, userId }) {
+    commit("getPublicProfileRequest");
+
+    userService.getPublicProfile(isBusinessUser, userId).then(
+      profile => commit("getPublicProfileSuccess", profile),
+      error => {
+        commit("getPublicProfileFailure", error);
+        dispatch("alert/error", error, { root: true });
+      }
+    );
+  },
+
   updateUser({ commit, dispatch }, { user, isBusinessUser }) {
     commit("updateUserRequest", user);
 
@@ -136,6 +148,27 @@ const mutations = {
   },
   getAccountDataFailure(state, error) {
     state.status = {};
+    state.error = error;
+  },
+
+  getPublicProfileRequest(state) {
+    state.status = { ...state.status, publicProfileLoading: true };
+  },
+  getPublicProfileSuccess(state, profile) {
+    (state.status = {
+      ...state.status,
+      publicProfileLoading: false,
+      publicProfileLoaded: true
+    }),
+      (state.publicProfile = profile);
+  },
+  getPublicProfileFailure(state, error) {
+    (state.status = {
+      ...state.status,
+      publicProfileLoading: false,
+      publicProfileLoaded: false
+    }),
+      (state.publicProfile = {});
     state.error = error;
   },
 

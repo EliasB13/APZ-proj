@@ -1,6 +1,6 @@
 <template>
   <b-row>
-    <b-col xl="4" lg="6" class="mb-5" v-for="item in itemsList" :key="item.id">
+    <b-col :class="'mb-5 ' + colsClasses" v-for="item in itemsList" :key="item.id">
       <base-card
         v-if="cardType == 'base-card'"
         :itemName="item.name"
@@ -29,7 +29,8 @@ export default {
   props: {
     itemsList: Array,
     selectionMode: Boolean,
-    cardType: String
+    cardType: String,
+    colsClasses: String
   }
 };
 </script>

@@ -24,9 +24,9 @@ const actions = {
     commit("getAvailableServicesRequest");
 
     privateItemsService.getAvailableServices().then(
-      items => commit("getAvailableItemsSuccess", items),
+      items => commit("getAvailableServicesSuccess", items),
       error => {
-        commit("getAvailabelItemsFailure", error);
+        commit("getAvailableServicesFailure", error);
         dispatch("alert/error", error, { root: true });
       }
     );
@@ -35,7 +35,7 @@ const actions = {
     commit("getBusinessItemsRequest", businessUserId);
 
     privateItemsService.getItemsByBusiness(businessUserId).then(
-      items => commit("getBusinessItemsSucess", items),
+      items => commit("getBusinessItemsSuccess", items),
       error => {
         commit("getBusinessItemsFailure", error);
         dispatch("alert/error", error, { root: true });
@@ -62,13 +62,13 @@ const mutations = {
     state.activeItems = [];
   },
 
-  getAvailableServiceRequest(state) {
+  getAvailableServicesRequest(state) {
     state.status = {
       ...state.status,
       availableServicesLoading: false
     };
   },
-  getAvailableServiceSuccess(state, services) {
+  getAvailableServicesSuccess(state, services) {
     state.status = {
       ...state.status,
       availableServicesLoaded: true,
@@ -76,7 +76,7 @@ const mutations = {
     };
     state.availableServices = services;
   },
-  getAvailableServiceFailure(state, error) {
+  getAvailableServicesFailure(state, error) {
     state.status = {
       ...state.status,
       availableServicesLoaded: false,
@@ -95,16 +95,16 @@ const mutations = {
   getBusinessItemsSuccess(state, items) {
     state.status = {
       ...state.status,
-      buisnessItemsLoaded: true,
-      buisnessItemsLoading: false
+      businessItemsLoaded: true,
+      businessItemsLoading: false
     };
     state.businessItems = items;
   },
   getBusinessItemsFailure(state, error) {
     state.status = {
       ...state.status,
-      buisnessItemsLoaded: false,
-      buisnessItemsLoading: false
+      businessItemsLoaded: false,
+      businessItemsLoading: false
     };
     state.businessItems = [];
     state.error = error;

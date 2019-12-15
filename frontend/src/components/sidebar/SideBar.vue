@@ -36,10 +36,7 @@
             <a slot="title" class="nav-link" href="#" role="button">
               <div class="media align-items-center">
                 <span class="avatar avatar-sm rounded-circle">
-                  <img
-                    alt="Image placeholder"
-                    src="img/theme/team-1-800x800.jpg"
-                  />
+                  <img alt="Image placeholder" src="img/theme/team-1-800x800.jpg" />
                 </span>
               </div>
             </a>
@@ -85,9 +82,7 @@
               </router-link>
             </div>
             <div class="col-6 collapse-close">
-              <navbar-toggle-button
-                @click.native="closeSidebar"
-              ></navbar-toggle-button>
+              <navbar-toggle-button @click.native="closeSidebar"></navbar-toggle-button>
             </div>
           </div>
         </div>
@@ -113,7 +108,7 @@ export default {
   props: {
     logo: {
       type: String,
-      default: "img/brand/gi_logo.png",
+      default: "/img/brand/gi_logo.png",
       description: "Sidebar app logo"
     },
     autoClose: {

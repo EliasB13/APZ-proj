@@ -4,7 +4,7 @@ export const userService = {
   login,
   logout,
   register,
-  getById,
+  getPublicProfile,
   update,
   delete: _delete,
   getAccountData
@@ -70,16 +70,17 @@ function getAccountData(isBusinessUser) {
   return fetch(requestString, requestOptions).then(handleResponse);
 }
 
-function getById(id) {
+function getPublicProfile(isBusinessUser, userId) {
   const requestOptions = {
     method: "GET",
     headers: authHeader()
   };
 
-  return fetch(
-    `${process.env.VUE_APP_DEV_BACKEND_URL}/users/${id}`,
-    requestOptions
-  ).then(handleResponse);
+  var endpointString = isBusinessUser
+    ? "BusinessUsers/public-profile"
+    : "PrivateUsers/public-profile";
+  const requestString = `${process.env.VUE_APP_DEV_BACKEND_URL}/${endpointString}?id=${userId}`;
+  return fetch(requestString, requestOptions).then(handleResponse);
 }
 
 function update(user, isBusinessUser) {

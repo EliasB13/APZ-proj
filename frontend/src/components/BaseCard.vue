@@ -11,8 +11,7 @@
             <span
               :class="isTaken ? 'text-danger' : 'text-success'"
               class="font-weight-700"
-              >{{ isTaken ? "Taken" : "Available" }}</span
-            >
+            >{{ isTaken ? "Taken" : "Available" }}</span>
           </p>
         </div>
         <i
@@ -56,7 +55,7 @@ export default {
     isTaken: Boolean,
     itemImage: {
       type: String,
-      default: "img/theme/item.png"
+      default: "/img/theme/item.png"
     },
     itemId: Number,
     selectionMode: Boolean

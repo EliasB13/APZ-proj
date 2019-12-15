@@ -57,6 +57,12 @@ export const router = new Router({
           path: "/profile",
           name: "profile",
           component: () => import("../views/privateUsers/Profile.vue")
+        },
+        {
+          path: "/service/:serviceId",
+          name: "service",
+          component: () => import("../views/privateUsers/Service.vue"),
+          props: true
         }
       ]
     },
