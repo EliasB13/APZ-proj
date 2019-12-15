@@ -18,7 +18,8 @@ namespace APZ_BACKEND.Core.Mappers
 				Email = user.Email,
 				Id = user.Id,
 				Login = user.Login,
-				Phone = user.Phone
+				Phone = user.Phone,
+				Photo = user.Photo
 			};
 		}
 

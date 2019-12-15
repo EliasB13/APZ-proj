@@ -70,7 +70,7 @@ namespace APZ_BACKEND.Presentation.Controllers
 			return Ok(result.Item);
 		}
 
-		[HttpGet("availiable-services")]
+		[HttpGet("available-services")]
 		public async Task<IActionResult> GetAvailiableServices()
 		{
 			if (ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
