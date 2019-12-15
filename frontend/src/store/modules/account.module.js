@@ -66,9 +66,6 @@ const actions = {
     userService.getAccountData(isBusinessUser).then(
       accountData => {
         commit("getAccountDataSuccess", accountData);
-        dispatch("alert/success", "Account data were successfuly loaded", {
-          root: true
-        });
       },
       error => {
         commit("getAccountDataFailure", error);
