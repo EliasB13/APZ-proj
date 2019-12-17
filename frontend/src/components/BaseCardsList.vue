@@ -1,6 +1,10 @@
 <template>
   <b-row>
-    <b-col :class="'mb-5 ' + colsClasses" v-for="item in itemsList" :key="item.id">
+    <b-col
+      :class="'mb-5 ' + colsClasses"
+      v-for="item in itemsList"
+      :key="item.id"
+    >
       <base-card
         v-if="cardType == 'base-card'"
         :itemName="item.name"

@@ -17,7 +17,7 @@
         <sidebar-item
           :link="{
             name: 'Consumers',
-            icon: 'ni ni-badge text-blue',
+            icon: 'ni ni-badge text-success',
             path: '/consumers'
           }"
         />

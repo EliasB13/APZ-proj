@@ -1,4 +1,6 @@
 import { authHeader } from "../helpers";
+import { responseHandler } from "../helpers";
+
 export const businessItemsService = {
   getItems,
   addItem,
@@ -14,7 +16,7 @@ function getItems() {
   return fetch(
     `${process.env.VUE_APP_DEV_BACKEND_URL}/api/SharedItems`,
     requestOptions
-  ).then(handleResponse);
+  ).then(responseHandler.handleResponse);
 }
 
 function addItem(item) {
@@ -27,7 +29,7 @@ function addItem(item) {
   return fetch(
     `${process.env.VUE_APP_DEV_BACKEND_URL}/api/SharedItems`,
     requestOptions
-  ).then(handleResponse);
+  ).then(responseHandler.handleResponse);
 }
 
 function _delete(id) {
@@ -39,22 +41,5 @@ function _delete(id) {
   return fetch(
     `${process.env.VUE_APP_DEV_BACKEND_URL}/api/SharedItems/${id}`,
     requestOptions
-  ).then(handleResponse);
-}
-
-function handleResponse(response) {
-  return response.text().then(text => {
-    const data = text && JSON.parse(text);
-    if (!response.ok) {
-      if (response.status === 401) {
-        //userService.logout();
-        //location.reload(true);
-      }
-
-      const error = (data && data.message) || response.statusText;
-      return Promise.reject(error);
-    }
-
-    return data;
-  });
+  ).then(responseHandler.handleResponse);
 }

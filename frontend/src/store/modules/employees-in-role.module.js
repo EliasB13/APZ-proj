@@ -1,19 +1,26 @@
 import { rolesService } from "../../services";
 
 const state = {
-  roles: [],
+  employees: [],
+  status: {},
+  employeesToAdd: {},
   error: null
 };
 
 const actions = {
-  getEmployeesInRole({ commit }, roleId) {
+  getEmployeesInRole({ commit, dispatch }, roleId) {
     commit("getEmployeesByRoleRequest", roleId);
 
     rolesService.getEmployeesByRole(roleId).then(
       employees => {
-        commit("getEmployeesByRoleSuccess", { employees, roleId });
+        commit("getEmployeesByRoleSuccess", employees);
       },
-      error => commit("getEmployeesByRole", { error, roleId })
+      error => {
+        commit("getEmployeesByRole", error);
+        dispatch("alert/error", error.toString(), {
+          root: true
+        });
+      }
     );
   },
   addEmployeeToRole({ commit, dispatch }, { emplId, roleId }) {
@@ -21,12 +28,12 @@ const actions = {
 
     rolesService.addEmployeeToRole(emplId, roleId).then(
       employee => {
-        commit("addEmployeeToRoleSuccess", { employee, roleId });
+        commit("addEmployeeToRoleSuccess", employee);
         dispatch("alert/success", "Employee was added to role", { root: true });
       },
       error => {
-        commit("addEmployeeToRoleFailure", { error, roleId });
-        dispatch("alert/error", "Employee wasn't added to role", {
+        commit("addEmployeeToRoleFailure", error);
+        dispatch("alert/error", error.toString(), {
           root: true
         });
       }
@@ -37,148 +44,96 @@ const actions = {
 
     rolesService.removeEmployeeFromRole(emplId, roleId).then(
       () => {
-        commit("removeEmployeeFromRoleSuccess", { emplId, roleId });
+        commit("removeEmployeeFromRoleSuccess", emplId);
         dispatch("alert/success", "Employee was removed from role", {
           root: true
         });
         dispatch("selectedItems/resetSelectedItems", {}, { root: true });
       },
       error => {
-        commit("removeEmployeeFromRoleFailure", {
-          emplId,
-          roleId,
-          error: error.toString()
-        });
-        dispatch("alert/error", error, { root: true });
+        commit("removeEmployeeFromRoleFailure", error);
+        dispatch("alert/error", error.toString(), { root: true });
       }
     );
+  },
+  resetState({ commit }) {
+    commit("resetState");
   }
 };
 
 const mutations = {
   getEmployeesByRoleRequest(state, roleId) {
-    var roleL = state.roles.find(r => r.roleId == roleId);
-    if (!roleL) {
-      state.roles.push({ roleId, status: { employeesLoading: true } });
-    }
-    state.roles = state.roles.map(r => {
-      if (r.roleId == roleId)
-        return {
-          ...r,
-          status: {
-            ...r.status,
-            employeesLoading: true
-          }
-        };
-      return r;
-    });
+    state.status = { ...state.status, employeesLoading: true };
   },
-  getEmployeesByRoleSuccess(state, role) {
-    state.roles = state.roles.map(r => {
-      if (r.roleId === role.roleId)
-        return {
-          ...r,
-          status: {
-            ...r.status,
-            employeesLoading: false,
-            employeesLoaded: true
-          },
-          employees: role.employees
-        };
-      return r;
-    });
+  getEmployeesByRoleSuccess(state, employees) {
+    state.status = {
+      ...state.status,
+      employeesLoading: false,
+      employeesLoaded: true
+    };
+    state.employees = employees;
   },
-  getEmployeesByRoleFailure(state, role) {
-    state.roles = state.roles.map(r => {
-      if (r.roleId === role.roleId)
-        return {
-          ...r,
-          status: {},
-          employees: []
-        };
-      return r;
-    });
-    state.error = role.error;
+  getEmployeesByRoleFailure(state, error) {
+    state.status = {
+      ...state.status,
+      employeesLoading: false,
+      employeesLoaded: false
+    };
+    state.employees = [];
+    state.error = error;
   },
 
-  addEmployeeToRoleRequest(state, role) {
-    state.roles = state.roles.map(r => {
-      if (r.roleId === role.roleId)
-        return {
-          ...r,
-          status: { ...r.status, employeeToRoleAdding: true },
-          employeeToAdd: { roleId: role.roleId, employeeId: role.emplId }
-        };
-      return r;
-    });
+  addEmployeeToRoleRequest(state, empl) {
+    state.status = {
+      ...state.status,
+      employeeAdding: true
+    };
+    state.employeeToAdd = empl;
   },
-  addEmployeeToRoleSuccess(state, role) {
-    state.roles = state.roles.map(r => {
-      r.employees.push(role.employee);
-      if (r.roleId === role.roleId)
-        return {
-          ...r,
-          status: {
-            ...r.status,
-            employeeToRoleAdding: false,
-            employeeToRoleAdded: true
-          }
-        };
-      return r;
-    });
+  addEmployeeToRoleSuccess(state, empl) {
+    state.status = {
+      ...state.status,
+      employeeAdding: false,
+      employeeAdded: false
+    };
+    state.employees.push(empl);
   },
-  addEmployeeToRoleFailure(state, role) {
-    state.roles = state.roles.map(r => {
-      if (r.roleId === role.roleId)
-        return {
-          ...r,
-          status: {},
-          employeeToAdd: {}
-        };
-      return r;
-    });
-    state.error = role.error;
+  addEmployeeToRoleFailure(state, error) {
+    state.status = {
+      ...state.status,
+      employeeAdding: false,
+      employeeAdded: false
+    };
+    state.error = error;
   },
 
-  removeEmployeeFromRoleRequest(state, role) {
-    state.roles = state.roles.map(r => {
-      if (r.roleId === role.roleId)
-        return {
-          ...r,
-          status: { ...r.status, removingEmployeeFromRole: true }
-        };
-      return r;
-    });
+  removeEmployeeFromRoleRequest(state, empl) {
+    state.status = {
+      ...state.status,
+      employeeRemoving: true
+    };
   },
-  removeEmployeeFromRoleSuccess(state, role) {
-    state.roles = state.roles.map(r => {
-      if (r.roleId === role.roleId)
-        return {
-          ...r,
-          status: {
-            ...r.status,
-            removingEmployeeFromRole: false,
-            removedEmployeeFromRole: true
-          },
-          employees: r.employees.filter(e => e.employeeId !== role.emplId)
-        };
-      return r;
-    });
+  removeEmployeeFromRoleSuccess(state, emplId) {
+    state.status = {
+      ...state.status,
+      employeeRemoving: false,
+      employeeRemoved: true
+    };
+    state.employees = state.employees.filter(e => e.employeeId !== emplId);
   },
-  removeEmployeeFromRoleFailure(state, role) {
-    state.roles = state.roles.map(r => {
-      if (r.roleId === role.roleId)
-        return {
-          ...r,
-          status: {
-            ...r.status,
-            removingEmployeeFromRole: false,
-            removedEmployeeFromRole: false
-          }
-        };
-      return r;
-    });
-    state.error = role.error;
+  removeEmployeeFromRoleFailure(state, error) {
+    state.status = {
+      ...state.status,
+      employeeRemoving: false,
+      employeeRemoved: false
+    };
+    state.error = error;
+  },
+
+  resetState(state) {
+    state.status = {};
+    state.error = {};
+    state.employees = [];
   }
 };
 

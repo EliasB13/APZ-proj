@@ -1,4 +1,5 @@
 import { authHeader } from "../helpers";
+import { responseHandler } from "../helpers";
 
 export const employeesService = {
   getEmployees,
@@ -16,7 +17,7 @@ function getEmployees() {
   return fetch(
     `${process.env.VUE_APP_DEV_BACKEND_URL}/api/Employees/businessEmployees`,
     requestOptions
-  ).then(handleResponse);
+  ).then(responseHandler.handleResponse);
 }
 
 function addEmployee(login) {
@@ -29,7 +30,7 @@ function addEmployee(login) {
   return fetch(
     `${process.env.VUE_APP_DEV_BACKEND_URL}/api/Employees/add-employee`,
     requestOptions
-  ).then(handleResponse);
+  ).then(responseHandler.handleResponse);
 }
 
 function removeEmployee(id) {
@@ -41,7 +42,7 @@ function removeEmployee(id) {
   return fetch(
     `${process.env.VUE_APP_DEV_BACKEND_URL}/api/Employees/employee/${id}`,
     requestOptions
-  ).then(handleResponse);
+  ).then(responseHandler.handleResponse);
 }
 
 function getUserByLogin(login) {
@@ -53,22 +54,5 @@ function getUserByLogin(login) {
   return fetch(
     `${process.env.VUE_APP_DEV_BACKEND_URL}/api/PrivateUsers/public-profile?login=${login}`,
     requestOptions
-  ).then(handleResponse);
-}
-
-function handleResponse(response) {
-  return response.text().then(text => {
-    const data = text && JSON.parse(text);
-    if (!response.ok) {
-      if (response.status === 401) {
-        //userService.logout();
-        //location.reload(true);
-      }
-
-      const error = (data && data.message) || response.statusText;
-      return Promise.reject(error);
-    }
-
-    return data;
-  });
+  ).then(responseHandler.handleResponse);
 }

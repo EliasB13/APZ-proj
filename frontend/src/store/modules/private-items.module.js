@@ -16,7 +16,7 @@ const actions = {
       items => commit("getActiveItemsSuccess", items),
       error => {
         commit("getActiveItemsFailure", error);
-        dispatch("alert/error", error, { root: true });
+        dispatch("alert/error", error.toString(), { root: true });
       }
     );
   },
@@ -27,7 +27,7 @@ const actions = {
       items => commit("getAvailableServicesSuccess", items),
       error => {
         commit("getAvailableServicesFailure", error);
-        dispatch("alert/error", error, { root: true });
+        dispatch("alert/error", error.toString(), { root: true });
       }
     );
   },
@@ -38,7 +38,7 @@ const actions = {
       items => commit("getBusinessItemsSuccess", items),
       error => {
         commit("getBusinessItemsFailure", error);
-        dispatch("alert/error", error, { root: true });
+        dispatch("alert/error", error.toString(), { root: true });
       }
     );
   }
@@ -52,7 +52,7 @@ const mutations = {
     state.status = { activeItemsLoaded: true, activeItemsLoading: false };
     state.activeItems = items;
   },
-  getActiveItemsError(state, error) {
+  getActiveItemsFailure(state, error) {
     state.status = {
       ...state.status,
       activeItemsLoaded: false,

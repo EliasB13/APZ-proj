@@ -4,9 +4,10 @@
       <div class="container-fluid d-flex align-items-center">
         <div class="row">
           <div class="col-lg-7 col-md-10">
-            <p
-              class="text-white mt-0 mb-5"
-            >This is your available business page. Here you can explore services shared items of which you can use</p>
+            <p class="text-white mt-0 mb-5">
+              This is your available business page. Here you can explore
+              services shared items of which you can use
+            </p>
           </div>
         </div>
       </div>
@@ -27,11 +28,16 @@
             <div class="row justify-content-center">
               <div class="col-lg-3 order-lg-2">
                 <div class="card-profile-image">
-                  <img :src="servicePhoto(service.photo)" class="rounded-circle" />
+                  <img
+                    :src="servicePhoto(service.photo)"
+                    class="rounded-circle"
+                  />
                 </div>
               </div>
             </div>
-            <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4"></div>
+            <div
+              class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4"
+            ></div>
             <div class="card-body pt-0 pt-md-4 mt-6">
               <div class="text-center">
                 <h3>{{ service.companyName }}</h3>

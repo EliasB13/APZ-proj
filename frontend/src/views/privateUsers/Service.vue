@@ -1,6 +1,9 @@
 <template>
   <div>
-    <base-header type="gradient-success" class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center">
+    <base-header
+      type="gradient-success"
+      class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center"
+    >
       <div class="container-fluid d-flex align-items-center">
         <div class="row">
           <div class="col-lg-7 col-md-10">
@@ -21,7 +24,9 @@
                 </div>
               </div>
             </div>
-            <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4"></div>
+            <div
+              class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4"
+            ></div>
             <div class="card-body pt-0 pt-md-4 mt-6">
               <div class="text-center">
                 <h3>{{ service.companyName }}</h3>

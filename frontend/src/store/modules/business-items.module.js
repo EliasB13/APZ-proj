@@ -10,12 +10,15 @@ const state = {
 };
 
 const actions = {
-  getItems({ commit }) {
+  getItems({ commit, dispatch }) {
     commit("getItemsRequest");
 
     businessItemsService.getItems().then(
       items => commit("getItemsSuccess", items),
-      error => commit("getItemsFailure", error)
+      error => {
+        dispatch("alert/error", error.toString(), { root: true });
+        commit("getItemsFailure", error);
+      }
     );
   },
   addItem({ commit, dispatch }, item) {
@@ -29,7 +32,7 @@ const actions = {
       },
       error => {
         commit("addItemFailure", error);
-        dispatch("alert/error", error, { root: true });
+        dispatch("alert/error", error.toString(), { root: true });
       }
     );
   },
@@ -44,7 +47,7 @@ const actions = {
       },
       error => {
         commit("deleteItemFailure", { id, error: error.toString() });
-        dispatch("alert/error", error, { root: true });
+        dispatch("alert/error", error.toString(), { root: true });
       }
     );
   }

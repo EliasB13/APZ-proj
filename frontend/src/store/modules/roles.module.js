@@ -2,6 +2,7 @@ import { rolesService } from "../../services";
 
 const state = {
   roles: [],
+  role: {},
   status: {},
   error: null,
   roleToAdd: null,
@@ -17,6 +18,17 @@ const actions = {
       error => commit("getRolesFailure", error)
     );
   },
+  getRoleById({ commit, dispatch }, roleId) {
+    commit("getRoleByIdRequest", roleId);
+
+    rolesService.getRoleById(roleId).then(
+      role => commit("getRoleByIdSuccess", role),
+      error => {
+        commit("getRoleByIdFailure", error);
+        dispatch("alert/error", error.toString(), { root: true });
+      }
+    );
+  },
   addRole({ commit, dispatch }, role) {
     commit("addRoleRequest", role);
 
@@ -27,7 +39,7 @@ const actions = {
       },
       error => {
         commit("addRoleFailure", error);
-        dispatch("alert/error", error, { root: true });
+        dispatch("alert/error", error.toString(), { root: true });
       }
     );
   },
@@ -42,7 +54,7 @@ const actions = {
       },
       error => {
         commit("removeRoleFailure", { id, error: error.toString() });
-        dispatch("alert/error", error, { root: true });
+        dispatch("alert/error", error.toString(), { root: true });
       }
     );
   }
@@ -60,6 +72,19 @@ const mutations = {
     state.status = {};
     state.roles = [];
     state.error = error;
+  },
+
+  getRoleByIdRequest(state, roleId) {
+    state.status = { ...state.status, roleLoading: true };
+  },
+  getRoleByIdSuccess(state, role) {
+    state.status = { ...state.status, roleLoaded: true, roleLoading: false };
+    state.role = role;
+  },
+  getRoleByIdFailure(state, error) {
+    state.status = { ...state.status, roleLoaded: false, roleLoading: false };
+    state.role = {};
+    state.error = {};
   },
 
   addRoleRequest(state, role) {

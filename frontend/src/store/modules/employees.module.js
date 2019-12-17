@@ -9,12 +9,15 @@ const state = {
 };
 
 const actions = {
-  getEmployees({ commit }) {
+  getEmployees({ commit, dispatch }) {
     commit("getEmployeesRequest");
 
     employeesService.getEmployees().then(
       employees => commit("getEmployeesSuccess", employees),
-      error => commit("getItemsFailure", error)
+      error => {
+        commit("getItemsFailure", error);
+        dispatch("alert/error", error.toString(), { root: true });
+      }
     );
   },
   addEmployee({ commit, dispatch }, login) {
@@ -27,7 +30,7 @@ const actions = {
       },
       error => {
         commit("addEmployeeFailure", error);
-        dispatch("alert/error", error, { root: true });
+        dispatch("alert/error", error.toString(), { root: true });
       }
     );
   },
@@ -42,7 +45,7 @@ const actions = {
       },
       error => {
         commit("removeEmployeeFailure", { id, error: error.toString() });
-        dispatch("alert/error", error, { root: true });
+        dispatch("alert/error", error.toString(), { root: true });
       }
     );
   }

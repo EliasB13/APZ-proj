@@ -1,6 +1,9 @@
 <template>
   <div>
-    <base-header type="gradient-primary" class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center">
+    <base-header
+      type="gradient-primary"
+      class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center"
+    >
       <div class="container-fluid d-flex align-items-center">
         <div class="row">
           <div class="col-lg-7 col-md-10">
@@ -27,7 +30,9 @@
                 </div>
               </div>
             </div>
-            <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4"></div>
+            <div
+              class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4"
+            ></div>
             <div class="card-body pt-0 pt-md-4 mt-6">
               <div class="text-center">
                 <h3>{{ user.companyName }}</h3>
@@ -47,7 +52,9 @@
                   <h3 class="mb-0">My account</h3>
                 </div>
                 <div class="col-4 text-right">
-                  <div @click="editClick" class="btn btn-sm btn-primary">Edit</div>
+                  <div @click="editClick" class="btn btn-sm btn-primary">
+                    Edit
+                  </div>
                 </div>
               </div>
             </div>
@@ -67,7 +74,9 @@
                   </div>
                 </div>
                 <hr class="my-4" />
-                <h6 class="heading-small text-muted mb-4">Contact information</h6>
+                <h6 class="heading-small text-muted mb-4">
+                  Contact information
+                </h6>
                 <div class="pl-lg-4">
                   <div class="row">
                     <div class="col-md-12">
@@ -108,7 +117,9 @@
                   <h3 class="mb-0">My account</h3>
                 </div>
                 <div class="col-4 text-right">
-                  <div @click="saveClick" class="btn btn-sm btn-success">Save</div>
+                  <div @click="saveClick" class="btn btn-sm btn-success">
+                    Save
+                  </div>
                 </div>
               </div>
             </div>
@@ -138,7 +149,9 @@
                   </div>
                 </div>
                 <hr class="my-4" />
-                <h6 class="heading-small text-muted mb-4">Contact information</h6>
+                <h6 class="heading-small text-muted mb-4">
+                  Contact information
+                </h6>
                 <div class="pl-lg-4">
                   <div class="row">
                     <div class="col-md-12">

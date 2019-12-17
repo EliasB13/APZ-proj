@@ -13,20 +13,20 @@
                 class="input-group-alternative"
                 alternative
                 addon-right-icon="fas fa-search"
-                v-model="employeesSearchQuery"
+                v-model="itemsSearchQuery"
               ></base-input>
             </div>
           </form>
         </b-col>
         <b-col cols="auto" align-self="center">
           <base-button
-            v-if="employeesSelectionMode"
+            v-if="itemsSelectionMode"
             type="link"
-            @click="resetEmployeesClick"
+            @click="resetItemsClick"
             >Reset</base-button
           >
           <base-button
-            v-if="!employeesSelectionMode"
+            v-if="!itemsSelectionMode"
             type="success"
             size="sm"
             icon="fas fa-plus"
@@ -36,7 +36,7 @@
             type="danger"
             size="sm"
             icon="fas fa-minus"
-            @click="removeEmployeeClick"
+            @click="removeItemClick"
           ></base-button>
         </b-col>
       </b-row>
@@ -45,31 +45,26 @@
     <div v-if="!showSpinner">
       <div
         class="card p-2 px-4 mb-2 role-card-hover bg-secondary"
-        v-for="employee in employeesCopy"
-        :key="employee.employeeId * 100"
+        v-for="item in itemsCopy"
+        :key="item.sharedItemId"
       >
-        <div @click="employeeInRoleClick(employee.employeeId)">
+        <div @click="itemInRoleClick(item.sharedItemId)">
           <b-row align-v="center">
-            <b-col cols="auto" v-if="employeesSelectionMode">
+            <b-col cols="auto" v-if="itemsSelectionMode">
               <i
                 :class="
                   `far ${
-                    employee.selected ? icon.checkedSquare : icon.square
+                    item.selected ? icon.checkedSquare : icon.square
                   } fa-lg`
                 "
               ></i>
             </b-col>
             <b-col cols="auto">
-              <img
-                src="/img/theme/team-4-800x800.jpg"
-                class="rounded-circle avatar"
-              />
+              <b-img class="thumbnail-img" rounded src="/img/theme/item.png" />
             </b-col>
             <b-col>
-              <h3 class="mt-1">
-                {{ employee.firstName + " " + employee.lastName }}
-              </h3>
-              <div class="h5 font-weight-300 mb-1">{{ employee.login }}</div>
+              <h3 class="mt-1">{{ item.name }}</h3>
+              <div class="h5 font-weight-300 mb-1">{{ item.description }}</div>
             </b-col>
           </b-row>
         </div>
@@ -84,9 +79,7 @@
       modal-classes="modal-dialog-centered modal-lg"
       :showClose="false"
     >
-      <div slot="header" class="modal-title">
-        Select employee to add in role
-      </div>
+      <div slot="header" class="modal-title">Select item to add in role</div>
       <card
         type="secondary"
         header-classes="bg-white text-default"
@@ -104,39 +97,38 @@
                 class="input-group-alternative"
                 alternative
                 addon-right-icon="fas fa-search"
-                v-model="modalEmployeesSearchQuery"
+                v-model="modalItemsSearchQuery"
               ></base-input>
             </div>
           </div>
           <div class="scrollable-list">
             <div
               class="card p-2 px-4 mb-2 role-card-hover pointer"
-              v-for="mEmployee in modalEmplpoyeesCopy"
-              :key="mEmployee.employeeId"
+              v-for="mItem in modalItemsCopy"
+              :key="mItem.id"
             >
-              <div @click="modalEmployeeClick(mEmployee.employeeId)">
+              <div @click="modalItemClick(mItem.id)">
                 <b-row align-v="center">
                   <b-col cols="auto">
                     <i
                       :class="
                         `far ${
-                          mEmployee.selected ? icon.checkedSquare : icon.square
+                          mItem.selected ? icon.checkedSquare : icon.square
                         } fa-lg`
                       "
                     ></i>
                   </b-col>
                   <b-col cols="auto">
-                    <img
-                      src="/img/theme/team-4-800x800.jpg"
-                      class="rounded-circle avatar"
+                    <b-img
+                      class="thumbnail-img"
+                      rounded
+                      src="/img/theme/item.png"
                     />
                   </b-col>
                   <b-col>
-                    <h3 class="mt-1">
-                      {{ mEmployee.firstName + " " + mEmployee.lastName }}
-                    </h3>
+                    <h3 class="mt-1">{{ mItem.name }}</h3>
                     <div class="h5 font-weight-300 mb-1">
-                      {{ mEmployee.login }}
+                      {{ mItem.description }}
                     </div>
                   </b-col>
                 </b-row>
@@ -153,7 +145,7 @@
         <base-button type="link" @click="showAddingModal = false"
           >Close</base-button
         >
-        <base-button type="success" class="ml-auto" @click="addEmployeeClick"
+        <base-button type="success" class="ml-auto" @click="addItemClick"
           >Add</base-button
         >
       </template>
@@ -168,73 +160,73 @@
 import { mapActions, mapState } from "vuex";
 
 export default {
-  name: "employees-in-role-list",
+  name: "items-in-role-list",
   props: {
-    showEmployees: Boolean,
+    showItems: Boolean,
     roleId: Number
   },
   computed: {
     ...mapState({
-      modalEmployees: state => state.employees.employees,
-      modalEmployeestatus: state => state.employees.status,
+      modalItems: state => state.businessItems.items,
+      modalItemstatus: state => state.businessItems.status,
       isSelectionReseted: state => state.selectedItems.isSelectedItemsReseted,
-      employees: state => state.employeesInRole.employees,
-      status: state => state.employeesInRole.status
+      items: state => state.itemsInRole.items,
+      status: state => state.itemsInRole.status
     }),
     showSpinner() {
       return (
-        this.status.employeesLoading ||
-        this.status.employeeAdding ||
-        this.status.employeeRemoving
+        this.status.itemsLoading ||
+        this.status.itemAdding ||
+        this.status.itemRemoving
       );
     },
     showModalSpinner() {
-      return this.modalEmployeestatus.employeesLoading;
+      return this.modalItemstatus.itemsLoading;
     },
-    showModalEmployees() {
-      return this.modalEmployeestatus.employeesLoaded;
+    showModalItems() {
+      return this.modalItemstatus.itemsLoaded;
     }
   },
   watch: {
     isSelectionReseted(newV, oldV) {
       if (newV) this.selected = false;
     },
-    showEmployees(newV, oldV) {
+    showItems(newV, oldV) {
       if (newV == true) {
-        if (!this.status.employeesLoaded) this.getEmployeesInRole(this.roleId);
-      } else this.employeesSelectionMode = false;
+        if (!this.status.itemsLoaded) this.getItemsInRole(this.roleId);
+      } else this.itemsSelectionMode = false;
     },
-    employees(newV, oldV) {
-      if (newV) this.employeesCopy = this.employees;
+    items(newV, oldV) {
+      if (newV) this.itemsCopy = this.items;
     },
-    modalEmployees(newV, oldV) {
-      if (newV) this.modalEmplpoyeesCopy = this.modalEmployees;
+    modalItems(newV, oldV) {
+      if (newV) this.modalItemsCopy = this.modalItems;
     },
-    employeesSearchQuery(newV, oldV) {
+    itemsSearchQuery(newV, oldV) {
       if (newV !== "") {
-        this.employeesCopy = this.employees.filter(e =>
-          e.login.toLowerCase().includes(newV.toLowerCase())
+        this.itemsCopy = this.items.filter(i =>
+          i.name.toLowerCase().includes(newV.toLowerCase())
         );
       } else {
-        this.employeesCopy = this.employees;
+        this.itemsCopy = this.items;
       }
     },
-    modalEmployeesSearchQuery(newV, oldV) {
+    modalItemsSearchQuery(newV, oldV) {
       if (newV !== "") {
-        this.modalEmplpoyeesCopy = this.modalEmployees.filter(e =>
-          e.login.toLowerCase().includes(newV.toLowerCase())
+        this.modalItemsCopy = this.modalItems.filter(i =>
+          i.name.toLowerCase().includes(newV.toLowerCase())
         );
       } else {
-        this.modalEmplpoyeesCopy = this.modalEmployees;
+        this.modalItemsCopy = this.modalItems;
       }
     },
     showAddingModal(newV, oldV) {
       if (newV) {
-        this.getEmployees();
+        this.getItems();
       }
     },
     status(newV) {
-      if (newV.employeeRemoved) this.employeesSelectionMode = false;
+      if (newV.itemRemoved) this.itemsSelectionMode = false;
     }
   },
   data() {
@@ -243,80 +235,76 @@ export default {
         checkedSquare: "fa-check-square",
         square: "fa-square"
       },
-      employeesSelectionMode: false,
-      employeesCopy: [],
+      itemsSelectionMode: false,
+      itemsCopy: [],
       showAddingModal: false,
-      employeesSearchQuery: "",
-      modalEmployeesSearchQuery: "",
-      modalEmplpoyeesCopy: []
+      itemsSearchQuery: "",
+      modalItemsSearchQuery: "",
+      modalItemsCopy: []
     };
   },
   methods: {
     ...mapActions("selectedItems", ["addSelectedItem", "removeSelectedItem"]),
-    ...mapActions("employeesInRole", [
-      "getEmployeesInRole",
-      "addEmployeeToRole",
-      "removeEmployeeFromRole",
+    ...mapActions("itemsInRole", [
+      "getItemsInRole",
+      "addItemToRole",
+      "removeItemFromRole",
       "resetState"
     ]),
 
-    ...mapActions("employees", ["getEmployees"]),
-    addEmployeeClick() {
-      this.modalEmplpoyeesCopy.forEach(e => {
-        if (e.selected)
-          this.addEmployeeToRole({ emplId: e.employeeId, roleId: this.roleId });
+    ...mapActions("businessItems", ["getItems"]),
+    addItemClick() {
+      this.modalItemsCopy.forEach(i => {
+        if (i.selected)
+          this.addItemToRole({ itemId: i.id, roleId: this.roleId });
       });
       this.showAddingModal = false;
     },
-    removeEmployeeClick() {
-      if (!this.employeesSelectionMode) this.employeesSelectionMode = true;
+    removeItemClick() {
+      if (!this.itemsSelectionMode) this.itemsSelectionMode = true;
       else
-        this.employeesCopy.forEach(e => {
-          if (e.selected)
-            this.removeEmployeeFromRole({
-              emplId: e.employeeId,
-              roleId: this.roleId
-            });
+        this.itemsCopy.forEach(i => {
+          if (i.selected) this.removeItemFromRole(i.roleItemId);
         });
     },
-    resetEmployeesClick() {
-      this.employeesSelectionMode = false;
+    resetItemsClick() {
+      this.itemsSelectionMode = false;
     },
-    modalEmployeeClick(emplId) {
-      this.modalEmplpoyeesCopy = this.modalEmplpoyeesCopy.slice().map(me => {
-        if (me.employeeId == emplId) {
-          if (me.selected == undefined) {
+    modalItemClick(itemId) {
+      this.modalItemsCopy = this.modalItemsCopy.slice().map(mi => {
+        if (mi.id == itemId) {
+          if (mi.selected == undefined) {
             return {
-              ...me,
+              ...mi,
               selected: true
             };
           } else {
             return {
-              ...me,
-              selected: me.selected ? false : true
+              ...mi,
+              selected: mi.selected ? false : true
             };
           }
         }
-        return me;
+        return mi;
       });
     },
-    employeeInRoleClick(emplId) {
-      if (this.employeesSelectionMode) {
-        this.employeesCopy = this.employeesCopy.slice().map(me => {
-          if (me.employeeId == emplId) {
-            if (me.selected == undefined) {
+    itemInRoleClick(itemId) {
+      if (this.itemsSelectionMode) {
+        this.itemsCopy = this.itemsCopy.slice().map(mi => {
+          if (mi.sharedItemId == itemId) {
+            if (mi.selected == undefined) {
               return {
-                ...me,
+                ...mi,
                 selected: true
               };
             } else {
               return {
-                ...me,
-                selected: me.selected ? false : true
+                ...mi,
+                selected: mi.selected ? false : true
               };
             }
           }
-          return me;
+          return mi;
         });
       }
     }

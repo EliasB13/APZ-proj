@@ -1,13 +1,19 @@
 import { authHeader } from "../helpers";
-import { hasMagic } from "glob";
+import { responseHandler } from "../helpers";
 
 export const rolesService = {
   getRoles,
+  getRoleById,
   addRole,
   removeRole,
+
   addEmployeeToRole,
   removeEmployeeFromRole,
-  getEmployeesByRole
+  getEmployeesByRole,
+
+  getItemsInRole,
+  addItemToRole,
+  removeItemFromRole
 };
 
 function getRoles() {
@@ -19,7 +25,19 @@ function getRoles() {
   return fetch(
     `${process.env.VUE_APP_DEV_BACKEND_URL}/api/EmployeesRoles/business-roles`,
     requestOptions
-  ).then(handleResponse);
+  ).then(responseHandler.handleResponse);
+}
+
+function getRoleById(roleId) {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader()
+  };
+
+  return fetch(
+    `${process.env.VUE_APP_DEV_BACKEND_URL}/api/EmployeesRoles/role/${roleId}`,
+    requestOptions
+  ).then(responseHandler.handleResponse);
 }
 
 function addRole(role) {
@@ -32,7 +50,7 @@ function addRole(role) {
   return fetch(
     `${process.env.VUE_APP_DEV_BACKEND_URL}/api/EmployeesRoles/create-employees-role`,
     requestOptions
-  ).then(handleResponse);
+  ).then(responseHandler.handleResponse);
 }
 
 function removeRole(id) {
@@ -44,7 +62,7 @@ function removeRole(id) {
   return fetch(
     `${process.env.VUE_APP_DEV_BACKEND_URL}/api/EmployeesRoles/employees-role/${id}`,
     requestOptions
-  ).then(handleResponse);
+  ).then(responseHandler.handleResponse);
 }
 
 function getEmployeesByRole(roleId) {
@@ -56,7 +74,7 @@ function getEmployeesByRole(roleId) {
   return fetch(
     `${process.env.VUE_APP_DEV_BACKEND_URL}/api/EmployeesRoles/employees-in-role/${roleId}`,
     requestOptions
-  ).then(handleResponse);
+  ).then(responseHandler.handleResponse);
 }
 
 function addEmployeeToRole(emplId, roleId) {
@@ -69,7 +87,7 @@ function addEmployeeToRole(emplId, roleId) {
   return fetch(
     `${process.env.VUE_APP_DEV_BACKEND_URL}/api/EmployeesRoles/add-employee-to-role`,
     requestOptions
-  ).then(handleResponse);
+  ).then(responseHandler.handleResponse);
 }
 
 function removeEmployeeFromRole(emplId, roleId) {
@@ -81,22 +99,42 @@ function removeEmployeeFromRole(emplId, roleId) {
   return fetch(
     `${process.env.VUE_APP_DEV_BACKEND_URL}/api/EmployeesRoles/employee-in-role/${roleId}/${emplId}`,
     requestOptions
-  ).then(handleResponse);
+  ).then(responseHandler.handleResponse);
 }
 
-function handleResponse(response) {
-  return response.text().then(text => {
-    const data = text && JSON.parse(text);
-    if (!response.ok) {
-      if (response.status === 401) {
-        //userService.logout();
-        //location.reload(true);
-      }
+function getItemsInRole(roleId) {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader()
+  };
 
-      const error = (data && data.message) || response.statusText;
-      return Promise.reject(error);
-    }
+  return fetch(
+    `${process.env.VUE_APP_DEV_BACKEND_URL}/api/SharedItems/employees-role-items/${roleId}`,
+    requestOptions
+  ).then(responseHandler.handleResponse);
+}
 
-    return data;
-  });
+function addItemToRole(itemId, roleId) {
+  const requestOptions = {
+    method: "POST",
+    headers: { ...authHeader(), "Content-Type": "application/json" },
+    body: JSON.stringify({ roleId: roleId, sharedItemId: itemId })
+  };
+
+  return fetch(
+    `${process.env.VUE_APP_DEV_BACKEND_URL}/api/SharedItems/add-item-to-employees-role`,
+    requestOptions
+  ).then(responseHandler.handleResponse);
+}
+
+function removeItemFromRole(roleItemId) {
+  const requestOptions = {
+    method: "DELETE",
+    headers: authHeader()
+  };
+
+  return fetch(
+    `${process.env.VUE_APP_DEV_BACKEND_URL}/api/SharedItems/item-in-role/${roleItemId}`,
+    requestOptions
+  ).then(responseHandler.handleResponse);
 }

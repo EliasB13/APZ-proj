@@ -17,7 +17,7 @@ const actions = {
       },
       error => {
         commit("loginFailure", error);
-        dispatch("alert/error", error, { root: true });
+        dispatch("alert/error", error.toString(), { root: true });
       }
     );
   },
@@ -39,7 +39,7 @@ const actions = {
       },
       error => {
         commit("registerFailure", error);
-        dispatch("alert/error", error, { root: true });
+        dispatch("alert/error", error.toString(), { root: true });
       }
     );
   },
@@ -56,7 +56,7 @@ const actions = {
       },
       error => {
         commit("registerFailure", error);
-        dispatch("alert/error", error, { root: true });
+        dispatch("alert/error", error.toString(), { root: true });
       }
     );
   },
@@ -69,7 +69,7 @@ const actions = {
       },
       error => {
         commit("getAccountDataFailure", error);
-        dispatch("alert/error", "Account data weren't loaded", { root: true });
+        dispatch("alert/error", error.toString(), { root: true });
       }
     );
   },
@@ -81,7 +81,7 @@ const actions = {
       profile => commit("getPublicProfileSuccess", profile),
       error => {
         commit("getPublicProfileFailure", error);
-        dispatch("alert/error", error, { root: true });
+        dispatch("alert/error", error.toString(), { root: true });
       }
     );
   },
@@ -97,8 +97,9 @@ const actions = {
         });
       },
       error => {
+        console.log(error);
         commit("updateUserFailure", error);
-        dispatch("alert/error", error, { root: true });
+        dispatch("alert/error", error.toString(), { root: true });
       }
     );
   }

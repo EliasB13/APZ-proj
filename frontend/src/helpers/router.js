@@ -34,6 +34,12 @@ export const router = new Router({
           path: "/roles",
           name: "roles",
           component: () => import("../views/businessUsers/Roles.vue")
+        },
+        {
+          path: "/role/:roleId",
+          name: "role",
+          component: () => import("../views/businessUsers/Role.vue"),
+          props: true
         }
       ]
     },

@@ -11,7 +11,8 @@
             <span
               :class="isTaken ? 'text-danger' : 'text-success'"
               class="font-weight-700"
-            >{{ isTaken ? "Taken" : "Available" }}</span>
+              >{{ isTaken ? "Taken" : "Available" }}</span
+            >
           </p>
         </div>
         <i

@@ -1,4 +1,5 @@
 import { authHeader } from "../helpers";
+import { responseHandler } from "../helpers";
 
 export const userService = {
   login,
@@ -23,11 +24,9 @@ function login(login, password, isBusinessUser) {
   const requestString = `${process.env.VUE_APP_DEV_BACKEND_URL}/${loginEndpoint}`;
 
   return fetch(requestString, requestOptions)
-    .then(handleResponse)
+    .then(responseHandler.handleResponse)
     .then(user => {
-      // login successful if there's a jwt token in the response
       if (user.token) {
-        // store user details and jwt token in local storage to keep user logged in between page refreshes
         user.isBusinessUser = isBusinessUser;
         localStorage.setItem("user", JSON.stringify(user));
       }
@@ -37,7 +36,6 @@ function login(login, password, isBusinessUser) {
 }
 
 function logout() {
-  // remove user from local storage to log user out
   localStorage.removeItem("user");
 }
 
@@ -53,7 +51,9 @@ function register(user, isBusinessUser) {
     : "PrivateUsers/register-private";
   const requestString = `${process.env.VUE_APP_DEV_BACKEND_URL}/${registerEndpoint}`;
 
-  return fetch(requestString, requestOptions).then(handleResponse);
+  return fetch(requestString, requestOptions).then(
+    responseHandler.handleResponse
+  );
 }
 
 function getAccountData(isBusinessUser) {
@@ -67,7 +67,9 @@ function getAccountData(isBusinessUser) {
     : "PrivateUsers/account-data";
   const requestString = `${process.env.VUE_APP_DEV_BACKEND_URL}/${endpointString}`;
 
-  return fetch(requestString, requestOptions).then(handleResponse);
+  return fetch(requestString, requestOptions).then(
+    responseHandler.handleResponse
+  );
 }
 
 function getPublicProfile(isBusinessUser, userId) {
@@ -80,7 +82,9 @@ function getPublicProfile(isBusinessUser, userId) {
     ? "BusinessUsers/public-profile"
     : "PrivateUsers/public-profile";
   const requestString = `${process.env.VUE_APP_DEV_BACKEND_URL}/${endpointString}?id=${userId}`;
-  return fetch(requestString, requestOptions).then(handleResponse);
+  return fetch(requestString, requestOptions).then(
+    responseHandler.handleResponse
+  );
 }
 
 function update(user, isBusinessUser) {
@@ -95,7 +99,7 @@ function update(user, isBusinessUser) {
   return fetch(
     `${process.env.VUE_APP_DEV_BACKEND_URL}/${endpoint}`,
     requestOptions
-  ).then(handleResponse);
+  ).then(responseHandler.handleResponse);
 }
 
 function _delete(id) {
@@ -107,23 +111,5 @@ function _delete(id) {
   return fetch(
     `${process.env.VUE_APP_DEV_BACKEND_URL}/users/${id}`,
     requestOptions
-  ).then(handleResponse);
-}
-
-function handleResponse(response) {
-  return response.text().then(text => {
-    const data = text && JSON.parse(text);
-    if (!response.ok) {
-      if (response.status === 401) {
-        // auto logout if 401 response returned from api
-        logout();
-        location.reload(true);
-      }
-
-      const error = (data && data.message) || response.statusText;
-      return Promise.reject(error);
-    }
-
-    return data;
-  });
+  ).then(responseHandler.handleResponse);
 }
