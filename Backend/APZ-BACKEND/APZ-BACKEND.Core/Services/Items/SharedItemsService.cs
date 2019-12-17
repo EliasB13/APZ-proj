@@ -60,28 +60,28 @@ namespace APZ_BACKEND.Core.Services.Items
 			}
 		}
 
-		public async Task<GenericServiceResponse<SharedItem>> AddItemToEmployeesRole(int businessUserId, int itemId, int roleId)
+		public async Task<GenericServiceResponse<SharedItemDto>> AddItemToEmployeesRole(int businessUserId, int itemId, int roleId)
 		{
 			try
 			{
 				var businessUser = await businessUsersRepository.GetByIdAsync(businessUserId);
 				if (businessUser == null)
-					return new GenericServiceResponse<SharedItem>($"Business user with id: {businessUserId} wasn't found");
+					return new GenericServiceResponse<SharedItemDto>($"Business user with id: {businessUserId} wasn't found");
 
 				var item = await sharedItemsRepository.SingleOrDefaultAsync(si => si.Id == itemId, si => si.BusinessUser);
 				if (item == null)
-					return new GenericServiceResponse<SharedItem>($"Shared item with id: {itemId} wasn't found");
+					return new GenericServiceResponse<SharedItemDto>($"Shared item with id: {itemId} wasn't found");
 
 				var role = await employeesRolesRepository.GetByIdAsync(roleId);
 				if (role == null)
-					return new GenericServiceResponse<SharedItem>($"Role with id: {roleId} wasn't found");
+					return new GenericServiceResponse<SharedItemDto>($"Role with id: {roleId} wasn't found");
 
 				if (item.BusinessUser.Id != businessUserId)
-					return new GenericServiceResponse<SharedItem>("Item doesn't belong to business");
+					return new GenericServiceResponse<SharedItemDto>("Item doesn't belong to business");
 
 				var isItemInRole = await employeesRoleItemsRepository.AnyAsync(eri => eri.EmployeesRole.Id == roleId && eri.SharedItem.Id == itemId);
 				if (isItemInRole)
-					return new GenericServiceResponse<SharedItem>($"Item with id: {itemId} already exists in role with id: {roleId}");
+					return new GenericServiceResponse<SharedItemDto>($"Item with id: {itemId} already exists in role with id: {roleId}");
 
 				var employeeRoleItem = new EmployeeRoleItem
 				{
@@ -91,11 +91,12 @@ namespace APZ_BACKEND.Core.Services.Items
 
 				await employeesRoleItemsRepository.AddAsync(employeeRoleItem);
 
-				return new GenericServiceResponse<SharedItem>(item);
+				var isTaken = await itemTakingLinesRepository.AnyAsync(itl => itl.SharedItemId == item.Id && itl.IsTaken);
+				return new GenericServiceResponse<SharedItemDto>(item.ToDto(isTaken));
 			}
 			catch (Exception ex)
 			{
-				return new GenericServiceResponse<SharedItem>("Error | Adding item to role: " + ex.Message);
+				return new GenericServiceResponse<SharedItemDto>("Error | Adding item to role: " + ex.Message);
 			}
 		}
 
