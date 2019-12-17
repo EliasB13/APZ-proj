@@ -12,7 +12,8 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 	public interface IEmployeesRolesService
 	{
 		Task<IEnumerable<EmployeesRoleDto>> GetBusinessEmployeesRoles(int businessUserId);
-		Task<IEnumerable<EmployeeDto>> GetEmployeesInRole(int businessUserId, int roleId); 
+		Task<IEnumerable<EmployeeDto>> GetEmployeesInRole(int businessUserId, int roleId);
+		Task<GenericServiceResponse<EmployeesRoleDto>> GetRoleById(int roleId, int businessUserId);
 		Task<GenericServiceResponse<EmployeesRoleDto>> Create(int businessUserId, CreateEmployeesRoleDto employeesRoleDto);
 		Task<GenericServiceResponse<EmployeeDto>> AddEmployeeToRole(int employeeId, int roleId);
 		Task<GenericServiceResponse<EmployeesRole>> Update(EmployeesRoleDto updateEmployeesRole);

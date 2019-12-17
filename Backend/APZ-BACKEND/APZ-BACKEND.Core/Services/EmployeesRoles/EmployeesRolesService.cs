@@ -122,6 +122,18 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 			return new List<EmployeeDto>();
 		}
 
+		public async Task<GenericServiceResponse<EmployeesRoleDto>> GetRoleById(int roleId, int businessUserId)
+		{
+			var role = await employeesRoleRepository.SingleOrDefaultAsync(r => r.Id == roleId, r => r.BusinessUser);
+			if (role == null)
+				return new GenericServiceResponse<EmployeesRoleDto>($"Role with id: {roleId} wasn't found");
+
+			if (role.BusinessUser.Id != businessUserId)
+				return new GenericServiceResponse<EmployeesRoleDto>("You have no access to this resource");
+
+			return new GenericServiceResponse<EmployeesRoleDto>(role.ToDto());
+		}
+
 		public async Task<GenericServiceResponse<EmployeesRole>> RemoveEmployeeFromRole(int employeesRoleId, int employeeId)
 		{
 			try
