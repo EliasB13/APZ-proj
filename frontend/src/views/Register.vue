@@ -160,8 +160,12 @@
                 </div>
               </div>
               <div class="text-center">
-                <base-button type="primary" @click="handleSignUp" class="my-4"
-                  >Create account</base-button
+                <b-spinner v-if="showSpinner" small></b-spinner>
+                <base-button type="primary" 
+                :disabled="!isPasswordValid || !isEmailValid || !isPasswordConfirmationValid || !isLoginValid || !isFirstNameValid || !isLastNameValid" 
+                @click="handleSignUp" class="my-4"
+                  >
+                  <span>Create account</span></base-button
                 >
               </div>
               <div class="alert-div">
@@ -238,7 +242,7 @@ export default {
     },
     isPasswordValid() {
       if (this.password === "" && !this.isSubmitted) return null;
-      if (this.password.length < 5 || this.password.length > 24) return false;
+      if (this.password.length < 6 || this.password.length > 23) return false;
       return true;
     },
     isPasswordConfirmationValid() {
@@ -264,7 +268,7 @@ export default {
     getPasswordError() {
       if (this.password === "") return "";
       if (this.password.length < 6 || this.password.length > 23)
-        return "Password must be more than 6 symbols and less than 24";
+        return "Password must be more than 5 symbols and less than 24";
       return "";
     },
     getPasswordConfirmationError() {
@@ -299,6 +303,9 @@ export default {
       if (!/^([^,.;+=()"#@!$%\^&*]*)$/.test(this.firstName))
         return "First name can contain only letters";
       return "";
+    },
+    showSpinner() {
+      return this.account.registering;
     }
   },
   methods: {
