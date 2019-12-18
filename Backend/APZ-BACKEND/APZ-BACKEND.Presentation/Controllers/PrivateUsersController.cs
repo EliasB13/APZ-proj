@@ -37,35 +37,35 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> GetPublicProfile(int? id, string login)
 		{
 			if (id.HasValue && !string.IsNullOrEmpty(login))
-				return BadRequest(new { message = "Provide only 1 parameter" });
+				return BadRequest(new { message = "Provide only 1 parameter", code = ErrorCode.WRONG_REQUEST_PARAMETERS });
 			if (id.HasValue)
 			{
 				var result = await userService.GetPublicProfile(id.Value);
 				if (!result.Success)
-					return BadRequest(new { message = result.ErrorMessage });
+					return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
 				return Ok(result.Item);
 			}
 			if (!string.IsNullOrEmpty(login))
 			{
 				var result = await userService.GetPublicProfile(login);
 				if (!result.Success)
-					return BadRequest(new { message = result.ErrorMessage });
+					return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
 				return Ok(result.Item);
 			}
-			return BadRequest(new { message = "You should provide at least 1 parameter" });
+			return BadRequest(new { message = "You should provide at least 1 parameter", code = ErrorCode.WRONG_REQUEST_PARAMETERS });
 		}
 
 		[HttpGet("account-data")]
 		public async Task<IActionResult> GetAccountData()
 		{
 			if (ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
-				return BadRequest(new { message = "Current user is not a privateUser" });
+				return BadRequest(new { message = "Current user is not a privateUser", code = ErrorCode.NOT_PRIVATE_USER });
 
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await userService.GetAccountData(contextUserId);
 			if (!result.Success)
-				return BadRequest(new { message = result.ErrorMessage });
+				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
 
 			return Ok(result.Item);
 		}
@@ -74,7 +74,7 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> GetAvailiableServices()
 		{
 			if (ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
-				return BadRequest(new { message = "Current user is not a privateUser" });
+				return BadRequest(new { message = "Current user is not a privateUser", code = ErrorCode.NOT_PRIVATE_USER });
 
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
@@ -87,7 +87,7 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> GetActiveItems()
 		{
 			if (ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
-				return BadRequest(new { message = "Current user is not a private user" });
+				return BadRequest(new { message = "Current user is not a private user", code = ErrorCode.NOT_PRIVATE_USER });
 
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
@@ -104,7 +104,7 @@ namespace APZ_BACKEND.Presentation.Controllers
 			var user = await userService.AuthenticatePrivateAsync(model.Login, model.Password);
 
 			if (user == null)
-				return BadRequest(new { message = "Username or password is incorrect" });
+				return BadRequest(new { message = "Username or password is incorrect", code = ErrorCode.USERNAME_OR_PASSWORD_INCORRECT });
 
 			var token = GetTokenString(user.Id);
 
@@ -136,13 +136,13 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> Update(UpdatePrivateUserRequest privateUser)
 		{
 			if (ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
-				return BadRequest(new { message = "Current user is not a privateUser" });
+				return BadRequest(new { message = "Current user is not a privateUser", code = ErrorCode.NOT_PRIVATE_USER });
 
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await userService.UpdatePrivateUser(privateUser, contextUserId);
 			if (!result.Success)
-				return BadRequest(new { message = result.ErrorMessage });
+				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
 
 			return Ok(result.Item);
 		}
@@ -151,13 +151,13 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> Delete()
 		{
 			if (ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
-				return BadRequest(new { message = "Current user is not a privateUser" });
+				return BadRequest(new { message = "Current user is not a privateUser", code = ErrorCode.NOT_PRIVATE_USER });
 
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await userService.DeletePrivateUser(contextUserId);
 			if (!result.Success)
-				return BadRequest(new { message = result.ErrorMessage });
+				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
 
 			return Ok();
 		}

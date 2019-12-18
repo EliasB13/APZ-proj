@@ -31,7 +31,7 @@ namespace APZ_BACKEND.Presentation.Controllers
 
 			var result = await imagesService.UploadProfilePicture(file, contextUserId, isBusinessUser ? UserType.BusinessUser : UserType.PrivateUser);
 			if (!result.Success)
-				return BadRequest(result.ErrorMessage);
+				return BadRequest( new { message = result.ErrorMessage, code = result.ErrorCode });
 
 			return Ok();
 		}

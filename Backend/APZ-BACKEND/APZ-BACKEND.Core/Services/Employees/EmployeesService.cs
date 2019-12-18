@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using APZ_BACKEND.Core.Dtos.Employee;
 using APZ_BACKEND.Core.Entities;
+using APZ_BACKEND.Core.Helpers;
 using APZ_BACKEND.Core.Interfaces;
 using APZ_BACKEND.Core.Mappers;
 using APZ_BACKEND.Core.Services.Communication;
@@ -46,15 +47,15 @@ namespace APZ_BACKEND.Core.Services.Employees
 		{
 			var privateUser = await privateUsersRepository.SingleOrDefaultAsync(pu => pu.Login == login);
 			if (privateUser == null)
-				return new GenericServiceResponse<EmployeeDto>("User \"" + login + "\" was not found.");
+				return new GenericServiceResponse<EmployeeDto>("User \"" + login + "\" was not found.", ErrorCode.USER_NOT_FOUND);
 
 			var businessUser = await businessUsersRepository.SingleOrDefaultAsync(bu => bu.Id == businessUserId);
 			if (businessUser == null)
-				return new GenericServiceResponse<EmployeeDto>("BusinessUser was not found.");
+				return new GenericServiceResponse<EmployeeDto>("BusinessUser was not found.", ErrorCode.CONTEXT_USER_NOT_FOUND);
 
 			var isEmployeeExits = await employeesRepository.AnyAsync(e => e.PrivateUser.Id == privateUser.Id && e.BusinessUser.Id == businessUser.Id);
 			if (isEmployeeExits)
-				return new GenericServiceResponse<EmployeeDto>("Such employee already exists");
+				return new GenericServiceResponse<EmployeeDto>("Such employee already exists", ErrorCode.EMPLOYEE_ALREADY_EXISTS);
 
 			var employee = new Employee
 			{
@@ -73,7 +74,7 @@ namespace APZ_BACKEND.Core.Services.Employees
 			{
 				var employee = await employeesRepository.GetByIdAsync(employeeId);
 				if (employee == null)
-					return new GenericServiceResponse<Employee>("Employee with specified id wasn't found");
+					return new GenericServiceResponse<Employee>("Employee with specified id wasn't found", ErrorCode.EMPLOYEE_NOT_FOUND);
 
 				await employeesRepository.DeleteAsync(employee);
 
@@ -81,7 +82,7 @@ namespace APZ_BACKEND.Core.Services.Employees
 			}
 			catch (Exception ex)
 			{
-				return new GenericServiceResponse<Employee>("Error | Deleting employee: " + ex.Message);
+				return new GenericServiceResponse<Employee>("Error | Deleting employee: " + ex.Message, ErrorCode.COMMON_ERROR);
 			}
 		}
 	}

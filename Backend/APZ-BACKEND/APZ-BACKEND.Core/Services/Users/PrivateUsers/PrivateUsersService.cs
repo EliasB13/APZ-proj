@@ -7,6 +7,7 @@ using APZ_BACKEND.Core.Dtos.SharedItems;
 using APZ_BACKEND.Core.Dtos.Users;
 using APZ_BACKEND.Core.Entities;
 using APZ_BACKEND.Core.Exceptions;
+using APZ_BACKEND.Core.Helpers;
 using APZ_BACKEND.Core.Interfaces;
 using APZ_BACKEND.Core.Mappers;
 using APZ_BACKEND.Core.Services.Communication;
@@ -86,7 +87,7 @@ namespace APZ_BACKEND.Core.Services.Users.PrivateUsers
 		{
 			var user = await usersRepository.GetByIdAsync(id);
 			if (user == null)
-				return new GenericServiceResponse<PrivateUserAccountData>("User with specified id wasn't found");
+				return new GenericServiceResponse<PrivateUserAccountData>("User with specified id wasn't found", ErrorCode.USER_NOT_FOUND);
 
 			return new GenericServiceResponse<PrivateUserAccountData>(user.ToAccountData());
 		}
@@ -95,7 +96,7 @@ namespace APZ_BACKEND.Core.Services.Users.PrivateUsers
 		{
 			var user = await usersRepository.GetByIdAsync(id);
 			if (user == null)
-				return new GenericServiceResponse<PrivateUserProfile>("User with specified id wasn't found.");
+				return new GenericServiceResponse<PrivateUserProfile>("User with specified id wasn't found.", ErrorCode.USER_NOT_FOUND);
 
 			return new GenericServiceResponse<PrivateUserProfile>(user.ToUserProfile());
 		}
@@ -104,7 +105,7 @@ namespace APZ_BACKEND.Core.Services.Users.PrivateUsers
 		{
 			var user = await usersRepository.SingleOrDefaultAsync(pu => pu.Login == login);
 			if (user == null)
-				return new GenericServiceResponse<PrivateUserProfile>("User with specified id wasn't found.");
+				return new GenericServiceResponse<PrivateUserProfile>("User with specified id wasn't found.", ErrorCode.USER_NOT_FOUND);
 
 			return new GenericServiceResponse<PrivateUserProfile>(user.ToUserProfile());
 		}
@@ -113,7 +114,7 @@ namespace APZ_BACKEND.Core.Services.Users.PrivateUsers
 		{
 			var dbUser = await usersRepository.GetByIdAsync(businessUserId);
 			if (dbUser == null)
-				return new GenericServiceResponse<PrivateUserAccountData>("User with specified id wasn't found.");
+				return new GenericServiceResponse<PrivateUserAccountData>("User with specified id wasn't found.", ErrorCode.USER_NOT_FOUND);
 
 			dbUser.UpdateUserFromDto(editData);
 			await usersRepository.UpdateAsync(dbUser);
@@ -125,7 +126,7 @@ namespace APZ_BACKEND.Core.Services.Users.PrivateUsers
 		{
 			var dbUser = await usersRepository.GetByIdAsync(businessUserId);
 			if (dbUser == null)
-				return new GenericServiceResponse<PrivateUser>("User with specified id wasn't found");
+				return new GenericServiceResponse<PrivateUser>("User with specified id wasn't found", ErrorCode.USER_NOT_FOUND);
 
 			await usersRepository.DeleteAsync(dbUser);
 
@@ -160,7 +161,7 @@ namespace APZ_BACKEND.Core.Services.Users.PrivateUsers
 			{
 				var user = await usersRepository.GetByIdAsync(userId);
 				if (user == null)
-					return new GenericServiceResponse<PrivateUser>($"Private user with id: {userId} wasn't found");
+					return new GenericServiceResponse<PrivateUser>($"Private user with id: {userId} wasn't found", ErrorCode.CONTEXT_USER_NOT_FOUND);
 
 				user.Photo = path;
 				await usersRepository.UpdateAsync(user);
@@ -168,7 +169,7 @@ namespace APZ_BACKEND.Core.Services.Users.PrivateUsers
 			}
 			catch (Exception ex)
 			{
-				return new GenericServiceResponse<PrivateUser>("Error | Updating photo path private user: " + ex.Message);
+				return new GenericServiceResponse<PrivateUser>("Error | Updating photo path private user: " + ex.Message, ErrorCode.COMMON_ERROR);
 			}
 		}
 	}

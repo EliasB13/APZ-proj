@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using APZ_BACKEND.Core.Dtos.Employee;
 using APZ_BACKEND.Core.Dtos.EmployeesRoles;
 using APZ_BACKEND.Core.Entities;
+using APZ_BACKEND.Core.Helpers;
 using APZ_BACKEND.Core.Interfaces;
 using APZ_BACKEND.Core.Mappers;
 using APZ_BACKEND.Core.Services.Communication;
@@ -34,15 +35,15 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 			{
 				var role = await employeesRoleRepository.SingleOrDefaultAsync(er => er.Id == roleId);
 				if (role == null)
-					return new GenericServiceResponse<EmployeeDto>($"Role with id: {roleId} wasn't found");
+					return new GenericServiceResponse<EmployeeDto>($"Role with id: {roleId} wasn't found", ErrorCode.ROLE_NOT_FOUND);
 
 				var employee = await employeesRepository.SingleOrDefaultAsync(e => e.Id == employeeId, e => e.PrivateUser);
 				if (employee == null)
-					return new GenericServiceResponse<EmployeeDto>($"Employee with id: {employeeId} wasn't found");
+					return new GenericServiceResponse<EmployeeDto>($"Employee with id: {employeeId} wasn't found", ErrorCode.EMPLOYEE_NOT_FOUND);
 
 				if (employee.EmployeesRole != null)
 					if (employee.EmployeesRole.Id == roleId)
-						return new GenericServiceResponse<EmployeeDto>($"Employee with id: {employeeId} already in role with id: {roleId}");
+						return new GenericServiceResponse<EmployeeDto>($"Employee with id: {employeeId} already in role with id: {roleId}", ErrorCode.EMPLOYEE_ALREADY_IN_ROLE);
 
 				employee.EmployeesRole = role;
 				await employeesRepository.UpdateAsync(employee);
@@ -51,7 +52,7 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 			}
 			catch (Exception ex)
 			{
-				return new GenericServiceResponse<EmployeeDto>("Adding employee to role: " + ex.Message);
+				return new GenericServiceResponse<EmployeeDto>("Adding employee to role: " + ex.Message, ErrorCode.COMMON_ERROR);
 			}
 		}
 
@@ -61,11 +62,11 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 			{
 				var businessUser = await businessUsersService.GetByIdAsync(businessUserId);
 				if (businessUser == null)
-					return new GenericServiceResponse<EmployeesRoleDto>($"BusinessUser with id: {businessUserId} wasn't found");
+					return new GenericServiceResponse<EmployeesRoleDto>($"BusinessUser with id: {businessUserId} wasn't found", ErrorCode.CONTEXT_USER_NOT_FOUND);
 
 				var isRoleNameTaken = await employeesRoleRepository.AnyAsync(er => er.Name == employeesRoleDto.Name);
 				if (isRoleNameTaken)
-					return new GenericServiceResponse<EmployeesRoleDto>($"Employees role with name: {employeesRoleDto.Name} already exists");
+					return new GenericServiceResponse<EmployeesRoleDto>($"Employees role with name: {employeesRoleDto.Name} already exists", ErrorCode.ROLE_ALREADY_EXISTS);
 
 				var employeesRole = employeesRoleDto.ToRoleFromDto();
 				employeesRole.BusinessUser = businessUser;
@@ -76,7 +77,7 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 			}
 			catch (Exception ex)
 			{
-				return new GenericServiceResponse<EmployeesRoleDto>("Creating employees role: " + ex.Message);
+				return new GenericServiceResponse<EmployeesRoleDto>("Creating employees role: " + ex.Message, ErrorCode.COMMON_ERROR);
 			}
 		}
 
@@ -86,14 +87,14 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 			{
 				var employeesRole = await employeesRoleRepository.SingleOrDefaultAsync(er => er.Id == employeesRoleId);
 				if (employeesRole == null)
-					return new GenericServiceResponse<EmployeesRole>($"Employees role with id: {employeesRoleId} wasn't found");
+					return new GenericServiceResponse<EmployeesRole>($"Employees role with id: {employeesRoleId} wasn't found", ErrorCode.ROLE_NOT_FOUND);
 
 				await employeesRoleRepository.DeleteAsync(employeesRole);
 				return new GenericServiceResponse<EmployeesRole>(employeesRole);
 			}
 			catch (Exception ex)
 			{
-				return new GenericServiceResponse<EmployeesRole>("Deleting employees role: " + ex.Message);
+				return new GenericServiceResponse<EmployeesRole>("Deleting employees role: " + ex.Message, ErrorCode.COMMON_ERROR);
 			}
 		}
 
@@ -126,10 +127,10 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 		{
 			var role = await employeesRoleRepository.SingleOrDefaultAsync(r => r.Id == roleId, r => r.BusinessUser);
 			if (role == null)
-				return new GenericServiceResponse<EmployeesRoleDto>($"Role with id: {roleId} wasn't found");
+				return new GenericServiceResponse<EmployeesRoleDto>($"Role with id: {roleId} wasn't found", ErrorCode.ROLE_NOT_FOUND);
 
 			if (role.BusinessUser.Id != businessUserId)
-				return new GenericServiceResponse<EmployeesRoleDto>("You have no access to this resource");
+				return new GenericServiceResponse<EmployeesRoleDto>("You have no access to this resource", ErrorCode.NO_ACCESS);
 
 			return new GenericServiceResponse<EmployeesRoleDto>(role.ToDto());
 		}
@@ -140,15 +141,15 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 			{
 				var role = await employeesRoleRepository.SingleOrDefaultAsync(er => er.Id == employeesRoleId);
 				if (role == null)
-					return new GenericServiceResponse<EmployeesRole>($"Role with id: {employeesRoleId} wasn't found");
+					return new GenericServiceResponse<EmployeesRole>($"Role with id: {employeesRoleId} wasn't found", ErrorCode.ROLE_NOT_FOUND);
 
 				var employee = await employeesRepository.SingleOrDefaultAsync(e => e.Id == employeeId);
 				if (employee == null)
-					return new GenericServiceResponse<EmployeesRole>($"Employee with id: {employeeId} wasn't found");
+					return new GenericServiceResponse<EmployeesRole>($"Employee with id: {employeeId} wasn't found", ErrorCode.EMPLOYEE_NOT_FOUND);
 
 				var employeeInRole = await employeesRepository.AnyAsync(e => e.EmployeesRole.Id == employeesRoleId);
 				if (!employeeInRole)
-					return new GenericServiceResponse<EmployeesRole>($"Employee with id: {employeeId} isn't in role with id: {employeesRoleId}");
+					return new GenericServiceResponse<EmployeesRole>($"Employee with id: {employeeId} isn't in role with id: {employeesRoleId}", ErrorCode.EMPLOYEE_NOT_FOUND_IN_ROLE);
 
 				employee.EmployeesRole = null;
 				await employeesRepository.UpdateAsync(employee);
@@ -157,7 +158,7 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 			}
 			catch (Exception ex)
 			{
-				return new GenericServiceResponse<EmployeesRole>("Removing employee from role: " + ex.Message);
+				return new GenericServiceResponse<EmployeesRole>("Removing employee from role: " + ex.Message, ErrorCode.COMMON_ERROR);
 			}
 		}
 
@@ -167,7 +168,7 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 			{
 				var employeesRole = await employeesRoleRepository.GetByIdAsync(updateEmployeesRole.Id);
 				if (employeesRole == null)
-					return new GenericServiceResponse<EmployeesRole>($"EmployeesRole with id: {updateEmployeesRole.Id} wasn't found");
+					return new GenericServiceResponse<EmployeesRole>($"EmployeesRole with id: {updateEmployeesRole.Id} wasn't found", ErrorCode.ROLE_NOT_FOUND);
 
 				employeesRole.UpdateRoleFromDto(updateEmployeesRole);
 
@@ -175,7 +176,7 @@ namespace APZ_BACKEND.Core.Services.EmployeesRoles
 			}
 			catch (Exception ex)
 			{
-				return new GenericServiceResponse<EmployeesRole>("Updating employees role: " + ex.Message);
+				return new GenericServiceResponse<EmployeesRole>("Updating employees role: " + ex.Message, ErrorCode.COMMON_ERROR);
 			}
 		}
 	}

@@ -26,7 +26,7 @@ namespace APZ_BACKEND.Infrastructure.Services.Users
 		public async Task<GenericServiceResponse<object>> UploadProfilePicture(IFormFile file, int userId, UserType userType)
 		{
 			if (file == null || file.Length == 0)
-				return new GenericServiceResponse<object>("File was not found");
+				return new GenericServiceResponse<object>("File was not found", ErrorCode.FILE_NOT_FOUND);
 
 			var folderName = Path.Combine("Resources", "ProfilePics");
 			var filePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
@@ -44,12 +44,13 @@ namespace APZ_BACKEND.Infrastructure.Services.Users
 			{
 				var result = await businessUsersService.UpdatePhotoPath(dbPath, userId);
 				if (!result.Success)
-					return new GenericServiceResponse<object>(result.ErrorMessage);
-			} else
+					return new GenericServiceResponse<object>(result.ErrorMessage, result.ErrorCode);
+			} 
+			else
 			{
 				var result = await privateUsersService.UpdatePhotoPath(dbPath, userId);
 				if (!result.Success)
-					return new GenericServiceResponse<object>(result.ErrorMessage);
+					return new GenericServiceResponse<object>(result.ErrorMessage, result.ErrorCode);
 			}
 
 			using (var fileStream = new FileStream(Path.Combine(filePath, uniqueFileName), FileMode.Create))

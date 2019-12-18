@@ -2,6 +2,7 @@
 using APZ_BACKEND.Core.Dtos.Users;
 using APZ_BACKEND.Core.Entities;
 using APZ_BACKEND.Core.Exceptions;
+using APZ_BACKEND.Core.Helpers;
 using APZ_BACKEND.Core.Interfaces;
 using APZ_BACKEND.Core.Mappers;
 using APZ_BACKEND.Core.Services.Communication;
@@ -74,7 +75,7 @@ namespace APZ_BACKEND.Core.Services.Users.BusinessUsers
 		{
 			var user = await usersRepository.GetByIdAsync(id);
 			if (user == null)
-				return new GenericServiceResponse<BusinessUserProfile>("User with specified id wasn't found.");
+				return new GenericServiceResponse<BusinessUserProfile>("User with specified id wasn't found.", ErrorCode.USER_NOT_FOUND);
 
 			return new GenericServiceResponse<BusinessUserProfile>(user.ToUserProfile());
 		}
@@ -83,7 +84,7 @@ namespace APZ_BACKEND.Core.Services.Users.BusinessUsers
 		{
 			var user = await usersRepository.SingleOrDefaultAsync(bu => bu.Login == login);
 			if (user == null)
-				return new GenericServiceResponse<BusinessUserProfile>("User with specified id wasn't found.");
+				return new GenericServiceResponse<BusinessUserProfile>("User with specified id wasn't found.", ErrorCode.USER_NOT_FOUND);
 
 			return new GenericServiceResponse<BusinessUserProfile>(user.ToUserProfile());
 		}
@@ -92,7 +93,7 @@ namespace APZ_BACKEND.Core.Services.Users.BusinessUsers
 		{
 			var user = await usersRepository.GetByIdAsync(id);
 			if (user == null)
-				return new GenericServiceResponse<BusinessUserAccountData>("User with specified id wasn't found");
+				return new GenericServiceResponse<BusinessUserAccountData>("User with specified id wasn't found", ErrorCode.USER_NOT_FOUND);
 
 			return new GenericServiceResponse<BusinessUserAccountData>(user.ToAccountData());
 		}
@@ -101,7 +102,7 @@ namespace APZ_BACKEND.Core.Services.Users.BusinessUsers
 		{
 			var dbUser = await usersRepository.GetByIdAsync(businessUserId);
 			if (dbUser == null)
-				return new GenericServiceResponse<BusinessUserAccountData>("User with specified id wasn't found.");
+				return new GenericServiceResponse<BusinessUserAccountData>("User with specified id wasn't found.", ErrorCode.USER_NOT_FOUND);
 
 			dbUser.UpdateUserFromDto(editData);
 			await usersRepository.UpdateAsync(dbUser);
@@ -113,7 +114,7 @@ namespace APZ_BACKEND.Core.Services.Users.BusinessUsers
 		{
 			var dbUser = await usersRepository.GetByIdAsync(businessUserId);
 			if (dbUser == null)
-				return new GenericServiceResponse<BusinessUser>("User with specified id wasn't found");
+				return new GenericServiceResponse<BusinessUser>("User with specified id wasn't found", ErrorCode.USER_NOT_FOUND);
 
 			await usersRepository.DeleteAsync(dbUser);
 
@@ -126,7 +127,7 @@ namespace APZ_BACKEND.Core.Services.Users.BusinessUsers
 			{
 				var user = await usersRepository.GetByIdAsync(userId);
 				if (user == null)
-					return new GenericServiceResponse<BusinessUser>($"Business user with id: {userId} wasn't found");
+					return new GenericServiceResponse<BusinessUser>($"Business user with id: {userId} wasn't found", ErrorCode.USER_NOT_FOUND);
 
 				user.Photo = path;
 				await usersRepository.UpdateAsync(user);
@@ -134,7 +135,7 @@ namespace APZ_BACKEND.Core.Services.Users.BusinessUsers
 			}
 			catch (Exception ex)
 			{
-				return new GenericServiceResponse<BusinessUser>("Error | Updating photo path business user: " + ex.Message);
+				return new GenericServiceResponse<BusinessUser>("Error | Updating photo path business user: " + ex.Message, ErrorCode.COMMON_ERROR);
 			}
 		}
 	}

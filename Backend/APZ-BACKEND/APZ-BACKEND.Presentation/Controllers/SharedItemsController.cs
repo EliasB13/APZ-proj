@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using APZ_BACKEND.Core.Dtos.SharedItems;
 using APZ_BACKEND.Core.Entities;
+using APZ_BACKEND.Core.Helpers;
 using APZ_BACKEND.Core.Interfaces;
 using APZ_BACKEND.Core.Services.Items;
 using APZ_BACKEND.Core.Services.Users.BusinessUsers;
@@ -53,7 +54,7 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> GetEmployeesRoleItems(int roleId)
 		{
 			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
-				return BadRequest(new { message = "Current user is not a businessUser" });
+				return BadRequest(new { message = "Current user is not a businessUser", code = ErrorCode.NOT_BUSINESS_USER });
 
 			var contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
@@ -71,7 +72,7 @@ namespace APZ_BACKEND.Presentation.Controllers
 			{
 				var result = await itemsService.GetItem(contextUserId, id);
 				if (!result.Success)
-					return BadRequest(new { message = result.ErrorMessage });
+					return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
 
 				return Ok(result.Item);
 			}
@@ -79,7 +80,7 @@ namespace APZ_BACKEND.Presentation.Controllers
 			{
 				var result = await itemsService.GetItemPrivateUser(contextUserId, id);
 				if (!result.Success)
-					return BadRequest(new { message = result.ErrorMessage });
+					return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
 
 				return Ok(result.Item);
 			}
@@ -89,13 +90,13 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> AddItemToBusiness(AddSharedItemRequest addSharedItemRequest)
 		{
 			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
-				return BadRequest(new { message = "Current user is not a businessUser" });
+				return BadRequest(new { message = "Current user is not a businessUser", code = ErrorCode.NOT_BUSINESS_USER });
 
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await itemsService.AddItemToBusiness(contextUserId, addSharedItemRequest);
 			if (!result.Success)
-				return BadRequest(new { message = result.ErrorMessage });
+				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
 
 			return Ok();
 		}
@@ -106,7 +107,7 @@ namespace APZ_BACKEND.Presentation.Controllers
 		{
 			var result = await itemsService.TakeItem(takeItemDto);
 			if (!result.Success)
-				return BadRequest(new { message = result.ErrorMessage });
+				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
 
 			return Ok();
 		}
@@ -117,7 +118,7 @@ namespace APZ_BACKEND.Presentation.Controllers
 		{
 			var result = await itemsService.ReturnItem(returnItemRequest);
 			if (!result.Success)
-				return BadRequest(new { message = result.ErrorMessage });
+				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
 			
 			return Ok();
 		}
@@ -126,13 +127,13 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> AddItemToRole(AddEmployeeRoleItemRequest dto)
 		{
 			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
-				return BadRequest(new { message = "Current user is not a businessUser" });
+				return BadRequest(new { message = "Current user is not a businessUser", code = ErrorCode.NOT_BUSINESS_USER });
 
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await itemsService.AddItemToEmployeesRole(contextUserId, dto.SharedItemId, dto.RoleId);
 			if (!result.Success)
-				return BadRequest(new { message = result.ErrorMessage });
+				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
 
 			return Ok(result.Item);
 		}
@@ -141,13 +142,13 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> UpdateItem(UpdateSharedItemRequest updateSharedItemRequest, int id)
 		{
 			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
-				return BadRequest(new { message = "Current user is not a businessUser" });
+				return BadRequest(new { message = "Current user is not a businessUser", ErrorCode.NOT_BUSINESS_USER });
 
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await itemsService.Update(updateSharedItemRequest, id, contextUserId);
 			if (!result.Success)
-				return BadRequest(new { message = result.ErrorMessage });
+				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
 
 			return Ok();
 		}
@@ -156,13 +157,13 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> DeleteItem(int itemId)
 		{
 			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
-				return BadRequest(new { message = "Current user is not a businessUser" });
+				return BadRequest(new { message = "Current user is not a businessUser", code = ErrorCode.NOT_BUSINESS_USER });
 
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await itemsService.Delete(itemId, contextUserId);
 			if (!result.Success)
-				return BadRequest(new { message = result.ErrorMessage });
+				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
 
 			return Ok();
 		}
@@ -171,13 +172,13 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> RemoveItemFromRole(int roleItemId)
 		{
 			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
-				return BadRequest(new { message = "Current user is not a businessUser" });
+				return BadRequest(new { message = "Current user is not a businessUser", code = ErrorCode.NOT_BUSINESS_USER });
 
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await itemsService.RemoveItemFromEmployeesRole(roleItemId, contextUserId);
 			if (!result.Success)
-				return BadRequest(new { message = result.ErrorMessage });
+				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
 
 			return Ok();
 		}

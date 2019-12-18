@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using APZ_BACKEND.Core.Dtos.SharedItems;
 using APZ_BACKEND.Core.Entities;
+using APZ_BACKEND.Core.Helpers;
 using APZ_BACKEND.Core.Interfaces;
 using APZ_BACKEND.Core.Mappers;
 using APZ_BACKEND.Core.Services.Communication;
@@ -47,7 +48,7 @@ namespace APZ_BACKEND.Core.Services.Items
 			{
 				var businessUser = await businessUsersRepository.GetByIdAsync(businessUserId);
 				if (businessUser == null)
-					return new GenericServiceResponse<SharedItem>($"Business user with id: {businessUserId} wasn't found");
+					return new GenericServiceResponse<SharedItem>($"Business user with id: {businessUserId} wasn't found", ErrorCode.CONTEXT_USER_NOT_FOUND);
 
 				var item = addItemDto.ToSharedItem(businessUser);
 
@@ -56,7 +57,7 @@ namespace APZ_BACKEND.Core.Services.Items
 			}
 			catch (Exception ex)
 			{
-				return new GenericServiceResponse<SharedItem>("Error | Adding item to business: " + ex.Message);
+				return new GenericServiceResponse<SharedItem>("Error | Adding item to business: " + ex.Message, ErrorCode.COMMON_ERROR);
 			}
 		}
 
@@ -66,22 +67,22 @@ namespace APZ_BACKEND.Core.Services.Items
 			{
 				var businessUser = await businessUsersRepository.GetByIdAsync(businessUserId);
 				if (businessUser == null)
-					return new GenericServiceResponse<SharedItemDto>($"Business user with id: {businessUserId} wasn't found");
+					return new GenericServiceResponse<SharedItemDto>($"Business user with id: {businessUserId} wasn't found", ErrorCode.CONTEXT_USER_NOT_FOUND);
 
 				var item = await sharedItemsRepository.SingleOrDefaultAsync(si => si.Id == itemId, si => si.BusinessUser);
 				if (item == null)
-					return new GenericServiceResponse<SharedItemDto>($"Shared item with id: {itemId} wasn't found");
+					return new GenericServiceResponse<SharedItemDto>($"Shared item with id: {itemId} wasn't found", ErrorCode.ITEM_NOT_FOUND);
 
 				var role = await employeesRolesRepository.GetByIdAsync(roleId);
 				if (role == null)
-					return new GenericServiceResponse<SharedItemDto>($"Role with id: {roleId} wasn't found");
+					return new GenericServiceResponse<SharedItemDto>($"Role with id: {roleId} wasn't found", ErrorCode.ROLE_NOT_FOUND);
 
 				if (item.BusinessUser.Id != businessUserId)
-					return new GenericServiceResponse<SharedItemDto>("Item doesn't belong to business");
+					return new GenericServiceResponse<SharedItemDto>("Item doesn't belong to business", ErrorCode.ITEM_NOT_IN_BUSINESS);
 
 				var isItemInRole = await employeesRoleItemsRepository.AnyAsync(eri => eri.EmployeesRole.Id == roleId && eri.SharedItem.Id == itemId);
 				if (isItemInRole)
-					return new GenericServiceResponse<SharedItemDto>($"Item with id: {itemId} already exists in role with id: {roleId}");
+					return new GenericServiceResponse<SharedItemDto>($"Item with id: {itemId} already exists in role with id: {roleId}", ErrorCode.ITEM_ALREADY_IN_ROLE);
 
 				var employeeRoleItem = new EmployeeRoleItem
 				{
@@ -96,7 +97,7 @@ namespace APZ_BACKEND.Core.Services.Items
 			}
 			catch (Exception ex)
 			{
-				return new GenericServiceResponse<SharedItemDto>("Error | Adding item to role: " + ex.Message);
+				return new GenericServiceResponse<SharedItemDto>("Error | Adding item to role: " + ex.Message, ErrorCode.COMMON_ERROR);
 			}
 		}
 
@@ -172,11 +173,11 @@ namespace APZ_BACKEND.Core.Services.Items
 		{
 			var businessUser = await businessUsersRepository.GetByIdAsync(businessUserId);
 			if (businessUser == null)
-				return new GenericServiceResponse<SharedItemDto>($"Business user with id: {businessUserId} wasn't found");
+				return new GenericServiceResponse<SharedItemDto>($"Business user with id: {businessUserId} wasn't found", ErrorCode.CONTEXT_USER_NOT_FOUND);
 
 			var item = await sharedItemsRepository.GetByIdAsync(itemId);
 			if (item == null)
-				return new GenericServiceResponse<SharedItemDto>($"Item with id: {itemId} wasn't found");
+				return new GenericServiceResponse<SharedItemDto>($"Item with id: {itemId} wasn't found", ErrorCode.ITEM_NOT_FOUND);
 
 			var isTaken = await itemTakingLinesRepository.AnyAsync(itl => itl.SharedItemId == item.Id && itl.IsTaken);
 			var itemDto = item.ToDto(isTaken);
@@ -188,15 +189,15 @@ namespace APZ_BACKEND.Core.Services.Items
 		{
 			var privateUser = await privateUsersRepository.GetByIdAsync(privatUserId);
 			if (privateUser == null)
-				return new GenericServiceResponse<SharedItemDto>($"Private user with id: {privatUserId} wasn't found");
+				return new GenericServiceResponse<SharedItemDto>($"Private user with id: {privatUserId} wasn't found", ErrorCode.CONTEXT_USER_NOT_FOUND);
 			
 			var item = await sharedItemsRepository.GetByIdAsync(itemId);
 			if (item == null)
-				return new GenericServiceResponse<SharedItemDto>($"Item with id: {itemId} wasn't found");
+				return new GenericServiceResponse<SharedItemDto>($"Item with id: {itemId} wasn't found", ErrorCode.ITEM_NOT_FOUND);
 
 			var isItemAvailiableForUser = await sharedItemsRepository.IsItemAvailableForUser(itemId, privatUserId);
 			if (!isItemAvailiableForUser)
-				return new GenericServiceResponse<SharedItemDto>("You don't have permissions");
+				return new GenericServiceResponse<SharedItemDto>("You don't have permissions", ErrorCode.NO_ACCESS);
 
 			var isTaken = await itemTakingLinesRepository.AnyAsync(itl => itl.SharedItemId == item.Id && itl.IsTaken);
 			var itemDto = item.ToDto(isTaken);
@@ -210,10 +211,10 @@ namespace APZ_BACKEND.Core.Services.Items
 			{
 				var item = await sharedItemsRepository.SingleOrDefaultAsync(si => si.Id == id, si => si.BusinessUser);
 				if (item == null)
-					return new GenericServiceResponse<SharedItem>($"Shared item with id: {id} wasn't found");
+					return new GenericServiceResponse<SharedItem>($"Shared item with id: {id} wasn't found", ErrorCode.ITEM_NOT_FOUND);
 				
 				if (item.BusinessUser.Id != businessUserId)
-					return new GenericServiceResponse<SharedItem>("Item doesn't belong to business");
+					return new GenericServiceResponse<SharedItem>("Item doesn't belong to business", ErrorCode.ITEM_NOT_IN_BUSINESS);
 
 				item.UpdateSharedItemFromDto(dto);
 				await sharedItemsRepository.UpdateAsync(item);
@@ -222,7 +223,7 @@ namespace APZ_BACKEND.Core.Services.Items
 			}
 			catch (Exception ex)
 			{
-				return new GenericServiceResponse<SharedItem>("Error | Updating shared item: " + ex.Message);
+				return new GenericServiceResponse<SharedItem>("Error | Updating shared item: " + ex.Message, ErrorCode.COMMON_ERROR);
 			}
 		}
 
@@ -232,17 +233,17 @@ namespace APZ_BACKEND.Core.Services.Items
 			{
 				var item = await sharedItemsRepository.SingleOrDefaultAsync(si => si.Id == itemId, si => si.BusinessUser);
 				if (item == null)
-					return new GenericServiceResponse<SharedItem>($"Shared item with id: {itemId} wasn't found");
+					return new GenericServiceResponse<SharedItem>($"Shared item with id: {itemId} wasn't found", ErrorCode.ITEM_NOT_FOUND);
 
 				if (item.BusinessUser.Id != businessUserId)
-					return new GenericServiceResponse<SharedItem>("Item doesn't belong to business");
+					return new GenericServiceResponse<SharedItem>("Item doesn't belong to business", ErrorCode.ITEM_NOT_IN_BUSINESS);
 
 				await sharedItemsRepository.DeleteAsync(item);
 				return new GenericServiceResponse<SharedItem>(item);
 			}
 			catch (Exception ex)
 			{
-				return new GenericServiceResponse<SharedItem>("Error | Deleting shared item: " + ex.Message);
+				return new GenericServiceResponse<SharedItem>("Error | Deleting shared item: " + ex.Message, ErrorCode.COMMON_ERROR);
 			}
 		}
 
@@ -252,14 +253,14 @@ namespace APZ_BACKEND.Core.Services.Items
 			{
 				var roleItem = await employeesRoleItemsRepository.SingleOrDefaultAsync(ri => ri.Id == roleItemId);
 				if (roleItem == null)
-					return new GenericServiceResponse<EmployeeRoleItem>($"Role item with id: {roleItemId} wasn't found");
+					return new GenericServiceResponse<EmployeeRoleItem>($"Role item with id: {roleItemId} wasn't found", ErrorCode.ROLE_NOT_FOUND);
 
 				var item = await sharedItemsRepository.SingleOrDefaultAsync(si => si.Id == roleItem.SharedItemId, si => si.BusinessUser);
 				if (item == null)
-					return new GenericServiceResponse<EmployeeRoleItem>($"Shared item with id: {roleItem.SharedItemId} wasn't found");
+					return new GenericServiceResponse<EmployeeRoleItem>($"Shared item with id: {roleItem.SharedItemId} wasn't found", ErrorCode.ITEM_NOT_FOUND);
 
 				if (item.BusinessUser.Id != businessUserId)
-					return new GenericServiceResponse<EmployeeRoleItem>("Item doesn't belong to business");
+					return new GenericServiceResponse<EmployeeRoleItem>("Item doesn't belong to business", ErrorCode.ITEM_NOT_IN_BUSINESS);
 
 				await employeesRoleItemsRepository.DeleteAsync(roleItem);
 				return new GenericServiceResponse<EmployeeRoleItem>(roleItem);
@@ -267,7 +268,7 @@ namespace APZ_BACKEND.Core.Services.Items
 			}
 			catch (Exception ex)
 			{
-				return new GenericServiceResponse<EmployeeRoleItem>("Error | Removing item from employees role: " + ex.Message);
+				return new GenericServiceResponse<EmployeeRoleItem>("Error | Removing item from employees role: " + ex.Message, ErrorCode.COMMON_ERROR);
 			}
 		}
 
@@ -278,19 +279,19 @@ namespace APZ_BACKEND.Core.Services.Items
 				var a = Encoding.UTF8.GetBytes(takeItemRequest.UserRfid);
 				var user = await privateUsersRepository.SingleOrDefaultAsync(pu => pu.RfidNumber == Encoding.UTF8.GetBytes(takeItemRequest.UserRfid));
 				if (user == null)
-					return new GenericServiceResponse<SharedItem>("User wasn't found");
+					return new GenericServiceResponse<SharedItem>("User wasn't found", ErrorCode.USER_NOT_FOUND);
 
 				var item = await sharedItemsRepository.SingleOrDefaultAsync(si => si.RfidNumber == Encoding.UTF8.GetBytes(takeItemRequest.ItemRfid));
 				if (item == null)
-					return new GenericServiceResponse<SharedItem>("Item wasn't found");
+					return new GenericServiceResponse<SharedItem>("Item wasn't found", ErrorCode.USER_NOT_FOUND);
 
 				var isItemTaken = await itemTakingLinesRepository.AnyAsync(itl => itl.SharedItemId == item.Id && itl.IsTaken);
 				if (isItemTaken)
-					return new GenericServiceResponse<SharedItem>("Item already taken");
+					return new GenericServiceResponse<SharedItem>("Item already taken", ErrorCode.ITEM_ALREADY_TAKEN);
 
 				var isItemAvailiableForUser = await sharedItemsRepository.IsItemAvailableForUser(item.Id, user.Id);
 				if (!isItemAvailiableForUser)
-					return new GenericServiceResponse<SharedItem>("You don't have permissions");
+					return new GenericServiceResponse<SharedItem>("You don't have permissions", ErrorCode.NO_ACCESS);
 
 				var itemTaking = new ItemTaking
 				{
@@ -311,7 +312,7 @@ namespace APZ_BACKEND.Core.Services.Items
 			}
 			catch (Exception ex)
 			{
-				return new GenericServiceResponse<SharedItem>("Error | Taking item: " + ex.Message);
+				return new GenericServiceResponse<SharedItem>("Error | Taking item: " + ex.Message, ErrorCode.COMMON_ERROR);
 			}
 		}
 
@@ -322,20 +323,20 @@ namespace APZ_BACKEND.Core.Services.Items
 				var user = await privateUsersRepository
 					.SingleOrDefaultAsync(pu => pu.RfidNumber == Encoding.UTF8.GetBytes(returnItemRequest.UserRfid));
 				if (user == null)
-					return new GenericServiceResponse<SharedItem>("User wasn't found");
+					return new GenericServiceResponse<SharedItem>("User wasn't found", ErrorCode.USER_NOT_FOUND);
 
 				var item = await sharedItemsRepository
 					.SingleOrDefaultAsync(si => si.RfidNumber == Encoding.UTF8.GetBytes(returnItemRequest.ItemRfid));
 				if (user == null)
-					return new GenericServiceResponse<SharedItem>("Item wasn't found");
+					return new GenericServiceResponse<SharedItem>("Item wasn't found", ErrorCode.ITEM_NOT_FOUND);
 
 				var isItemAvailiableForUser = await sharedItemsRepository.IsItemAvailableForUser(item.Id, user.Id);
 				if (!isItemAvailiableForUser)
-					return new GenericServiceResponse<SharedItem>("You don't have permissions");
+					return new GenericServiceResponse<SharedItem>("You don't have permissions", ErrorCode.NO_ACCESS);
 
 				var itemTaking = await itemTakingsRepository.GetItemTakingByUserAndItem(user.Id, item.Id);
 				if (itemTaking == null)
-					return new GenericServiceResponse<SharedItem>("This item wasn't taken by this user");
+					return new GenericServiceResponse<SharedItem>("This item wasn't taken by this user", ErrorCode.ITEM_NOT_TAKEN_BY_CURRENT_USER);
 
 				var itemTakingLine = itemTaking.ItemTakingLines.SingleOrDefault(itl => itl.SharedItemId == item.Id);
 				itemTakingLine.IsReturned = true;
@@ -347,7 +348,7 @@ namespace APZ_BACKEND.Core.Services.Items
 			}
 			catch (Exception ex)
 			{
-				return new GenericServiceResponse<SharedItem>("Error | Taking item: " + ex.Message);
+				return new GenericServiceResponse<SharedItem>("Error | Taking item: " + ex.Message, ErrorCode.COMMON_ERROR);
 			}
 		}
 	}
