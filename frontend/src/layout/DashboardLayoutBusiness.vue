@@ -8,7 +8,7 @@
       <template slot="links">
         <sidebar-item
           :link="{
-            name: 'Items',
+            name: $t('sidebarLinks.items'),
             icon: 'ni ni-app text-primary',
             path: '/business-items'
           }"
@@ -16,21 +16,21 @@
 
         <sidebar-item
           :link="{
-            name: 'Consumers',
+            name: $t('sidebarLinks.consumers'),
             icon: 'ni ni-badge text-success',
             path: '/consumers'
           }"
         />
         <sidebar-item
           :link="{
-            name: 'Roles',
+            name: $t('sidebarLinks.roles'),
             icon: 'ni ni-ungroup text-orange',
             path: '/roles'
           }"
         />
         <sidebar-item
           :link="{
-            name: 'Profile',
+            name: $t('sidebarLinks.profile'),
             icon: 'ni ni-building text-yellow',
             path: '/business-profile'
           }"

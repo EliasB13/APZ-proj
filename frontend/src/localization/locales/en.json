@@ -1,0 +1,198 @@
+{
+  "pageName": {
+    "business items": "business items",
+    "consumers": "consumers",
+    "business profile": "business profile",
+    "roles": "roles",
+    "role": "role",
+    "available services": "available services",
+    "active items": "active items",
+    "profile": "profile",
+    "service": "service",
+    "login": "login",
+    "register": "register"
+  },
+  "businessItemsPage": {
+    "secondaryHeader": "This is your items page. Here you can explore or manage your items",
+    "manageBar": {
+      "manage": "Manage",
+      "remove": "Select items for removing"
+    },
+    "modal": {
+      "header": "Add new item",
+      "nameLabel": "Name",
+      "descriptionLabel": "Description",
+      "namePlaceholder": "Item name",
+      "descriptionPlaceholder": "Item description"
+    }
+  },
+  "consumersPage": {
+    "secondaryHeader": "This is your consumers page. Here you can explore or manage customers of your business.",
+    "manageBar": {
+      "manage": "Manage",
+      "remove": "Select employees for removing"
+    },
+    "modal": {
+      "header": "Add new item",
+      "loginLabel": "Employee login",
+      "loginPlaceholder": "Login"
+    }
+  },
+  "rolesPage": {
+    "secondaryHeader": "This is roles page. Here you can explore roles of your employees or consumers.",
+    "manageBar": {
+      "manage": "Manage",
+      "remove": "Select roles for removing"
+    },
+    "modal": {
+      "header": "Add new role",
+      "nameLabel": "Role name",
+      "descriptionLabel": "Role description",
+      "namePlaceholder": "Name",
+      "descriptionPlaceholder": "Description"
+    }
+  },
+  "rolePage": {
+    "description": "Description",
+    "employees": "Employees",
+    "items": "Items"
+  },
+  "businessProfilePage": {
+    "mainHeader": "Hello, {name}",
+    "secondaryHeader": "This is your profile page. Here you can edit information about your company.",
+    "profileCardHeader": "My account",
+    "userInformationHeader": "User information",
+    "descriptionHeader": "Description",
+    "contactInformationHeader": "Contact information",
+    "label": {
+      "login": "Login",
+      "email": "Email",
+      "companyName": "Company name",
+      "address": "Address",
+      "phone": "Phone",
+      "description": "Description"
+    },
+    "placeholder": {
+      "login": "Login",
+      "password": "Password",
+      "companyName": "Company name",
+      "email": "Email",
+      "passwordConfirmation": "Confirm password",
+      "address": "Address",
+      "phone": "Phone",
+      "description": "Description"
+    }
+  },
+  "loginPage": {
+    "mainHeader": "Welcome",
+    "secondaryHeader": "Sign in with your account to start to get whatever you want!",
+    "signInAsHeader": "Sign in as",
+    "privateUser": "Private User",
+    "businessUser": "Business user",
+    "placeholder": {
+      "login": "Login",
+      "password": "Password"
+    },
+    "button": {
+      "signIn": "Sign in",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "signUpRedirect": "Create new account"
+    }
+  },
+  "registerPage": {
+    "mainHeader": "Welcome",
+    "secondaryHeader": "Sign in with your account to start to get whatever you want!",
+    "signUpAsHeader": "Sign up as",
+    "privateUser": "Private User",
+    "businessUser": "Business user",
+    "placeholder": {
+      "login": "Login",
+      "password": "Password",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "companyName": "Company name",
+      "email": "Email",
+      "passwordConfirmation": "Confirm password"
+    },
+    "button": {
+      "policyAgreement": "I agree with the ",
+      "privacyPolicy": "Privacy Policy",
+      "createAccount": "Create account",
+      "forgotPassword": "Forgot password?",
+      "signInRedirect": "Login into your account"
+    },
+    "error": {
+      "login": {
+        "length": "Login must be more than 4 letters and less than 24",
+        "startsWithDigit": "Login can't starts with digit",
+        "onlyLatin": "Login can contain only latin chars"
+      },
+      "password": {
+        "length": "Password must be more than 5 symbols and less than 24",
+        "passwordConfirmation": "Password and confirmation don't match"
+      },
+      "firstName": {
+        "onlyDigits": "First name can contain only letters"
+      },
+      "lastName": {
+        "onlyDigits": "Last name can contain only letters"
+      },
+      "email": "Provide valid email, e. g. user@example.com",
+      "companyName": {
+        "onlyDigits": "Company name can contain only letters and - _"
+      }
+    }
+  },
+  "availableServicesPage": {
+    "secondaryHeader": "This is your available business page. Here you can explore services shared items of which you can use"
+  },
+  "activeItemsPage": {
+    "secondaryHeader": "This is your active items page. Here you can explore items which you've taken and doesn't return yet"
+  },
+  "privateProfilePage": {
+    "mainHeader": "Hello, {name}",
+    "secondaryHeader": "This is your profile page. Here you can edit information about you.",
+    "profileCardHeader": "My account",
+    "userInformationHeader": "User information",
+    "contactInformationHeader": "Contact information",
+    "label": {
+      "login": "Login",
+      "email": "Email",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "phone": "Phone"
+    },
+    "placeholder": {
+      "login": "Login",
+      "firstName": "First name",
+      "lastName": "Second name",
+      "email": "Email",
+      "phone": "Phone"
+    }
+  },
+  "sidebarLinks": {
+    "availableItems": "Available items",
+    "activeItems": "Active items",
+    "items": "Items",
+    "consumers": "Consumers",
+    "roles": "Roles",
+    "profile": "Profile"
+  },
+  "common": {
+    "addBtn": "Add",
+    "removeBtn": "Remove",
+    "resetBtn": "Reset",
+    "searchPlaceholder": "Search",
+    "editBtn": "Edit",
+    "saveBtn": "Save",
+    "closeBtn": "Close",
+    "registerBtn": "Register",
+    "loginBtn": "Login",
+    "spinnerText": "Loading"
+  },
+  "userDropDown": {
+    "myProfile": "My profile",
+    "logout": "Logout"
+  }
+}

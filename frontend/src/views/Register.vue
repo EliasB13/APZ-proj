@@ -4,21 +4,19 @@
       <div class="card bg-secondary shadow border-0">
         <div class="card-header bg-transparent pb-5">
           <div class="text-muted text-center mt-2 mb-3">
-            <small>Sign up as</small>
+            <small>{{ $t("registerPage.signUpAsHeader") }}</small>
           </div>
           <div class="btn-wrapper text-center">
             <base-button
               :type="privateUserSelected ? 'primary' : 'secondary'"
               icon="ni ni-single-02"
               @click="privateUserClick"
-              >Private user</base-button
-            >
+            >{{ $t("registerPage.privateUser") }}</base-button>
             <base-button
               :type="businessUserSelected ? 'primary' : 'secondary'"
               icon="ni ni-building"
               @click="businessUserClick"
-              >Business user</base-button
-            >
+            >{{ $t("registerPage.businessUser") }}</base-button>
           </div>
         </div>
         <div v-if="businessUserSelected">
@@ -26,7 +24,7 @@
             <form role="form">
               <base-input
                 class="input-group-alternative mb-3"
-                placeholder="Login"
+                :placeholder="$t('registerPage.placeholder.login')"
                 addon-left-icon="ni ni-badge"
                 v-model="loginInput"
                 :valid="isLoginValid"
@@ -35,7 +33,7 @@
 
               <base-input
                 class="input-group-alternative mb-3"
-                placeholder="Company name"
+                :placeholder="$t('registerPage.placeholder.companyName')"
                 addon-left-icon="ni ni-badge"
                 v-model="companyName"
                 :valid="isCompanyNameValid"
@@ -44,7 +42,7 @@
 
               <base-input
                 class="input-group-alternative mb-3"
-                placeholder="Email"
+                :placeholder="$t('registerPage.placeholder.email')"
                 type="email"
                 addon-left-icon="ni ni-email-83"
                 v-model="email"
@@ -53,7 +51,7 @@
 
               <base-input
                 class="input-group-alternative mb-3"
-                placeholder="Password"
+                :placeholder="$t('registerPage.placeholder.password')"
                 type="password"
                 addon-left-icon="ni ni-lock-circle-open"
                 v-model="password"
@@ -63,7 +61,9 @@
 
               <base-input
                 class="input-group-alternative"
-                placeholder="Confirm password"
+                :placeholder="
+                  $t('registerPage.placeholder.passwordConfirmation')
+                "
                 type="password"
                 addon-left-icon="ni ni-lock-circle-open"
                 v-model="passwordConfirmation"
@@ -75,16 +75,22 @@
                 <div class="col-12">
                   <base-checkbox class="custom-control-alternative">
                     <span class="text-muted">
-                      I agree with the
-                      <a href="#!">Privacy Policy</a>
+                      {{ $t("registerPage.button.policyAgreement") }}
+                      <a href="#!">
+                        {{
+                        $t("registerPage.button.privacyPolicy")
+                        }}
+                      </a>
                     </span>
                   </base-checkbox>
                 </div>
               </div>
               <div class="text-center">
-                <base-button type="primary" @click="handleSignUp" class="my-4"
-                  >Create account</base-button
-                >
+                <base-button
+                  type="primary"
+                  @click="handleSignUp"
+                  class="my-4"
+                >{{ $t("registerPage.button.createAccount") }}</base-button>
               </div>
             </form>
           </div>
@@ -94,7 +100,7 @@
             <form role="form">
               <base-input
                 class="input-group-alternative mb-3"
-                placeholder="Login"
+                :placeholder="$t('registerPage.placeholder.login')"
                 addon-left-icon="ni ni-badge"
                 v-model="loginInput"
                 :valid="isLoginValid"
@@ -103,7 +109,7 @@
 
               <base-input
                 class="input-group-alternative mb-3"
-                placeholder="First name"
+                :placeholder="$t('registerPage.placeholder.firstName')"
                 addon-left-icon="ni ni-badge"
                 v-model="firstName"
                 :valid="isFirstNameValid"
@@ -112,7 +118,7 @@
 
               <base-input
                 class="input-group-alternative mb-3"
-                placeholder="Last name"
+                :placeholder="$t('registerPage.placeholder.lastName')"
                 addon-left-icon="ni ni-badge"
                 v-model="lastName"
                 :valid="isLastNameValid"
@@ -121,7 +127,7 @@
 
               <base-input
                 class="input-group-alternative mb-3"
-                placeholder="Email"
+                :placeholder="$t('registerPage.placeholder.email')"
                 type="email"
                 addon-left-icon="ni ni-email-83"
                 v-model="email"
@@ -131,7 +137,7 @@
 
               <base-input
                 class="input-group-alternative mb-3"
-                placeholder="Password"
+                :placeholder="$t('registerPage.placeholder.password')"
                 type="password"
                 addon-left-icon="ni ni-lock-circle-open"
                 v-model="password"
@@ -141,7 +147,9 @@
 
               <base-input
                 class="input-group-alternative"
-                placeholder="Confirm password"
+                :placeholder="
+                  $t('registerPage.placeholder.passwordConfirmation')
+                "
                 type="password"
                 addon-left-icon="ni ni-lock-circle-open"
                 v-model="passwordConfirmation"
@@ -153,28 +161,31 @@
                 <div class="col-12">
                   <base-checkbox class="custom-control-alternative">
                     <span class="text-muted">
-                      I agree with the
-                      <a href="#!">Privacy Policy</a>
+                      {{ $t("registerPage.button.policyAgreement") }}
+                      <a href="#!">
+                        {{
+                        $t("registerPage.button.privacyPolicy")
+                        }}
+                      </a>
                     </span>
                   </base-checkbox>
                 </div>
               </div>
               <div class="text-center">
                 <b-spinner v-if="showSpinner" small></b-spinner>
-                <base-button type="primary" 
-                :disabled="!isPasswordValid || !isEmailValid || !isPasswordConfirmationValid || !isLoginValid || !isFirstNameValid || !isLastNameValid" 
-                @click="handleSignUp" class="my-4"
-                  >
-                  <span>Create account</span></base-button
+                <base-button
+                  type="primary"
+                  :disabled="
+                    !isPasswordValid ||
+                      !isEmailValid ||
+                      !isPasswordConfirmationValid ||
+                      !isLoginValid
+                  "
+                  @click="handleSignUp"
+                  class="my-4"
                 >
-              </div>
-              <div class="alert-div">
-                <b-alert
-                  :show="showAlert"
-                  dismissible
-                  @dismissed="clearStoreAlerts"
-                  >{{ alert.message }}</b-alert
-                >
+                  <span>{{ $t("registerPage.button.createAccount") }}</span>
+                </base-button>
               </div>
             </form>
           </div>
@@ -183,12 +194,12 @@
       <div class="row mt-3">
         <div class="col-6">
           <a href="#" class="text-light">
-            <small>Forgot password?</small>
+            <small>{{ $t("registerPage.button.forgotPassword") }}</small>
           </a>
         </div>
         <div class="col-6 text-right">
           <router-link to="/login" class="text-light">
-            <small>Login into your account</small>
+            <small>{{ $t("registerPage.button.signInRedirect") }}</small>
           </router-link>
         </div>
       </div>
@@ -258,50 +269,47 @@ export default {
     getLoginError() {
       if (this.loginInput === "") return "";
       if (this.loginInput.length < 5 || this.loginInput.length > 23)
-        return "Login must be more than 4 letters and less than 24";
+        return this.$t("registerPage.error.login.length");
       if (this.loginInput.charAt(0) >= "0" && this.loginInput.charAt(0) <= "9")
-        return "Login can't starts with digit";
+        return this.$t("registerPage.error.login.startsWithDigit");
       if (!/^[a-zA-z0-9]+$/.test(this.loginInput))
-        return "Login can contain only latin chars";
+        return this.$t("registerPage.error.login.onlyLatin");
       return "";
     },
     getPasswordError() {
       if (this.password === "") return "";
       if (this.password.length < 6 || this.password.length > 23)
-        return "Password must be more than 5 symbols and less than 24";
+        return this.$t("registerPage.error.password.length");
       return "";
     },
     getPasswordConfirmationError() {
       if (this.password != this.passwordConfirmation)
-        return "Password and confirmation don't match";
+        return this.$t("registerPage.error.password.passwordConfirmation");
       return "";
     },
     getFirstNameError() {
       if (this.firstName === "") return "";
       if (!/^([^0-9,.;\-_+=()"#@!$%\^&*]*)$/.test(this.firstName))
-        return "First name can contain only letters";
+        return this.$t("registerPage.error.firstName.onlyDigits");
       return "";
     },
     getLastNameError() {
       if (this.lastName === "") return "";
       if (!/^([^0-9,.;\-_+=()"#@!$%\^&*]*)$/.test(this.lastName))
-        return "Last name can contain only letters";
+        return this.$t("registerPage.error.lastName.onlyDigits");
       return "";
     },
     getEmailError() {
       if (this.email === "" && !this.isSubmitted) return null;
       var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       if (!regex.test(String(this.email).toLowerCase()))
-        return "Provide valid email, e. g. user@example.com";
+        return this.$t("registerPage.error.email");
       return "";
-    },
-    showAlert() {
-      return this.alert && this.alert.message;
     },
     getCompanyNameError() {
       if (this.firstName === "") return "";
       if (!/^([^,.;+=()"#@!$%\^&*]*)$/.test(this.firstName))
-        return "First name can contain only letters";
+        return this.$t("registerPage.error.companyName.onlyDigits");
       return "";
     },
     showSpinner() {

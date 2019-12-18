@@ -4,60 +4,53 @@
       <div class="card bg-secondary shadow border-0">
         <div class="card-header bg-transparent pb-5">
           <div class="text-muted text-center mt-2 mb-3">
-            <small>Sign in as</small>
+            <small>{{ $t("loginPage.signInAsHeader") }}</small>
           </div>
           <div class="btn-wrapper text-center">
             <base-button
               :type="privateUserSelected ? 'primary' : 'secondary'"
               icon="ni ni-single-02"
               @click="privateUserClick"
-            >Private user</base-button>
+            >{{ $t("loginPage.privateUser") }}</base-button>
             <base-button
               :type="businessUserSelected ? 'primary' : 'secondary'"
               icon="ni ni-building"
               @click="businessUserClick"
-            >Business user</base-button>
+            >{{ $t("loginPage.businessUser") }}</base-button>
           </div>
         </div>
         <div class="card-body px-lg-5 py-lg-5">
           <form role="form">
             <base-input
               class="input-group-alternative mb-3"
-              placeholder="Login"
+              :placeholder="$t('loginPage.placeholder.login')"
               addon-left-icon="ni ni-email-83"
               v-model="loginInput"
-              :valid="isLoginValid"
-              :error="getLoginError"
             ></base-input>
 
             <base-input
               class="input-group-alternative"
-              placeholder="Password"
+              :placeholder="$t('loginPage.placeholder.password')"
               type="password"
               addon-left-icon="ni ni-lock-circle-open"
               v-model="passwordInput"
-              :valid="isPasswordValid"
-              :error="getPasswordError"
             ></base-input>
 
             <base-checkbox class="custom-control-alternative">
-              <span class="text-muted">Remember me</span>
+              <span class="text-muted">
+                {{
+                $t("loginPage.button.rememberMe")
+                }}
+              </span>
             </base-checkbox>
             <div class="text-center">
-                <b-spinner v-if="showSpinner" class="mr-3"></b-spinner>
+              <b-spinner v-if="showSpinner" class="mr-3"></b-spinner>
               <base-button
                 @click="handleSignIn"
                 :disabled="!isLoginValid || !isPasswordValid"
                 type="primary"
                 class="my-4"
-              >Sign in</base-button>
-            </div>
-            <div class="alert-div">
-              <b-alert
-                :show="showAlert"
-                dismissible
-                @dismissed="clearStoreAlerts"
-              >{{ alert.message }}</b-alert>
+              >{{ $t("loginPage.button.signIn") }}</base-button>
             </div>
           </form>
         </div>
@@ -65,12 +58,12 @@
       <div class="row mt-3">
         <div class="col-6">
           <a href="#" class="text-light">
-            <small>Forgot password?</small>
+            <small>{{ $t("loginPage.button.forgotPassword") }}</small>
           </a>
         </div>
         <div class="col-6 text-right">
           <router-link to="/register" class="text-light">
-            <small>Create new account</small>
+            <small>{{ $t("loginPage.button.signUpRedirect") }}</small>
           </router-link>
         </div>
       </div>
@@ -122,9 +115,6 @@ export default {
       if (this.passwordInput.length < 6 || this.passwordInput.length > 23)
         return "Password must be more than 5 symbols and less than 24";
       return "";
-    },
-    showAlert() {
-      return this.alert && this.alert.message;
     },
     showSpinner() {
       return this.account.loggingIn;

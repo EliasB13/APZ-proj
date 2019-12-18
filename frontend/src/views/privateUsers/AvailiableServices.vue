@@ -5,8 +5,7 @@
         <div class="row">
           <div class="col-lg-7 col-md-10">
             <p class="text-white mt-0 mb-5">
-              This is your available business page. Here you can explore
-              services shared items of which you can use
+              {{ $t("availableServicesPage.secondaryHeader") }}
             </p>
           </div>
         </div>

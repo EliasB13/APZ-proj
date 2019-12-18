@@ -12,9 +12,8 @@
         <router-link
           :to="$route.path"
           class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
+          >{{ $t("pageName." + $route.name.toString()) }}</router-link
         >
-          {{ $route.name }}
-        </router-link>
       </slot>
       <navbar-toggle-button
         v-if="showToggleButton"

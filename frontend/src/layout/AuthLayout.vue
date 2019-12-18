@@ -38,13 +38,17 @@
           <li class="nav-item">
             <router-link class="nav-link nav-link-icon" to="/register">
               <i class="ni ni-circle-08"></i>
-              <span class="nav-link-inner--text">Register</span>
+              <span class="nav-link-inner--text">{{
+                $t("common.registerBtn")
+              }}</span>
             </router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link nav-link-icon" to="/login">
               <i class="ni ni-key-25"></i>
-              <span class="nav-link-inner--text">Login</span>
+              <span class="nav-link-inner--text">{{
+                $t("common.loginBtn")
+              }}</span>
             </router-link>
           </li>
         </ul>
@@ -57,9 +61,9 @@
         <div class="header-body text-center mb-7">
           <div class="row justify-content-center">
             <div class="col-lg-5 col-md-6">
-              <h1 class="text-white">Welcome!</h1>
+              <h1 class="text-white">{{ $t("loginPage.mainHeader") }}!</h1>
               <p class="text-lead text-white">
-                Sign in with your account to start to get whatever you want!
+                {{ $t("loginPage.secondaryHeader") }}
               </p>
             </div>
           </div>
@@ -101,7 +105,30 @@
               >
             </div>
           </div>
-          <div class="col-xl-6"></div>
+          <div class="col-xl-6">
+            <ul
+              class="nav nav-footer justify-content-center justify-content-xl-end"
+            >
+              <li class="nav-item" @click="changeLang('ua')">
+                <div class="nav-link pointer">
+                  <img
+                    class="thumbnail-locale mr-3"
+                    src="/img/locales/ua.png"
+                  />
+                  Українська
+                </div>
+              </li>
+              <li class="nav-item" @click="changeLang('en')">
+                <div class="nav-link pointer">
+                  <img
+                    class="thumbnail-locale mr-3"
+                    src="/img/locales/uk.png"
+                  />
+                  English
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </footer>
@@ -121,6 +148,11 @@ export default {
       year: new Date().getFullYear(),
       showMenu: false
     };
+  },
+  methods: {
+    changeLang(lang) {
+      this.$i18n.locale = lang;
+    }
   }
 };
 </script>

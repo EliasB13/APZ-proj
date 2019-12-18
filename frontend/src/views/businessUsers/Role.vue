@@ -15,7 +15,9 @@
 
     <div class="container-fluid mt--7 mb-5">
       <b-card>
-        <p class="card-text">Description: {{ role.description }}</p>
+        <p class="card-text">
+          {{ $t("rolePage.description") }}: {{ role.description }}
+        </p>
       </b-card>
 
       <div
@@ -28,7 +30,7 @@
             <i class="ni ni-badge text-success"></i>
           </b-col>
           <b-col cols="auto" class="pl-0" align-self="center">
-            <h3 class="mt-2">Employees</h3>
+            <h3 class="mt-2">{{ $t("rolePage.employees") }}</h3>
           </b-col>
           <b-col align-self="center" class="text-right">
             <i class="fas fa-chevron-down"></i>
@@ -57,7 +59,7 @@
             <i class="ni ni-app text-primary mt-1"></i>
           </b-col>
           <b-col cols="auto" class="pl-0" align-self="center">
-            <h3 class="mt-2">Items</h3>
+            <h3 class="mt-2">{{ $t("rolePage.items") }}</h3>
           </b-col>
           <b-col align-self="center" class="text-right">
             <i class="fas fa-chevron-down"></i>

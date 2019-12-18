@@ -8,6 +8,7 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 import GlobalComponents from "./helpers/globalComponents";
 import GlobalDirectives from "./helpers/globalDirectives";
 import Sidebar from "./components/sidebar/index";
+import i18n from "./localization/i18n";
 
 Vue.use(BootstrapVue);
 Vue.use(GlobalComponents);
@@ -18,6 +19,7 @@ Vue.use(Sidebar);
 
 new Vue({
   el: "#app",
+  i18n,
   router,
   store,
   render: h => h(App)

@@ -25,21 +25,21 @@
               <img alt="Image placeholder" :src="userPhoto" />
             </span>
             <div class="media-body ml-2 d-none d-lg-block">
-              <span class="mb-0 text-sm font-weight-bold">
-                {{ currentUser.login }}
-              </span>
+              <span class="mb-0 text-sm font-weight-bold">{{
+                currentUser.login
+              }}</span>
             </div>
           </div>
 
           <template>
             <router-link to="/business-profile" class="dropdown-item">
               <i class="ni ni-single-02"></i>
-              <span>My profile</span>
+              <span>{{ $t("userDropDown.myProfile") }}</span>
             </router-link>
             <div class="dropdown-divider"></div>
             <router-link to="/login" class="dropdown-item">
               <i class="ni ni-user-run"></i>
-              <span>Logout</span>
+              <span>{{ $t("userDropDown.logout") }}</span>
             </router-link>
           </template>
         </base-dropdown>

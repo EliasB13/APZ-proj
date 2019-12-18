@@ -5,8 +5,7 @@
         <div class="row">
           <div class="col-lg-7 col-md-10">
             <p class="text-white mt-0 mb-5">
-              This is your active items page. Here you can explore items which
-              you've taken and doesn't return yet
+              {{ $t("activeItemsPage.secondaryHeader") }}
             </p>
           </div>
         </div>

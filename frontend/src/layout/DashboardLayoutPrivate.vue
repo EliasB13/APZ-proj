@@ -8,7 +8,7 @@
       <template slot="links">
         <sidebar-item
           :link="{
-            name: 'Available services',
+            name: $t('sidebarLinks.availableItems'),
             icon: 'ni ni-tv-2 text-primary',
             path: '/availableServices'
           }"
@@ -16,14 +16,14 @@
 
         <sidebar-item
           :link="{
-            name: 'Active items',
+            name: $t('sidebarLinks.activeItems'),
             icon: 'ni ni-planet text-blue',
             path: '/active-items'
           }"
         />
         <sidebar-item
           :link="{
-            name: 'Profile',
+            name: $t('sidebarLinks.profile'),
             icon: 'ni ni-pin-3 text-orange',
             path: '/profile'
           }"

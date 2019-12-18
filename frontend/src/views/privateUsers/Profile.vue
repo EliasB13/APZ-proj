@@ -7,10 +7,11 @@
       <div class="container-fluid d-flex align-items-center">
         <div class="row">
           <div class="col-lg-7 col-md-10">
-            <h1 class="display-2 text-white">Hello, {{ user.login }}</h1>
+            <h1 class="display-2 text-white">
+              {{ $t("privateProfilePage.mainHeader", { name: user.login }) }}
+            </h1>
             <p class="text-white mt-0 mb-5">
-              This is your profile page. Here you can edit information about
-              you.
+              {{ $t("privateProfilePage.secondaryHeader") }}
             </p>
           </div>
         </div>
@@ -47,48 +48,62 @@
             <div slot="header" class="bg-white border-0">
               <div class="row align-items-center">
                 <div class="col-8">
-                  <h3 class="mb-0">My account</h3>
+                  <h3 class="mb-0">
+                    {{ $t("privateProfilePage.profileCardHeader") }}
+                  </h3>
                 </div>
                 <div class="col-4 text-right">
                   <div @click="editClick" class="btn btn-sm btn-primary">
-                    Edit
+                    {{ $t("common.editBtn") }}
                   </div>
                 </div>
               </div>
             </div>
             <template>
               <form @submit.prevent>
-                <h6 class="heading-small text-muted mb-4">User information</h6>
+                <h6 class="heading-small text-muted mb-4">
+                  {{ $t("privateProfilePage.userInformationHeader") }}
+                </h6>
                 <div class="pl-lg-4">
                   <div class="row">
                     <div class="col-lg-6">
-                      <label class="form-control-label">Login</label>
+                      <label class="form-control-label">{{
+                        $t("privateProfilePage.label.login")
+                      }}</label>
                       <p>{{ user.login }}</p>
                     </div>
                     <div class="col-lg-6">
-                      <label class="form-control-label">Email</label>
+                      <label class="form-control-label">{{
+                        $t("privateProfilePage.label.email")
+                      }}</label>
                       <p>{{ user.email }}</p>
                     </div>
                   </div>
                 </div>
                 <hr class="my-4" />
                 <h6 class="heading-small text-muted mb-4">
-                  Contact information
+                  {{ $t("privateProfilePage.contactInformationHeader") }}
                 </h6>
                 <div class="pl-lg-4">
                   <div class="row">
                     <div class="col-lg-6">
-                      <label class="form-control-label">First name</label>
+                      <label class="form-control-label">{{
+                        $t("privateProfilePage.label.firstName")
+                      }}</label>
                       <p>{{ user.firstName }}</p>
                     </div>
                     <div class="col-lg-6">
-                      <label class="form-control-label">Last name</label>
+                      <label class="form-control-label">{{
+                        $t("privateProfilePage.label.lastName")
+                      }}</label>
                       <p>{{ user.lastName }}</p>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-12">
-                      <label class="form-control-label">Phone</label>
+                      <label class="form-control-label">{{
+                        $t("privateProfilePage.label.phone")
+                      }}</label>
                       <p>{{ user.phone ? user.phone : "-" }}</p>
                     </div>
                   </div>
@@ -103,25 +118,31 @@
             <div slot="header" class="bg-white border-0">
               <div class="row align-items-center">
                 <div class="col-8">
-                  <h3 class="mb-0">My account</h3>
+                  <h3 class="mb-0">
+                    {{ $t("privateProfilePage.profileCardHeader") }}
+                  </h3>
                 </div>
                 <div class="col-4 text-right">
                   <div @click="saveClick" class="btn btn-sm btn-success">
-                    Save
+                    {{ $t("common.saveBtn") }}
                   </div>
                 </div>
               </div>
             </div>
             <template>
               <form @submit.prevent>
-                <h6 class="heading-small text-muted mb-4">User information</h6>
+                <h6 class="heading-small text-muted mb-4">
+                  {{ $t("privateProfilePage.userInformationHeader") }}
+                </h6>
                 <div class="pl-lg-4">
                   <div class="row">
                     <div class="col-lg-6">
                       <base-input
                         alternative
-                        label="Login"
-                        placeholder="Login"
+                        :label="$t('privateProfilePage.label.login')"
+                        :placeholder="
+                          $t('privateProfilePage.placeholder.login')
+                        "
                         input-classes="form-control-alternative"
                         v-model="model.login"
                       />
@@ -129,7 +150,7 @@
                     <div class="col-lg-6">
                       <base-input
                         alternative
-                        label="Email address"
+                        :label="$t('privateProfilePage.label.email')"
                         placeholder="jesse@example.com"
                         input-classes="form-control-alternative"
                         v-model="model.email"
@@ -139,15 +160,17 @@
                 </div>
                 <hr class="my-4" />
                 <h6 class="heading-small text-muted mb-4">
-                  Contact information
+                  {{ $t("privateProfilePage.contactInformationHeader") }}
                 </h6>
                 <div class="pl-lg-4">
                   <div class="row">
                     <div class="col-lg-6">
                       <base-input
                         alternative
-                        label="First name"
-                        placeholder="First name"
+                        :label="$t('privateProfilePage.label.firstName')"
+                        :placeholder="
+                          $t('privateProfilePage.placeholder.firstName')
+                        "
                         input-classes="form-control-alternative"
                         v-model="model.firstName"
                       />
@@ -155,8 +178,10 @@
                     <div class="col-lg-6">
                       <base-input
                         alternative
-                        label="Last name"
-                        placeholder="Last name"
+                        :label="$t('privateProfilePage.label.lastName')"
+                        :placeholder="
+                          $t('privateProfilePage.placeholder.lastName')
+                        "
                         input-classes="form-control-alternative"
                         v-model="model.lastName"
                       />
@@ -166,8 +191,10 @@
                     <div class="col-md-12">
                       <base-input
                         alternative
-                        label="Phone"
-                        placeholder="Phone"
+                        :label="$t('privateProfilePage.label.phone')"
+                        :placeholder="
+                          $t('privateProfilePage.placeholder.phone')
+                        "
                         input-classes="form-control-alternative"
                         v-model="model.phone"
                       />

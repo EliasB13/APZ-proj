@@ -5,8 +5,7 @@
         <div class="row">
           <div class="col-lg-7 col-md-10">
             <p class="text-white mt-0 mb-5">
-              This is roles page. Here you can explore roles of your employees
-              or consumers.
+              {{ $t("rolesPage.secondaryHeader") }}
             </p>
           </div>
         </div>
@@ -22,7 +21,11 @@
           <b-row>
             <b-col align-self="center">
               <h2 class="pl-3">
-                {{ selectionMode ? "Select roles for removing" : "Manage" }}
+                {{
+                  selectionMode
+                    ? $t("rolesPage.manageBar.remove")
+                    : $t("rolesPage.manageBar.manage")
+                }}
               </h2>
             </b-col>
             <b-col cols="auto" class="p-3">
@@ -32,14 +35,14 @@
                 type="success"
                 icon="ni ni-fat-add"
                 @click="showAddingModal = true"
-                >Add</base-button
+                >{{ $t("common.addBtn") }}</base-button
               >
               <base-button
                 v-if="selectionMode"
                 class="float-right"
                 type="link"
                 @click="resetClick"
-                >Reset</base-button
+                >{{ $t("common.resetBtn") }}</base-button
               >
             </b-col>
             <b-col cols="auto" class="p-3">
@@ -48,7 +51,7 @@
                 type="danger"
                 icon="ni ni-fat-remove"
                 @click="removeClick"
-                >Remove</base-button
+                >{{ $t("common.removeBtn") }}</base-button
               >
             </b-col>
           </b-row>
@@ -77,7 +80,9 @@
       modal-classes="modal-dialog-centered modal-sm"
       :showClose="false"
     >
-      <div slot="header" class="modal-title">Add new item</div>
+      <div slot="header" class="modal-title">
+        {{ $t("rolesPage.modal.header") }}
+      </div>
       <card
         type="secondary"
         header-classes="bg-white text-default"
@@ -89,33 +94,34 @@
             <base-input
               alternative
               class="mb-3"
-              placeholder="Name"
-              label="Role name"
+              :placeholder="$t('rolesPage.modal.namePlaceholder')"
+              :label="$t('rolesPage.modal.nameLabel')"
               v-model="roleToAdd.name"
             ></base-input>
             <base-input
               alternative
               class="mb-3"
-              placeholder="Login"
-              label="Description"
+              :placeholder="$t('rolesPage.modal.descriptionPlaceholder')"
+              :label="$t('rolesPage.modal.descriptionLabel')"
               v-model="roleToAdd.description"
             ></base-input>
           </form>
         </template>
       </card>
       <template slot="footer">
-        <base-button type="link" @click="showAddingModal = false"
-          >Close</base-button
-        >
-        <base-button type="success" class="ml-auto" @click="addItemClick"
-          >Add</base-button
-        >
+        <base-button type="link" @click="showAddingModal = false">{{
+          $t("common.closeBtn")
+        }}</base-button>
+        <base-button type="success" class="ml-auto" @click="addItemClick">{{
+          $t("common.closeBtn")
+        }}</base-button>
       </template>
     </modal>
 
     <div id="overlay" v-if="showSpinner">
       <b-spinner class="spinner-scaled" label="loading"></b-spinner>
-      <br />Loading
+      <br />
+      {{ $t("common.spinnerText") }}
     </div>
   </div>
 </template>

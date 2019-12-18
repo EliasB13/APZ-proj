@@ -1,0 +1,198 @@
+{
+  "pageName": {
+    "business items": "предмети бізнесу",
+    "consumers": "користувачі",
+    "business profile": "бізнес-профіль",
+    "roles": "ролі",
+    "role": "роль",
+    "available services": "доступні сервіси",
+    "active items": "активні предмети",
+    "profile": "профіль",
+    "service": "сервіс",
+    "login": "авторизація",
+    "register": "реєстрація"
+  },
+  "businessItemsPage": {
+    "secondaryHeader": "Це сторінка ваших предметів. Тут ви можете переглядати чи керувати предметами.",
+    "manageBar": {
+      "manage": "Керування",
+      "remove": "Виберіть предмети для видалення"
+    },
+    "modal": {
+      "header": "Додати новий предмет",
+      "nameLabel": "Ім'я",
+      "descriptionLabel": "Опис",
+      "namePlaceholder": "Ім'я предмету",
+      "descriptionPlaceholder": "Опис предмету"
+    }
+  },
+  "consumersPage": {
+    "secondaryHeader": "Це сторінка ваших користувачів. Тут ви можете переглядати чи керувати користувачами вашого сервісу.",
+    "manageBar": {
+      "manage": "Керування",
+      "remove": "Виберіть користувачів для видалення."
+    },
+    "modal": {
+      "header": "Додати новий предмет",
+      "loginLabel": "Ім'я облікового запису користувача",
+      "loginPlaceholder": "Ім'я користувача"
+    }
+  },
+  "rolesPage": {
+    "secondaryHeader": "Це сторінка ролей. Тут ви можете переглядати чи керувати ролями користувачів вашого сервісу",
+    "manageBar": {
+      "manage": "Керування",
+      "remove": "Виберіть ролі для видалення"
+    },
+    "modal": {
+      "header": "Додати нову роль",
+      "nameLabel": "Ім'я ролі",
+      "descriptionLabel": "Опис ролі",
+      "namePlaceholder": "Ім'я",
+      "descriptionPlaceholder": "Опис"
+    }
+  },
+  "rolePage": {
+    "description": "Опис",
+    "employees": "Користувачі",
+    "items": "Предмети"
+  },
+  "businessProfilePage": {
+    "mainHeader": "Вітаємо, {name}",
+    "secondaryHeader": "Це сторінка вашого профілю. Тут ви можете переглядати чи редагувати дані вашого облікового запису",
+    "profileCardHeader": "Мій обліковий запис",
+    "userInformationHeader": "Інформація про користувача",
+    "descriptionHeader": "Опис",
+    "contactInformationHeader": "Контактна інформація",
+    "label": {
+      "login": "Ім'я користувача",
+      "email": "Електрона пошта",
+      "companyName": "Назва компанії",
+      "address": "Адреса",
+      "phone": "Телефон",
+      "description": "Опис"
+    },
+    "placeholder": {
+      "login": "Ім'я користувача",
+      "password": "Пароль",
+      "companyName": "Назва компанії",
+      "email": "Електрона пошта",
+      "passwordConfirmation": "Підтвердження паролю",
+      "address": "Адреса",
+      "phone": "Телефон",
+      "description": "Опис"
+    }
+  },
+  "loginPage": {
+    "mainHeader": "Ласкаво просимо",
+    "secondaryHeader": "Увійдіть до свого акаунту, щоб розпочати роботу з сервісом",
+    "signInAsHeader": "Увійти як",
+    "privateUser": "Приватний користувач",
+    "businessUser": "Бізнес-користувач",
+    "placeholder": {
+      "login": "Ім'я користувача",
+      "password": "Пароль"
+    },
+    "button": {
+      "signIn": "Вхід",
+      "rememberMe": "Запам'ятати мене",
+      "forgotPassword": "Забули пароль?",
+      "signUpRedirect": "Створити новий акаунт"
+    }
+  },
+  "registerPage": {
+    "mainHeader": "Ласкаво просимо",
+    "secondaryHeader": "Створіть обліковий запис, щоб розпочати роботу з сервісом",
+    "signUpAsHeader": "Зареєструватися як",
+    "privateUser": "Приватний користувач",
+    "businessUser": "Бізнес-користувач",
+    "placeholder": {
+      "login": "Ім'я користувача",
+      "password": "Пароль",
+      "firstName": "Ім'я",
+      "lastName": "Прізвище",
+      "companyName": "Назва компанії",
+      "email": "Електрона пошта",
+      "passwordConfirmation": "Підтвердження паролю"
+    },
+    "button": {
+      "policyAgreement": "Я погоджуюся з",
+      "privacyPolicy": "Політикою приватності",
+      "createAccount": "Створити акаунт",
+      "forgotPassword": "Забули пароль?",
+      "signInRedirect": "Увійти до існуючого акаунту"
+    },
+    "error": {
+      "login": {
+        "length": "Ім'я користувача має бути більше 4 та менше 24 символів",
+        "startsWithDigit": "Ім'я користувача не може починатися з цифр",
+        "onlyLatin": "Ім'я користувача може містити лише латинські символи"
+      },
+      "password": {
+        "length": "Пароль має бути 5 та менше 25 символів",
+        "passwordConfirmation": "Пароль та підтвердження не співпадають"
+      },
+      "firstName": {
+        "onlyDigits": "Ім'я може містити лише літери"
+      },
+      "lastName": {
+        "onlyDigits": "Прізвище може містити лише літери"
+      },
+      "email": "Не валідний формат електроної пошти, приклад: user@example.com",
+      "companyName": {
+        "onlyDigits": "Назва компанії може містити літери, цифри та символи - _"
+      }
+    }
+  },
+  "availableServicesPage": {
+    "secondaryHeader": "Це сторінка доступних вам сервісів. Тут ви можете переглянути доступні сервіси та предмети у них."
+  },
+  "activeItemsPage": {
+    "secondaryHeader": "Це сторінка ваших активних предметів. Тут ви можете переглянути предмети, які ще не повернуті."
+  },
+  "privateProfilePage": {
+    "mainHeader": "Вітаємо, {name}",
+    "secondaryHeader": "Це сторінка вашого профілю. Тут ви можете переглядати чи редагувати дані вашого облікового запису.",
+    "profileCardHeader": "Мій обліковий запис",
+    "userInformationHeader": "Інформація про користувача",
+    "contactInformationHeader": "Контактна інформація",
+    "label": {
+      "login": "Ім'я користувача",
+      "email": "Електрона пошта",
+      "firstName": "Ім'я",
+      "lastName": "Прізвище",
+      "phone": "Телефон"
+    },
+    "placeholder": {
+      "login": "Ім'я користувача",
+      "firstName": "Ім'я",
+      "lastName": "Прізвище",
+      "email": "Електрона пошта",
+      "phone": "Телефон"
+    }
+  },
+  "sidebarLinks": {
+    "availableItems": "Доступні предмети",
+    "activeItems": "Активні предмети",
+    "items": "Предмети",
+    "consumers": "Користувачі",
+    "roles": "Ролі",
+    "profile": "Профіль"
+  },
+  "common": {
+    "addBtn": "Додати",
+    "removeBtn": "Видалити",
+    "resetBtn": "Скинути",
+    "searchPlaceholder": "Шукати",
+    "editBtn": "Редагувати",
+    "saveBtn": "Зберегти",
+    "closeBtn": "Закрити",
+    "registerBtn": "Зареєструватися",
+    "loginBtn": "Увійти",
+    "spinnerText": "Завантаження"
+  },
+  "userDropDown": {
+    "myProfile": "Мій профіль",
+    "logout": "Вийти"
+  }
+}

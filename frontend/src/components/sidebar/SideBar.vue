@@ -9,7 +9,7 @@
         <span class="navbar-toggler-icon"></span>
       </navbar-toggle-button>
       <router-link class="navbar-brand" to="/">
-        <img :src="logo" class="navbar-brand-img" alt="..." />
+        <img :src="logo" class="navbar-brand-img" alt="logo" />
       </router-link>
 
       <slot name="mobile-right">
@@ -44,24 +44,9 @@
               </div>
             </a>
 
-            <div class="dropdown-header noti-title">
-              <h6 class="text-overflow m-0">Welcome!</h6>
-            </div>
             <router-link to="/profile" class="dropdown-item">
               <i class="ni ni-single-02"></i>
               <span>My profile</span>
-            </router-link>
-            <router-link to="/profile" class="dropdown-item">
-              <i class="ni ni-settings-gear-65"></i>
-              <span>Settings</span>
-            </router-link>
-            <router-link to="/profile" class="dropdown-item">
-              <i class="ni ni-calendar-grid-58"></i>
-              <span>Activity</span>
-            </router-link>
-            <router-link to="/profile" class="dropdown-item">
-              <i class="ni ni-support-16"></i>
-              <span>Support</span>
             </router-link>
             <div class="dropdown-divider"></div>
             <a href="#!" class="dropdown-item">
@@ -98,6 +83,21 @@
         <!--Divider-->
         <hr class="my-3" />
         <!--Heading-->
+        <h6 class="navbar-heading text-muted">Localizaton</h6>
+        <ul class="navbar-nav mb-md-3">
+          <li class="nav-item" @click="changeLang('ua')">
+            <div class="nav-link pointer">
+              <img class="thumbnail-locale mr-3" src="/img/locales/ua.png" />
+              Українська
+            </div>
+          </li>
+          <li class="nav-item" @click="changeLang('en')">
+            <div class="nav-link pointer">
+              <img class="thumbnail-locale mr-3" src="/img/locales/uk.png" />
+              English
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
   </nav>
@@ -134,6 +134,9 @@ export default {
     },
     showSidebar() {
       this.$sidebar.displaySidebar(true);
+    },
+    changeLang(lang) {
+      this.$i18n.locale = lang;
     }
   },
   beforeDestroy() {
