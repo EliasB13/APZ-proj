@@ -1,5 +1,6 @@
 import { userService } from "../../services";
 import { router } from "../../helpers";
+import i18n from "../../localization/i18n";
 
 const user = JSON.parse(localStorage.getItem("user"));
 const state = user
@@ -33,8 +34,9 @@ const actions = {
         commit("registerSuccess", user);
         router.push("/login");
         setTimeout(() => {
-          // display success message after route change completes
-          dispatch("alert/success", "Registration successful", { root: true });
+          dispatch("alert/success", i18n.t("alert.registerSuccess"), {
+            root: true
+          });
         });
       },
       error => {
@@ -51,7 +53,9 @@ const actions = {
         commit("registerSuccess", user);
         router.push("/login");
         setTimeout(() => {
-          dispatch("alert/sucess", "Registration sucessful", { root: true });
+          dispatch("alert/sucess", i18n.t("alert.registerSuccess"), {
+            root: true
+          });
         });
       },
       error => {
@@ -92,7 +96,7 @@ const actions = {
     userService.update(user, isBusinessUser).then(
       updatedUser => {
         commit("updateUserSuccess", updatedUser);
-        dispatch("alert/success", "User was successfuly updated", {
+        dispatch("alert/success", i18n.t("alert.updateUserSuccess"), {
           root: true
         });
       },

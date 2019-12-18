@@ -79,7 +79,7 @@ namespace APZ_BACKEND.Presentation.Controllers
 			var user = await userService.AuthenticateBusinessAsync(dto.Login, dto.Password);
 
 			if (user == null)
-				return BadRequest(new { message = "Username or password is incorrect", ErrorCode.USERNAME_OR_PASSWORD_INCORRECT });
+				return BadRequest(new { message = "Username or password is incorrect", code = ErrorCode.USERNAME_OR_PASSWORD_INCORRECT });
 
 			var token = GetTokenString(user.Id);
 

@@ -65,19 +65,15 @@ export default {
       "addEmployeeToRole",
       "RemoveEmployeeFromRole"
     ]),
-    handleRoleClick() {
-      if (this.selectionMode) {
+    roleClick(roleId) {
+      if (!this.selectionMode)
+        this.$router.push({ name: "role", params: { roleId: roleId } });
+      else {
         this.selected = !this.selected;
         this.selected
           ? this.addSelectedItem(this.roleId)
           : this.removeSelectedItem(this.roleId);
-      } else {
-        if (this.collapseVisible) this.employeesCollapseVisible = false;
-        this.collapseVisible = !this.collapseVisible;
       }
-    },
-    roleClick(roleId) {
-      this.$router.push({ name: "role", params: { roleId: roleId } });
     },
     showEmployeesClick() {
       // if (!this.employeesCollapseVisible) {

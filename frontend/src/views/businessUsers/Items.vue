@@ -107,12 +107,12 @@
         </template>
       </card>
       <template slot="footer">
-        <base-button type="link" @click="showAddingModal = false">{{
-          $t("common.closeBtn")
-        }}</base-button>
-        <base-button type="success" class="ml-auto" @click="addItemClick">{{
-          $t("common.addBtn")
-        }}</base-button>
+        <base-button type="link" @click="showAddingModal = false">
+          {{ $t("common.closeBtn") }}
+        </base-button>
+        <base-button type="success" class="ml-auto" @click="addItemClick">
+          {{ $t("common.addBtn") }}
+        </base-button>
       </template>
     </modal>
 

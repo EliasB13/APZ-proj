@@ -11,12 +11,14 @@
               :type="privateUserSelected ? 'primary' : 'secondary'"
               icon="ni ni-single-02"
               @click="privateUserClick"
-            >{{ $t("registerPage.privateUser") }}</base-button>
+              >{{ $t("registerPage.privateUser") }}</base-button
+            >
             <base-button
               :type="businessUserSelected ? 'primary' : 'secondary'"
               icon="ni ni-building"
               @click="businessUserClick"
-            >{{ $t("registerPage.businessUser") }}</base-button>
+              >{{ $t("registerPage.businessUser") }}</base-button
+            >
           </div>
         </div>
         <div v-if="businessUserSelected">
@@ -76,11 +78,9 @@
                   <base-checkbox class="custom-control-alternative">
                     <span class="text-muted">
                       {{ $t("registerPage.button.policyAgreement") }}
-                      <a href="#!">
-                        {{
+                      <a href="#!">{{
                         $t("registerPage.button.privacyPolicy")
-                        }}
-                      </a>
+                      }}</a>
                     </span>
                   </base-checkbox>
                 </div>
@@ -90,7 +90,8 @@
                   type="primary"
                   @click="handleSignUp"
                   class="my-4"
-                >{{ $t("registerPage.button.createAccount") }}</base-button>
+                  >{{ $t("registerPage.button.createAccount") }}</base-button
+                >
               </div>
             </form>
           </div>
@@ -162,11 +163,9 @@
                   <base-checkbox class="custom-control-alternative">
                     <span class="text-muted">
                       {{ $t("registerPage.button.policyAgreement") }}
-                      <a href="#!">
-                        {{
+                      <a href="#!">{{
                         $t("registerPage.button.privacyPolicy")
-                        }}
-                      </a>
+                      }}</a>
                     </span>
                   </base-checkbox>
                 </div>
@@ -366,9 +365,6 @@ export default {
         }
       }
     },
-    clearStoreAlerts() {
-      this.clear();
-    },
     businessUserClick() {
       if (this.privateUserSelected) {
         this.privateUserSelected = false;
@@ -392,11 +388,6 @@ export default {
         (this.companyName = ""),
         (this.passwordConfirmation = ""),
         (this.isSubmitted = false);
-    }
-  },
-  watch: {
-    $route(to, from) {
-      this.clearStoreAlerts();
     }
   }
 };

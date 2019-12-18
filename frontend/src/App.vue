@@ -21,7 +21,7 @@ export default {
     }),
     makeToast(message, variant) {
       this.$bvToast.toast(message, {
-        title: "Notification",
+        title: this.$t("common.notification"),
         variant: variant,
         autoHideDelay: 5000
       });
@@ -34,7 +34,6 @@ export default {
       }
     },
     $route(to, from) {
-      // clear alert on location change
       this.clearAlert();
     }
   }

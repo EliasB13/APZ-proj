@@ -189,10 +189,46 @@
     "closeBtn": "Close",
     "registerBtn": "Register",
     "loginBtn": "Login",
-    "spinnerText": "Loading"
+    "spinnerText": "Loading",
+    "notification": "Notification"
   },
   "userDropDown": {
     "myProfile": "My profile",
     "logout": "Logout"
+  },
+  "alert": {
+    "registerSuccess": "Registration successful",
+    "updateUserSuccess": "User was successfuly updated",
+    "addItemSuccess": "Item was added",
+    "removeItemSuccess": "Item was removed",
+    "addEmployeeSuccess": "Employee was added",
+    "removeEmployeeSuccess": "Employee was removed",
+    "addRoleSuccess": "Role was added",
+    "removeRoleSuccess": "Role was removed",
+    "addEmployeeToRoleSuccess": "Employee was added to role",
+    "addItemToRoleSuccess": "Item was added to role",
+    "removeEmployeeFromRoleSuccess": "Employee was removed from role",
+    "removeItemFromRoleSuccess": "Item was removed from role"
+  },
+  "errorCode": {
+    "100": "User was not found",
+    "101": "Current user wasn't found",
+    "102": "Such rmployee already exists",
+    "103": "Employee wasn't found",
+    "104": "Such role already exists",
+    "105": "Role wasn't found",
+    "106": "Employee already added to role",
+    "107": "Employee wasn't found in role",
+    "108": "Item already added to role",
+    "109": "Item wasn't found",
+    "110": "Item doesn't belong to current business",
+    "111": "Item already taken",
+    "112": "Item wasn't taken by current user",
+    "113": "Current user isn't business user",
+    "114": "Current user isn't private user",
+    "115": "Wrong request parameters",
+    "116": "Login or password is incorrect",
+    "117": "File not found",
+    "900": "You have no access to this resource"
   }
 }

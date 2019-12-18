@@ -11,12 +11,14 @@
               :type="privateUserSelected ? 'primary' : 'secondary'"
               icon="ni ni-single-02"
               @click="privateUserClick"
-            >{{ $t("loginPage.privateUser") }}</base-button>
+              >{{ $t("loginPage.privateUser") }}</base-button
+            >
             <base-button
               :type="businessUserSelected ? 'primary' : 'secondary'"
               icon="ni ni-building"
               @click="businessUserClick"
-            >{{ $t("loginPage.businessUser") }}</base-button>
+              >{{ $t("loginPage.businessUser") }}</base-button
+            >
           </div>
         </div>
         <div class="card-body px-lg-5 py-lg-5">
@@ -37,11 +39,9 @@
             ></base-input>
 
             <base-checkbox class="custom-control-alternative">
-              <span class="text-muted">
-                {{
+              <span class="text-muted">{{
                 $t("loginPage.button.rememberMe")
-                }}
-              </span>
+              }}</span>
             </base-checkbox>
             <div class="text-center">
               <b-spinner v-if="showSpinner" class="mr-3"></b-spinner>
@@ -50,7 +50,8 @@
                 :disabled="!isLoginValid || !isPasswordValid"
                 type="primary"
                 class="my-4"
-              >{{ $t("loginPage.button.signIn") }}</base-button>
+                >{{ $t("loginPage.button.signIn") }}</base-button
+              >
             </div>
           </form>
         </div>
@@ -151,11 +152,6 @@ export default {
         this.businessUserSelected = false;
         this.privateUserSelected = true;
       }
-    }
-  },
-  watch: {
-    $route(to, from) {
-      this.clearStoreAlerts();
     }
   }
 };

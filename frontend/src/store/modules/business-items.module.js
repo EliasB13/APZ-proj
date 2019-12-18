@@ -1,4 +1,5 @@
 import { businessItemsService } from "../../services";
+import i18n from "../../localization/i18n";
 
 const state = {
   items: [],
@@ -27,7 +28,9 @@ const actions = {
     businessItemsService.addItem(item).then(
       () => {
         commit("addItemSuccess", item);
-        dispatch("alert/success", "Item was added", { root: true });
+        dispatch("alert/success", i18n.t("alert.addItemSuccess"), {
+          root: true
+        });
         dispatch("getItems");
       },
       error => {
@@ -42,7 +45,9 @@ const actions = {
     businessItemsService.delete(id).then(
       () => {
         commit("deleteItemSuccess", id);
-        dispatch("alert/success", "Item was removed", { root: true });
+        dispatch("alert/success", i18n.t("alert.removeItemSuccess"), {
+          root: true
+        });
         dispatch("selectedItems/resetSelectedItems", {}, { root: true });
       },
       error => {

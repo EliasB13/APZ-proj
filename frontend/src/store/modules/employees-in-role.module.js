@@ -1,4 +1,5 @@
 import { rolesService } from "../../services";
+import i18n from "../../localization/i18n";
 
 const state = {
   employees: [],
@@ -29,7 +30,9 @@ const actions = {
     rolesService.addEmployeeToRole(emplId, roleId).then(
       employee => {
         commit("addEmployeeToRoleSuccess", employee);
-        dispatch("alert/success", "Employee was added to role", { root: true });
+        dispatch("alert/success", i18n.t("alert.addEmployeeToRoleSuccess"), {
+          root: true
+        });
       },
       error => {
         commit("addEmployeeToRoleFailure", error);
@@ -45,9 +48,13 @@ const actions = {
     rolesService.removeEmployeeFromRole(emplId, roleId).then(
       () => {
         commit("removeEmployeeFromRoleSuccess", emplId);
-        dispatch("alert/success", "Employee was removed from role", {
-          root: true
-        });
+        dispatch(
+          "alert/success",
+          i18n.t("alert.removeEmployeeFromRoleSuccess"),
+          {
+            root: true
+          }
+        );
         dispatch("selectedItems/resetSelectedItems", {}, { root: true });
       },
       error => {
