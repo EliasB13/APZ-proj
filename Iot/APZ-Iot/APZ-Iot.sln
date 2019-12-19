@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29326.143
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APZ-Iot", "APZ-Iot\APZ-Iot.csproj", "{2486F124-DFCF-43B7-B99B-8E2F0920B087}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2486F124-DFCF-43B7-B99B-8E2F0920B087}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2486F124-DFCF-43B7-B99B-8E2F0920B087}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2486F124-DFCF-43B7-B99B-8E2F0920B087}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2486F124-DFCF-43B7-B99B-8E2F0920B087}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {17DD7338-7272-4B59-B52A-1EBD553502F5}
+	EndGlobalSection
+EndGlobal
