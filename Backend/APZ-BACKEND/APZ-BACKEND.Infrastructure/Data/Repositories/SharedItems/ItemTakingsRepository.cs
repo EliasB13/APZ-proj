@@ -27,7 +27,7 @@ namespace APZ_BACKEND.Infrastructure.Data.Repositories.SharedItems
 			return await dbContext.ItemTakings
 				.Include(it => it.ItemTakingLines)
 				.Include(it => it.PrivateUser)
-				.SingleOrDefaultAsync(it => it.PrivateUser.Id == privateUserId && it.ItemTakingLines.Any(itl => itl.SharedItemId == sharedItemId));
+				.SingleOrDefaultAsync(it => it.PrivateUser.Id == privateUserId && it.ItemTakingLines.Any(itl => itl.SharedItemId == sharedItemId && !itl.IsReturned));
 		}
 	}
 }

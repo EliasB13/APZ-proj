@@ -101,28 +101,6 @@ namespace APZ_BACKEND.Presentation.Controllers
 			return Ok();
 		}
 
-		[AllowAnonymous]
-		[HttpPost("take-item")]
-		public async Task<IActionResult> TakeItem(TakeItemRequest takeItemDto)
-		{
-			var result = await itemsService.TakeItem(takeItemDto);
-			if (!result.Success)
-				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
-
-			return Ok();
-		}
-
-		[AllowAnonymous]
-		[HttpPost("return-item")]
-		public async Task<IActionResult> ReturnItem(ReturnItemRequest returnItemRequest)
-		{
-			var result = await itemsService.ReturnItem(returnItemRequest);
-			if (!result.Success)
-				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
-			
-			return Ok();
-		}
-
 		[HttpPost("add-item-to-employees-role")]
 		public async Task<IActionResult> AddItemToRole(AddEmployeeRoleItemRequest dto)
 		{

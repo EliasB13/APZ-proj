@@ -43,7 +43,7 @@ namespace APZ_BACKEND.Core.Services.Users.PrivateUsers
 			if (user == null)
 				return null;
 
-			if (!UsersExtensions.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+			if (!UsersExtensions.VerifyHash(password, user.PasswordHash, user.PasswordSalt))
 				return null;
 
 			return user;
@@ -61,7 +61,7 @@ namespace APZ_BACKEND.Core.Services.Users.PrivateUsers
 				throw new AppException("Email \"" + userDto.Email + "\" is already taken");
 
 			byte[] passwordHash, passwordSalt;
-			UsersExtensions.CreatePasswordHash(userDto.Password, out passwordHash, out passwordSalt);
+			UsersExtensions.CreateHash(userDto.Password, out passwordHash, out passwordSalt);
 
 			PrivateUser user = new PrivateUser()
 			{

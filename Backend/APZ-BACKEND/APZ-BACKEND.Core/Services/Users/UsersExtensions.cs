@@ -6,7 +6,7 @@ namespace APZ_BACKEND.Core.Services.Users
 {
 	public static class UsersExtensions
 	{
-		public static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+		public static void CreateHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
 		{
 			if (password == null) throw new ArgumentNullException("password");
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
@@ -18,7 +18,7 @@ namespace APZ_BACKEND.Core.Services.Users
 			}
 		}
 
-		public static bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
+		public static bool VerifyHash(string password, byte[] storedHash, byte[] storedSalt)
 		{
 			if (password == null) throw new ArgumentNullException("password");
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");

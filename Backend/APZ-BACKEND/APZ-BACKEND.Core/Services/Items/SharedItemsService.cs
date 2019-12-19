@@ -51,6 +51,9 @@ namespace APZ_BACKEND.Core.Services.Items
 					return new GenericServiceResponse<SharedItem>($"Business user with id: {businessUserId} wasn't found", ErrorCode.CONTEXT_USER_NOT_FOUND);
 
 				var item = addItemDto.ToSharedItem(businessUser);
+				
+				string rfid = Guid.NewGuid().ToString().Substring(0, 20);
+				item.RfidNumber = rfid;
 
 				await sharedItemsRepository.AddAsync(item);
 				return new GenericServiceResponse<SharedItem>(item);
@@ -269,86 +272,6 @@ namespace APZ_BACKEND.Core.Services.Items
 			catch (Exception ex)
 			{
 				return new GenericServiceResponse<EmployeeRoleItem>("Error | Removing item from employees role: " + ex.Message, ErrorCode.COMMON_ERROR);
-			}
-		}
-
-		public async Task<GenericServiceResponse<SharedItem>> TakeItem(TakeItemRequest takeItemRequest)
-		{
-			try
-			{
-				var a = Encoding.UTF8.GetBytes(takeItemRequest.UserRfid);
-				var user = await privateUsersRepository.SingleOrDefaultAsync(pu => pu.RfidNumber == Encoding.UTF8.GetBytes(takeItemRequest.UserRfid));
-				if (user == null)
-					return new GenericServiceResponse<SharedItem>("User wasn't found", ErrorCode.USER_NOT_FOUND);
-
-				var item = await sharedItemsRepository.SingleOrDefaultAsync(si => si.RfidNumber == Encoding.UTF8.GetBytes(takeItemRequest.ItemRfid));
-				if (item == null)
-					return new GenericServiceResponse<SharedItem>("Item wasn't found", ErrorCode.USER_NOT_FOUND);
-
-				var isItemTaken = await itemTakingLinesRepository.AnyAsync(itl => itl.SharedItemId == item.Id && itl.IsTaken);
-				if (isItemTaken)
-					return new GenericServiceResponse<SharedItem>("Item already taken", ErrorCode.ITEM_ALREADY_TAKEN);
-
-				var isItemAvailiableForUser = await sharedItemsRepository.IsItemAvailableForUser(item.Id, user.Id);
-				if (!isItemAvailiableForUser)
-					return new GenericServiceResponse<SharedItem>("You don't have permissions", ErrorCode.NO_ACCESS);
-
-				var itemTaking = new ItemTaking
-				{
-					TakingTime = DateTime.Now,
-					PrivateUser = user,
-					ItemTakingLines = new List<ItemTakingLine>
-					{
-						new ItemTakingLine()
-						{
-							IsTaken = true,
-							SharedItem = item
-						}
-					}
-				};
-
-				await itemTakingsRepository.AddAsync(itemTaking);
-				return new GenericServiceResponse<SharedItem>(item);
-			}
-			catch (Exception ex)
-			{
-				return new GenericServiceResponse<SharedItem>("Error | Taking item: " + ex.Message, ErrorCode.COMMON_ERROR);
-			}
-		}
-
-		public async Task<GenericServiceResponse<SharedItem>> ReturnItem(ReturnItemRequest returnItemRequest)
-		{
-			try
-			{
-				var user = await privateUsersRepository
-					.SingleOrDefaultAsync(pu => pu.RfidNumber == Encoding.UTF8.GetBytes(returnItemRequest.UserRfid));
-				if (user == null)
-					return new GenericServiceResponse<SharedItem>("User wasn't found", ErrorCode.USER_NOT_FOUND);
-
-				var item = await sharedItemsRepository
-					.SingleOrDefaultAsync(si => si.RfidNumber == Encoding.UTF8.GetBytes(returnItemRequest.ItemRfid));
-				if (user == null)
-					return new GenericServiceResponse<SharedItem>("Item wasn't found", ErrorCode.ITEM_NOT_FOUND);
-
-				var isItemAvailiableForUser = await sharedItemsRepository.IsItemAvailableForUser(item.Id, user.Id);
-				if (!isItemAvailiableForUser)
-					return new GenericServiceResponse<SharedItem>("You don't have permissions", ErrorCode.NO_ACCESS);
-
-				var itemTaking = await itemTakingsRepository.GetItemTakingByUserAndItem(user.Id, item.Id);
-				if (itemTaking == null)
-					return new GenericServiceResponse<SharedItem>("This item wasn't taken by this user", ErrorCode.ITEM_NOT_TAKEN_BY_CURRENT_USER);
-
-				var itemTakingLine = itemTaking.ItemTakingLines.SingleOrDefault(itl => itl.SharedItemId == item.Id);
-				itemTakingLine.IsReturned = true;
-				itemTakingLine.IsTaken = false;
-				itemTakingLine.ReturningTime = DateTime.Now;
-
-				await itemTakingLinesRepository.UpdateAsync(itemTakingLine);
-				return new GenericServiceResponse<SharedItem>(item);
-			}
-			catch (Exception ex)
-			{
-				return new GenericServiceResponse<SharedItem>("Error | Taking item: " + ex.Message, ErrorCode.COMMON_ERROR);
 			}
 		}
 	}

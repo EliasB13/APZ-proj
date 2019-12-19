@@ -10,6 +10,7 @@ using APZ_BACKEND.Core.Interfaces;
 using APZ_BACKEND.Core.Services.Employees;
 using APZ_BACKEND.Core.Services.EmployeesRoles;
 using APZ_BACKEND.Core.Services.Items;
+using APZ_BACKEND.Core.Services.Readers;
 using APZ_BACKEND.Core.Services.Users;
 using APZ_BACKEND.Core.Services.Users.BusinessUsers;
 using APZ_BACKEND.Core.Services.Users.PrivateUsers;
@@ -195,6 +196,7 @@ namespace APZ_BACKEND.Presentation
 			services.AddScoped<IEmployeesRolesService, EmployeesRolesService>();
 			services.AddScoped<ISharedItemsService, SharedItemsService>();
 			services.AddScoped<IImageService, ImagesService>();
+			services.AddScoped<IReaderService, ReaderService>();
 		}
 	}
 }

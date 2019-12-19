@@ -17,8 +17,6 @@ namespace APZ_BACKEND.Core.Services.Items
 		Task<GenericServiceResponse<SharedItemDto>> GetItemPrivateUser(int privatUserId, int itemId);
 		Task<GenericServiceResponse<SharedItem>> AddItemToBusiness(int businessUserId, AddSharedItemRequest addItemDto);
 		Task<GenericServiceResponse<SharedItemDto>> AddItemToEmployeesRole(int businessUserId, int itemId, int roleId);
-		Task<GenericServiceResponse<SharedItem>> TakeItem(TakeItemRequest takeItemRequest);
-		Task<GenericServiceResponse<SharedItem>> ReturnItem(ReturnItemRequest returnItemRequest);
 		Task<GenericServiceResponse<SharedItem>> Update(UpdateSharedItemRequest sharedItemDto, int id, int businessUserId);
 		Task<GenericServiceResponse<SharedItem>> Delete(int itemId, int businessUserId);
 		Task<GenericServiceResponse<EmployeeRoleItem>> RemoveItemFromEmployeesRole(int roleItemId, int businessUserId);

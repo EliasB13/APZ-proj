@@ -45,13 +45,9 @@
             </base-checkbox>
             <div class="text-center">
               <b-spinner v-if="showSpinner" class="mr-3"></b-spinner>
-              <base-button
-                @click="handleSignIn"
-                :disabled="!isLoginValid || !isPasswordValid"
-                type="primary"
-                class="my-4"
-                >{{ $t("loginPage.button.signIn") }}</base-button
-              >
+              <base-button @click="handleSignIn" type="primary" class="my-4">{{
+                $t("loginPage.button.signIn")
+              }}</base-button>
             </div>
           </form>
         </div>

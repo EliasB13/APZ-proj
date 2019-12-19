@@ -4,14 +4,16 @@ using APZ_BACKEND.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace APZ_BACKEND.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20191219162744_rfidUpdate")]
+    partial class rfidUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,29 +235,6 @@ namespace APZ_BACKEND.Infrastructure.Data.Migrations
                     b.ToTable("PrivateUsers");
                 });
 
-            modelBuilder.Entity("APZ_BACKEND.Core.Entities.Reader", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("BusinessUserId")
-                        .HasColumnType("int");
-
-                    b.Property<byte[]>("SecretHash")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<byte[]>("SecretSalt")
-                        .HasColumnType("varbinary(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BusinessUserId");
-
-                    b.ToTable("Reader");
-                });
-
             modelBuilder.Entity("APZ_BACKEND.Core.Entities.SharedItem", b =>
                 {
                     b.Property<int>("Id")
@@ -272,9 +251,6 @@ namespace APZ_BACKEND.Infrastructure.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ReaderId")
-                        .HasColumnType("int");
-
                     b.Property<string>("RfidNumber")
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
@@ -282,8 +258,6 @@ namespace APZ_BACKEND.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BusinessUserId");
-
-                    b.HasIndex("ReaderId");
 
                     b.ToTable("SharedItems");
                 });
@@ -349,22 +323,11 @@ namespace APZ_BACKEND.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("APZ_BACKEND.Core.Entities.Reader", b =>
-                {
-                    b.HasOne("APZ_BACKEND.Core.Entities.BusinessUser", "BusinessUser")
-                        .WithMany()
-                        .HasForeignKey("BusinessUserId");
-                });
-
             modelBuilder.Entity("APZ_BACKEND.Core.Entities.SharedItem", b =>
                 {
                     b.HasOne("APZ_BACKEND.Core.Entities.BusinessUser", "BusinessUser")
                         .WithMany("SharedItems")
                         .HasForeignKey("BusinessUserId");
-
-                    b.HasOne("APZ_BACKEND.Core.Entities.Reader", "Reader")
-                        .WithMany()
-                        .HasForeignKey("ReaderId");
                 });
 #pragma warning restore 612, 618
         }
