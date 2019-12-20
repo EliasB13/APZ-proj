@@ -11,7 +11,7 @@ namespace APZ_BACKEND.Core.Services.Readers
 {
 	public interface IReaderService
 	{
-		Task<IEnumerable<SharedItemDto>> GetReaderItems(int readerId);
+		Task<IEnumerable<ReaderItemDto>> GetReaderItems(int readerId, string secret);
 		Task<IEnumerable<ReaderDto>> GetReaders(int businessUserId);
 		Task<GenericServiceResponse<SharedItemDto>> AddItemToReader(int businessUserId, AddItemToReaderRequest request);
 		Task<GenericServiceResponse<ReaderDto>> OrderReader(int businessUserId);

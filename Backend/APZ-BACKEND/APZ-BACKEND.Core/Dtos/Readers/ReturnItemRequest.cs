@@ -10,8 +10,6 @@ namespace APZ_BACKEND.Core.Dtos.Readers
 		[Required]
 		public string ItemRfid { get; set; }
 		[Required]
-		public string UserRfid { get; set; }
-		[Required]
 		public string SecretKey { get; set; }
 		[Required]
 		public int ReaderId { get; set; }

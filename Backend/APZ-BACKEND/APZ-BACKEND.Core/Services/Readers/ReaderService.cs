@@ -74,22 +74,18 @@ namespace APZ_BACKEND.Core.Services.Readers
 			}
 		}
 
-		public async Task<IEnumerable<SharedItemDto>> GetReaderItems(int readerId)
+		public async Task<IEnumerable<ReaderItemDto>> GetReaderItems(int readerId, string secret)
 		{
+			var reader = await readersRepository.GetByIdAsync(readerId);
+			if (reader == null)
+				return new List<ReaderItemDto>();
+
+			if (!UsersExtensions.VerifyHash(secret, reader.SecretHash, reader.SecretSalt))
+				return new List<ReaderItemDto>();
+
 			var items = await sharedItemsRepository.ListAllAsync(si => si.Reader.Id == readerId, si => si.Reader);
-
-			var itemTakingLines = await itemTakingLinesRepository.ListAllAsync();
-			if (items.Count() > 0)
-			{
-				var itemsDto = items.Select(i =>
-				{
-					var isItemTaken = itemTakingLines.Any(itl => itl.SharedItemId == i.Id && itl.IsTaken);
-					return i.ToDto(isItemTaken);
-				});
-
-				return itemsDto;
-			}
-			return new List<SharedItemDto>();
+			var dtos = items.Select(i => i.ToDto());
+			return dtos;
 		}
 
 		public async Task<GenericServiceResponse<PrivateUserAccountData>> OrderCard(int privateUserId)
@@ -211,16 +207,17 @@ namespace APZ_BACKEND.Core.Services.Readers
 		{
 			try
 			{
-				var user = await privateUsersRepository
-					.SingleOrDefaultAsync(pu => pu.RfidNumber == request.UserRfid);
-				if (user == null)
-					return new GenericServiceResponse<SharedItemDto>("User wasn't found", ErrorCode.USER_NOT_FOUND);
+				//var user = await privateUsersRepository
+				//	.SingleOrDefaultAsync(pu => pu.RfidNumber == request.UserRfid);
+				//if (user == null)
+				//	return new GenericServiceResponse<SharedItemDto>("User wasn't found", ErrorCode.USER_NOT_FOUND);
 
 				var item = await sharedItemsRepository
 					.SingleOrDefaultAsync(si => si.RfidNumber == request.ItemRfid, si => si.Reader);
 				if (item == null)
 					return new GenericServiceResponse<SharedItemDto>("Item wasn't found", ErrorCode.ITEM_NOT_FOUND);
-				
+
+
 				if (item.Reader == null)
 					return new GenericServiceResponse<SharedItemDto>("Item with item doesn't belong to reader", 
 						ErrorCode.ITEM_NOT_IN_READER);
@@ -232,14 +229,18 @@ namespace APZ_BACKEND.Core.Services.Readers
 							ErrorCode.ITEM_NOT_IN_READER);
 				}
 
-				var isItemAvailiableForUser = await sharedItemsRepository.IsItemAvailableForUser(item.Id, user.Id);
-				if (!isItemAvailiableForUser)
-					return new GenericServiceResponse<SharedItemDto>("You don't have permissions", ErrorCode.NO_ACCESS);
+				var itemTakingLine = await itemTakingLinesRepository.SingleOrDefaultAsync(itl => itl.SharedItem.Id == item.Id && !itl.IsReturned);
+				if (itemTakingLine == null)
+					return new GenericServiceResponse<SharedItemDto>("Item wasn't taken", ErrorCode.ITEM_NOT_TAKEN_BY_CURRENT_USER);
 
-				var itemTaking = await itemTakingsRepository.GetItemTakingByUserAndItem(user.Id, item.Id);
-				if (itemTaking == null)
-					return new GenericServiceResponse<SharedItemDto>("This item wasn't taken by this user", 
-						ErrorCode.ITEM_NOT_TAKEN_BY_CURRENT_USER);
+				//var isItemAvailiableForUser = await sharedItemsRepository.IsItemAvailableForUser(item.Id, user.Id);
+				//if (!isItemAvailiableForUser)
+				//	return new GenericServiceResponse<SharedItemDto>("You don't have permissions", ErrorCode.NO_ACCESS);
+
+				//var itemTaking = await itemTakingsRepository.GetItemTakingByUserAndItem(user.Id, item.Id);
+				//if (itemTaking == null)
+				//	return new GenericServiceResponse<SharedItemDto>("This item wasn't taken by this user", 
+				//		ErrorCode.ITEM_NOT_TAKEN_BY_CURRENT_USER);
 
 				var reader = await readersRepository.GetByIdAsync(request.ReaderId);
 				if (reader == null)
@@ -248,7 +249,7 @@ namespace APZ_BACKEND.Core.Services.Readers
 				if (!UsersExtensions.VerifyHash(request.SecretKey, reader.SecretHash, reader.SecretSalt))
 					return new GenericServiceResponse<SharedItemDto>("Wrong credentials", ErrorCode.NO_ACCESS);
 
-				var itemTakingLine = itemTaking.ItemTakingLines.SingleOrDefault(itl => itl.SharedItemId == item.Id);
+				//var itemTakingLine = itemTaking.ItemTakingLines.SingleOrDefault(itl => itl.SharedItemId == item.Id);
 				itemTakingLine.IsReturned = true;
 				itemTakingLine.IsTaken = false;
 				itemTakingLine.ReturningTime = DateTime.Now;

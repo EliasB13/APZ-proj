@@ -29,6 +29,16 @@ namespace APZ_BACKEND.Core.Mappers
 			};
 		}
 
+		public static ReaderItemDto ToDto(this SharedItem sharedItem)
+		{
+			return new ReaderItemDto
+			{
+				Description = sharedItem.Description,
+				Name = sharedItem.Name,
+				Rfid = sharedItem.RfidNumber
+			};
+		}
+
 		public static void UpdateSharedItemFromDto(this SharedItem item, UpdateSharedItemRequest dto)
 		{
 			item.Name = dto.Name;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace APZ_Iot
 {
@@ -6,7 +7,11 @@ namespace APZ_Iot
 	{
 		static void Main(string[] args)
 		{
-			Console.WriteLine("Hello World!");
+			Reader reader = new Reader();
+			reader.LoadSettings("defaultConfig.json");
+			reader.Start();
+
+			Console.ReadLine();
 		}
 	}
 }

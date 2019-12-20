@@ -24,10 +24,10 @@ namespace APZ_BACKEND.Presentation.Controllers
 			this.readerService = readerService;
 		}
 
-		[HttpGet("reader-items/{readerId}")]
-		public async Task<IActionResult> GetReaderItems(int readerId)
+		[HttpPost("reader-items")]
+		public async Task<IActionResult> GetReaderItems(GetReaderItemsRequest request)
 		{
-			var items = await readerService.GetReaderItems(readerId);
+			var items = await readerService.GetReaderItems(request.ReaderId, request.Secret);
 			return Ok(items);
 		}
 
