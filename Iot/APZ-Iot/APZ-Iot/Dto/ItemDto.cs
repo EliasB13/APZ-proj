@@ -10,5 +10,6 @@ namespace APZ_Iot.Dto
 		public string Name { get; set; }
 		public string Description { get; set; }
 		public string RfId { get; set; }
+		public string IsTaken { get; set; }
 	}
 }

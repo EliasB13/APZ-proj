@@ -65,6 +65,8 @@ namespace APZ_Iot
 					.AppendPathSegments("api", "Readers", "return-item")
 					.AllowHttpStatus("400-404")
 					.PostJsonAsync(new { itemRfid = rfid, secretKey = SecretKey, readerId = ReaderId }).ReceiveJson();
+				if (res == null)
+					ActualReaderItems.Add(rfid);
 				return res;
 			}
 			catch (FlurlHttpException ex)
@@ -83,6 +85,8 @@ namespace APZ_Iot
 					.AppendPathSegments("api", "Readers", "take-item")
 					.AllowHttpStatus("400-404")
 					.PostJsonAsync(new { itemRfid = itemRfId, userRfid = userRfid, secretKey = SecretKey, readerId = ReaderId }).ReceiveJson();
+				if (result == null)
+					ActualReaderItems.Remove(itemRfId);
 				return result;
 			}
 			catch (FlurlHttpException ex)
@@ -129,7 +133,7 @@ namespace APZ_Iot
 		private void LoadMainMenu()
 		{
 			var mainMenuItems = new List<string> { "View items", "Return item", "Take item" };
-			ConsoleMenu.DrawMenu(mainMenuItems);
+			//ConsoleMenu.DrawMenu(mainMenuItems);
 
 			string input = "";
 			int selector = 0;
@@ -137,6 +141,9 @@ namespace APZ_Iot
 
 			while (true)
 			{
+				Console.Clear();
+				ConsoleMenu.DrawMenu(mainMenuItems);
+
 				input = Console.ReadLine();
 				if (input == "off")
 					Environment.Exit(1);
@@ -165,7 +172,11 @@ namespace APZ_Iot
 				}
 				else
 				{
+					Console.Clear();
 					Console.WriteLine("ERROR | Wrong input");
+					Console.WriteLine("Press any key to continue...");
+					Console.ReadLine();
+					ConsoleMenu.DrawMenu(mainMenuItems);
 				}
 			}
 		}
@@ -177,7 +188,7 @@ namespace APZ_Iot
 			BindedReaderItems
 				.Where(bi => ActualReaderItems.Contains(bi.RfId))
 				.ToList()
-				.ForEach(bi => items += $"\tName: {bi.Name}\n\tDescription: {bi.Description}\n");
+				.ForEach(bi => items += $"\tName: {bi.Name}\n\tDescription: {bi.Description}\n\n");
 
 			string input = "";
 			while (true)
