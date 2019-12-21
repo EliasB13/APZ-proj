@@ -97,13 +97,13 @@ export const router = new Router({
 
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ["/login", "/register"];
-  const authRequired = !publicPages.includes(to.path);
-  const user = localStorage.getItem("user");
+  // const publicPages = ["/login", "/register"];
+  // const authRequired = !publicPages.includes(to.path);
+  // const user = localStorage.getItem("user");
 
-  if (authRequired && !user) {
-    return next("/login");
-  }
+  // if (authRequired && !user) {
+  //   return next("/login");
+  // }
 
   // TODO: error page when acessing business pages from private and vice versa
 
