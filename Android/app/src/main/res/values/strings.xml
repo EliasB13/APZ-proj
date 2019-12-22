@@ -16,7 +16,7 @@
     <string name="menu_send">Send</string>
     <string name="submenu_header">Communicate</string>
 
-    <!--login-->
+    <!--auth-->
     <string name="login_main_header">Welcome</string>
     <string name="login_secondary_header">Sign in to open a world of shared items</string>
     <string name="register_secondary_header">Sign up to open a world of shared items</string>
@@ -32,11 +32,16 @@
     <string name="signUpBtn">Sign up</string>
     <string name="signUpRedirect">Create new account</string>
     <string name="signInRedirect">Login into account</string>
+    <string name="registerSuccess">Registration successful!</string>
+
 
     <!--preferences-->
     <string name="token_pref">token_pref</string>
     <string name="token">token_key</string>
     
     <!--error codes-->
+    <string name="validation_error">"Validation error occurred"</string>
     <string name="code_116">Username or password is incorrect</string>
+    <string name="code_123">Login is already taken</string>
+    <string name="code_124">Email is already taken</string>
 </resources>

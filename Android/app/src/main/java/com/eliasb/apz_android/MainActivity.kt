@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        //val accService = AccountService.logout(this)
+        val accService = AccountService.logout(this)
 
         checkAuthorization()
     }

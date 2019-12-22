@@ -27,10 +27,10 @@ class LoginActivity : AppCompatActivity() {
         signUpRedirect.setOnClickListener{ goToSignUp() }
 
         val signInBtn = findViewById<Button>(R.id.sign_in_btn)
-        signInBtn.setOnClickListener{ login() }
+        signInBtn.setOnClickListener{ signInClick() }
     }
 
-    private fun login() {
+    private fun signInClick() {
         val loginEdit = findViewById<EditText>(R.id.loginEditText)
         val passEdit = findViewById<EditText>(R.id.passEditText)
         val accService = AccountService.create()
