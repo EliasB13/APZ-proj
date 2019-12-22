@@ -28,8 +28,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        //supportActionBar?.setDisplayShowTitleEnabled(false)
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener { view ->
@@ -42,20 +42,19 @@ class MainActivity : AppCompatActivity() {
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
-                R.id.nav_share, R.id.nav_send
+                R.id.nav_services, R.id.nav_gallery, R.id.nav_slideshow
+//                R.id.nav_share, R.id.nav_send
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        val accService = AccountService.logout(this)
+        //val accService = AccountService.logout(this)
 
         checkAuthorization()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
     }

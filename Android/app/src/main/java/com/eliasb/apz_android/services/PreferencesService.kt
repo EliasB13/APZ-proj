@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 class PreferencesService {
 
     companion object {
-        private val prefService: PreferencesService? = null
         private var sharedPreferences: SharedPreferences? = null
 
         fun create(context: Context, prefName: String) {
