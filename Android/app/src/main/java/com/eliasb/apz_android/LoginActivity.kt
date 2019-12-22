@@ -7,9 +7,12 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
+import com.eliasb.apz_android.model.ErrorBody
 import com.eliasb.apz_android.model.LoginRequest
 import com.eliasb.apz_android.services.AccountService
 import com.eliasb.apz_android.services.PreferencesService
+import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -37,9 +40,20 @@ class LoginActivity : AppCompatActivity() {
             .subscribe({
                     loginResponse ->
                 Log.d("Result", loginResponse.toString())
-                saveToken(loginResponse.token)
-                goToMain()
-            },{ error -> Log.d("Error", error.toString()) })
+                loginResponse.body()?.token?.let {
+                    saveToken(it)
+                    goToMain()
+                }
+                loginResponse.errorBody()?.let {
+                    val gson = Gson()
+                    val json = gson.fromJson<ErrorBody>(it.charStream(), ErrorBody::class.java)
+                    Log.w("ResponseError", json.message)
+                    val codeStringId = resources.getIdentifier("code_" + json.code.toString(), "string", packageName)
+                    Toast.makeText(this, getString(codeStringId), Toast.LENGTH_SHORT).show()
+                }
+            },{ error ->
+                Log.d("Error", error.message)
+            })
     }
 
     private fun goToSignUp() {
@@ -50,6 +64,7 @@ class LoginActivity : AppCompatActivity() {
     private fun goToMain() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     private fun saveToken(token: String) {

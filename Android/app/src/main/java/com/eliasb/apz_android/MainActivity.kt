@@ -15,6 +15,9 @@ import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
+import com.eliasb.apz_android.model.LoginRequest
+import com.eliasb.apz_android.services.AccountService
+import com.eliasb.apz_android.services.PreferencesService
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,13 +49,9 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        //val accService = AccountService.logout(this)
+
         checkAuthorization()
-
-//        val intent = Intent(this, LoginActivity::class.java)
-//        startActivity(intent)
-
-//        val intent = Intent(this, RegisterActivity::class.java)
-//        startActivity(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -67,20 +66,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkAuthorization() {
-//        val sharedPref = getSharedPreferences(
-//            getString(R.string.token), Context.MODE_PRIVATE
-//        ) ?: return
-//        with (sharedPref.edit()) {
-//            putString(getString(R.string.token), "")
-//            commit()
-//        }
-
-        val sharedPref = getPreferences(Context.MODE_PRIVATE) ?: return
-        val defaultValue = ""
-        val token = sharedPref.getString(getString(R.string.token), defaultValue)
-        if (token == "") {
+        val prefService = PreferencesService
+        prefService.create(this, getString(R.string.token_pref))
+        val token = prefService.getPreference(getString(R.string.token))
+        if (token == null) {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 }

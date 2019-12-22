@@ -24,5 +24,12 @@ class PreferencesService {
         fun getPreference(key: String): String? {
             return sharedPreferences?.getString(key, null)
         }
+
+        fun clearPreference(prefName: String) {
+            with (sharedPreferences?.edit()) {
+                this?.clear()
+                this?.commit()
+            }
+        }
     }
 }

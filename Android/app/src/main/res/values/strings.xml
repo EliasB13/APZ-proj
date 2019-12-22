@@ -36,4 +36,7 @@
     <!--preferences-->
     <string name="token_pref">token_pref</string>
     <string name="token">token_key</string>
+    
+    <!--error codes-->
+    <string name="code_116">Username or password is incorrect</string>
 </resources>
