@@ -1,5 +1,6 @@
 package com.eliasb.apz_android
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -24,6 +25,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener { view ->
@@ -33,19 +36,23 @@ class MainActivity : AppCompatActivity() {
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
-                R.id.nav_tools, R.id.nav_share, R.id.nav_send
+                R.id.nav_share, R.id.nav_send
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
+        checkAuthorization()
+
+//        val intent = Intent(this, LoginActivity::class.java)
+//        startActivity(intent)
+
+//        val intent = Intent(this, RegisterActivity::class.java)
+//        startActivity(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -57,5 +64,23 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    private fun checkAuthorization() {
+//        val sharedPref = getSharedPreferences(
+//            getString(R.string.token), Context.MODE_PRIVATE
+//        ) ?: return
+//        with (sharedPref.edit()) {
+//            putString(getString(R.string.token), "")
+//            commit()
+//        }
+
+        val sharedPref = getPreferences(Context.MODE_PRIVATE) ?: return
+        val defaultValue = ""
+        val token = sharedPref.getString(getString(R.string.token), defaultValue)
+        if (token == "") {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
