@@ -12,7 +12,7 @@ namespace APZ_BACKEND.Core.Services.Users.BusinessUsers
 {
 	public interface IBusinessUsersService
 	{
-		Task<BusinessUser> RegisterBusinessAsync(RegisterBusinessRequest userDto);
+		Task<GenericServiceResponse<BusinessUser>> RegisterBusinessAsync(RegisterBusinessRequest userDto);
 		Task<BusinessUser> AuthenticateBusinessAsync(string login, string password);
 		Task<BusinessUser> GetByIdAsync(int id);
 		Task<GenericServiceResponse<BusinessUserProfile>> GetPublicProfile(int id);

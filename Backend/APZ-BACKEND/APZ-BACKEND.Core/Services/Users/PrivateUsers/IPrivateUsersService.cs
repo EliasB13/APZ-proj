@@ -12,7 +12,7 @@ namespace APZ_BACKEND.Core.Services.Users.PrivateUsers
 	{
 		Task<PrivateUser> AuthenticatePrivateAsync(string login, string password);
 		Task<PrivateUser> GetByIdAsync(int id);
-		Task<PrivateUser> RegisterPrivateAsync(RegisterPrivateRequest userDto);
+		Task<GenericServiceResponse<PrivateUser>> RegisterPrivateAsync(RegisterPrivateRequest userDto);
 		Task<GenericServiceResponse<PrivateUserProfile>> GetPublicProfile(int id);
 		Task<GenericServiceResponse<PrivateUserProfile>> GetPublicProfile(string login);
 		Task<GenericServiceResponse<PrivateUserAccountData>> GetAccountData(int id);

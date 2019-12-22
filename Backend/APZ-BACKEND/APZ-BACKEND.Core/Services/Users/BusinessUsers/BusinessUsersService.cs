@@ -43,32 +43,36 @@ namespace APZ_BACKEND.Core.Services.Users.BusinessUsers
 			return await usersRepository.GetByIdAsync(id);
 		}
 		 
-		public async Task<BusinessUser> RegisterBusinessAsync(RegisterBusinessRequest userDto)
+		public async Task<GenericServiceResponse<BusinessUser>> RegisterBusinessAsync(RegisterBusinessRequest userDto)
 		{
-			if (string.IsNullOrWhiteSpace(userDto.Password))
-				throw new AppException("Password is required");
-
-			if (await usersRepository.AnyAsync(x => x.Login == userDto.Login))
-				throw new AppException("Username \"" + userDto.Login + "\" is already taken");
-
-			if (await usersRepository.AnyAsync(x => x.Email == userDto.Email))
-				throw new AppException("Email \"" + userDto.Email + "\" is already taken");
-
-			byte[] passwordHash, passwordSalt;
-			UsersExtensions.CreateHash(userDto.Password, out passwordHash, out passwordSalt);
-
-			BusinessUser user = new BusinessUser()
+			try
 			{
-				Login = userDto.Login,
-				Email = userDto.Email,
-				CompanyName = userDto.CompanyName,
-				PasswordHash = passwordHash,
-				PasswordSalt = passwordSalt
-			};
+				if (await usersRepository.AnyAsync(x => x.Login == userDto.Login))
+					return new GenericServiceResponse<BusinessUser>("Username \"" + userDto.Login + "\" is already taken", ErrorCode.LOGIN_ALREADY_TAKEN);
 
-			await usersRepository.AddAsync(user);
+				if (await usersRepository.AnyAsync(x => x.Email == userDto.Email))
+					return new GenericServiceResponse<BusinessUser>("Email \"" + userDto.Email + "\" is already taken", ErrorCode.EMAIL_ALREADY_TAKEN);
 
-			return user;
+				byte[] passwordHash, passwordSalt;
+				UsersExtensions.CreateHash(userDto.Password, out passwordHash, out passwordSalt);
+
+				BusinessUser user = new BusinessUser()
+				{
+					Login = userDto.Login,
+					Email = userDto.Email,
+					CompanyName = userDto.CompanyName,
+					PasswordHash = passwordHash,
+					PasswordSalt = passwordSalt
+				};
+
+				await usersRepository.AddAsync(user);
+
+				return new GenericServiceResponse<BusinessUser>(user);
+			}
+			catch (Exception ex)
+			{
+				return new GenericServiceResponse<BusinessUser>("Error | Registering business user: " + ex.Message, ErrorCode.COMMON_ERROR);
+			}
 		}
 
 		public async Task<GenericServiceResponse<BusinessUserProfile>> GetPublicProfile(int id)

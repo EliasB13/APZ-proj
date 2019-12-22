@@ -49,33 +49,37 @@ namespace APZ_BACKEND.Core.Services.Users.PrivateUsers
 			return user;
 		}
 
-		public async Task<PrivateUser> RegisterPrivateAsync(RegisterPrivateRequest userDto)
+		public async Task<GenericServiceResponse<PrivateUser>> RegisterPrivateAsync(RegisterPrivateRequest userDto)
 		{
-			if (string.IsNullOrWhiteSpace(userDto.Password))
-				throw new AppException("Password is required");
-
-			if (await usersRepository.AnyAsync(x => x.Login == userDto.Login))
-				throw new AppException("Username \"" + userDto.Login + "\" is already taken");
-
-			if (await usersRepository.AnyAsync(x => x.Email == userDto.Email))
-				throw new AppException("Email \"" + userDto.Email + "\" is already taken");
-
-			byte[] passwordHash, passwordSalt;
-			UsersExtensions.CreateHash(userDto.Password, out passwordHash, out passwordSalt);
-
-			PrivateUser user = new PrivateUser()
+			try
 			{
-				Login = userDto.Login,
-				FirstName = userDto.FirstName,
-				LastName = userDto.LastName,
-				Email = userDto.Email,
-				PasswordHash = passwordHash,
-				PasswordSalt = passwordSalt
-			};
+				if (await usersRepository.AnyAsync(x => x.Login == userDto.Login))
+					return new GenericServiceResponse<PrivateUser>("Username \"" + userDto.Login + "\" is already taken", ErrorCode.LOGIN_ALREADY_TAKEN);
 
-			await usersRepository.AddAsync(user);
+				if (await usersRepository.AnyAsync(x => x.Email == userDto.Email))
+					return new GenericServiceResponse<PrivateUser>("Email \"" + userDto.Email + "\" is already taken", ErrorCode.EMAIL_ALREADY_TAKEN);
 
-			return user;
+				byte[] passwordHash, passwordSalt;
+				UsersExtensions.CreateHash(userDto.Password, out passwordHash, out passwordSalt);
+
+				PrivateUser user = new PrivateUser()
+				{
+					Login = userDto.Login,
+					FirstName = userDto.FirstName,
+					LastName = userDto.LastName,
+					Email = userDto.Email,
+					PasswordHash = passwordHash,
+					PasswordSalt = passwordSalt
+				};
+
+				await usersRepository.AddAsync(user);
+
+				return new GenericServiceResponse<PrivateUser>(user);
+			}
+			catch (Exception ex)
+			{
+				return new GenericServiceResponse<PrivateUser>("Error | Registering private user", ErrorCode.COMMON_ERROR);
+			}
 		}
 		
 		public async Task<PrivateUser> GetByIdAsync(int id)

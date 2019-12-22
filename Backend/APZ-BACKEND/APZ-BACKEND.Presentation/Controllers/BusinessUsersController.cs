@@ -96,15 +96,11 @@ namespace APZ_BACKEND.Presentation.Controllers
 		[HttpPost("register-business")]
 		public async Task<IActionResult> RegisterBusiness([FromBody]RegisterBusinessRequest dto)
 		{
-			try
-			{
-				await userService.RegisterBusinessAsync(dto);
-				return Ok();
-			}
-			catch (AppException ex)
-			{
-				return BadRequest(new { message = ex.Message });
-			}
+			var result = await userService.RegisterBusinessAsync(dto);
+			if (!result.Success)
+				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
+			
+			return Ok();
 		}
 
 		[HttpPut]

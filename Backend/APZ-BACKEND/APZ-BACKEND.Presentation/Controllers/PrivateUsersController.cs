@@ -121,15 +121,11 @@ namespace APZ_BACKEND.Presentation.Controllers
 		[HttpPost("register-private")]
 		public async Task<IActionResult> RegisterPrivate([FromBody]RegisterPrivateRequest dto)
 		{
-			try
-			{
-				await userService.RegisterPrivateAsync(dto);
-				return Ok();
-			}
-			catch (AppException ex)
-			{
-				return BadRequest(new { message = ex.Message });
-			}
+			var result = await userService.RegisterPrivateAsync(dto); 
+			if (!result.Success)
+				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
+
+			return Ok();
 		}
 
 		[HttpPut]

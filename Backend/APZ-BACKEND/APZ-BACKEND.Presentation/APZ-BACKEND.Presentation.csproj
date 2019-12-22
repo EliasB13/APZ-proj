@@ -31,4 +31,16 @@
     <ProjectReference Include="..\APZ-BACKEND.Infrastructure\APZ-BACKEND.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Resources\ProfilePics\businessUser_1_profilepic.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\ProfilePics\privateUser_5_profilepic.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\ProfilePics\privateUser_6_profilepic.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
