@@ -16,18 +16,6 @@
             app:destination="@id/availableServiceFragment" />
     </fragment>
 
-<!--    <fragment-->
-<!--        android:id="@+id/nav_home"-->
-<!--        android:name="com.eliasb.apz_android.ui.home.HomeFragment"-->
-<!--        android:label="@string/menu_services"-->
-<!--        tools:layout="@layout/fragment_home" />-->
-
-    <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.eliasb.apz_android.ui.gallery.GalleryFragment"
-        android:label="@string/menu_items"
-        tools:layout="@layout/fragment_gallery" />
-
     <fragment
         android:id="@+id/nav_slideshow"
         android:name="com.eliasb.apz_android.ui.slideshow.SlideshowFragment"
@@ -38,5 +26,11 @@
         android:name="com.eliasb.apz_android.ui.availableServices.AvailableServiceFragment"
         android:label="fragment_available"
         tools:layout="@layout/fragment_available_service" />
+
+    <fragment
+        android:id="@+id/nav_active_items"
+        android:name="com.eliasb.apz_android.ui.activeItems.ActiveItemsFragment"
+        android:label="@string/menu_items"
+        tools:layout="@layout/fragment_items_list" />
 
 </navigation>

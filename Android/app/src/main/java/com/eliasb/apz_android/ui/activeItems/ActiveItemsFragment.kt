@@ -6,24 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.eliasb.apz_android.R
-
-import com.eliasb.apz_android.ui.activeItems.dummy.DummyContent.DummyItem
+import com.eliasb.apz_android.adapters.ItemsAdapter
+import kotlinx.android.synthetic.main.fragment_items_list.*
 
 class ActiveItemsFragment : Fragment() {
 
-    // TODO: Customize parameters
-    private var columnCount = 1
-
-    private var listener: OnListFragmentInteractionListener? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
-    }
+    private lateinit var adapter: ItemsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,37 +23,13 @@ class ActiveItemsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_items_list, container, false)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnListFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
-        }
-    }
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
+        adapter = ItemsAdapter(context!!)
+        adapter.refreshActiveItems(empty_list, activeItemsList)
 
-    interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onListFragmentInteraction(item: DummyItem?)
-    }
-
-    companion object {
-
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-            ActiveItemsFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
-            }
+        activeItemsList.layoutManager = LinearLayoutManager(context)
+        activeItemsList.adapter = adapter
     }
 }

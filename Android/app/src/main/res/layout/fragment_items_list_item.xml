@@ -18,8 +18,8 @@
 
             <ImageView
                 android:id="@+id/photo"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <LinearLayout
@@ -35,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/defaultColor"
                     android:text="Item name"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     />
 
                 <TextView
@@ -44,6 +44,26 @@
                     android:layout_height="wrap_content"
                     android:text="Description of the amazing company"
                     />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/status"/>
+
+                    <TextView
+                        android:id="@+id/status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/success"
+                        android:layout_marginLeft="3dp"
+                        android:text="@string/status_not_taken"/>
+                </LinearLayout>
+
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

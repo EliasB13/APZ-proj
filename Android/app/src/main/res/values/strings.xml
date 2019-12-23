@@ -7,6 +7,9 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="empty_list">There are no items to show</string>
+    <string name="status">Status:</string>
+    <string name="status_taken">Taken</string>
+    <string name="status_not_taken">Available</string>
 
     <!-- menu -->
     <string name="menu_services">Services</string>

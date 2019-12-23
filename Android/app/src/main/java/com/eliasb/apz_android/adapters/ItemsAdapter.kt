@@ -1,6 +1,7 @@
 package com.eliasb.apz_android.adapters
 
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.eliasb.apz_android.R
 import com.eliasb.apz_android.config.ApiConfig
 import com.eliasb.apz_android.model.ItemResponse
@@ -49,6 +51,16 @@ class ItemsAdapter(val context: Context
         val imageUrl = "${ApiConfig.getBaseUrl()}/$DEFAULT_ITEM_PHOTO"
         holder.updateWithUrl(imageUrl)
         holder.view.setOnClickListener{ Log.i("INFO", "item click!!!") }
+
+        if (items[position].isTaken)
+        {
+            holder.view.status.text = context.getString(R.string.status_taken)
+            holder.view.status.setTextColor(ContextCompat.getColor(context, R.color.danger))
+        }
+        else {
+            holder.view.status.text = context.getString(R.string.status_not_taken)
+            holder.view.status.setTextColor(ContextCompat.getColor(context, R.color.success))
+        }
     }
 
     override fun getItemCount(): Int = items.size
@@ -84,7 +96,7 @@ class ItemsAdapter(val context: Context
         }
     }
 
-    fun refreshActiveItems() {
+    fun refreshActiveItems(emptyListView: TextView, itemsList: RecyclerView) {
         val prefService = PreferencesService
         prefService.create(context, context.getString(R.string.token_pref))
         val token = prefService.getPreference(context.getString(R.string.token))
@@ -95,6 +107,13 @@ class ItemsAdapter(val context: Context
                 .subscribe(
                 {
                     result -> Log.i("RefreshServiceItems res", result.toString())
+                    if (result.isEmpty()) {
+                        emptyListView.visibility = View.VISIBLE
+                        itemsList.visibility = View.GONE
+                    } else {
+                        emptyListView.visibility = View.GONE
+                        itemsList.visibility = View.VISIBLE
+                    }
                     items.clear()
                     items.addAll(result)
                     notifyDataSetChanged()

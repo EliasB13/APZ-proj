@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list"
-    android:name="com.eliasb.apz_android.ui.activeItems.ActiveItemsFragment"
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    app:layoutManager="LinearLayoutManager"
-    tools:context=".ui.activeItems.ActiveItemsFragment"
-    tools:listitem="@layout/fragment_items_list_item" />
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical">
+    <androidx.recyclerview.widget.RecyclerView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activeItemsList"
+        android:name="com.eliasb.apz_android.ui.activeItems.ActiveItemsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="LinearLayoutManager"
+        tools:context=".ui.activeItems.ActiveItemsFragment"
+        tools:listitem="@layout/fragment_items_list_item" />
+
+    <TextView
+        android:id="@+id/empty_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/empty_list"
+        android:visibility="gone"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="5dp"
+        android:textSize="15sp"
+        android:layout_gravity="center"/>
+</LinearLayout>
