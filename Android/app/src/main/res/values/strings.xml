@@ -6,6 +6,7 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="empty_list">There are no items to show</string>
 
     <!-- menu -->
     <string name="menu_services">Services</string>
@@ -38,10 +39,17 @@
     <!--preferences-->
     <string name="token_pref">token_pref</string>
     <string name="token">token_key</string>
-    
+
     <!--error codes-->
     <string name="validation_error">"Validation error occurred"</string>
     <string name="code_116">Username or password is incorrect</string>
     <string name="code_123">Login is already taken</string>
     <string name="code_124">Email is already taken</string>
+    <string name="fetch_err">Fetching error</string>
+
+    <!-- bundle keys -->
+    <string name="service_id">service_id</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

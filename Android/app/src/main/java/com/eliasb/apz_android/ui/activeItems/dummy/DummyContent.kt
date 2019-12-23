@@ -1,4 +1,4 @@
-package com.eliasb.apz_android.ui.availableServices.dummy
+package com.eliasb.apz_android.ui.activeItems.dummy
 
 import java.util.ArrayList
 import java.util.HashMap

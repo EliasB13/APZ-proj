@@ -10,7 +10,11 @@
         android:name="com.eliasb.apz_android.ui.availableServices.AvailableServicesFragment"
         android:label="@string/menu_services"
         tools:layout="@layout/fragment_available_services"
-        />
+        >
+        <action
+            android:id="@+id/action_nav_services_to_availableServiceFragment"
+            app:destination="@id/availableServiceFragment" />
+    </fragment>
 
 <!--    <fragment-->
 <!--        android:id="@+id/nav_home"-->
@@ -29,5 +33,10 @@
         android:name="com.eliasb.apz_android.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_profile"
         tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/availableServiceFragment"
+        android:name="com.eliasb.apz_android.ui.availableServices.AvailableServiceFragment"
+        android:label="fragment_available"
+        tools:layout="@layout/fragment_available_service" />
 
 </navigation>

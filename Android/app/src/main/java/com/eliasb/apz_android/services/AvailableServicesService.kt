@@ -8,21 +8,18 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Query
 
 interface AvailableServicesService {
     @GET("PrivateUsers/available-services")
     fun getAvailableServices(@Header("Authorization") token: String): Observable<List<ServiceResponse>>
 
     @GET("BusinessUsers/public-profile")
-    fun getService(): Observable<Response<ServiceResponse>>
+    fun getService(@Query("id") serviceId: Int): Observable<Response<ServiceResponse>>
 
     companion object {
         fun create(): AvailableServicesService {
-            val retrofit = Retrofit.Builder()
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("https://apz-backend.azurewebsites.net")
-                .build()
+            val retrofit = RetrofitBuilder.build()
 
             return retrofit.create(AvailableServicesService::class.java)
         }

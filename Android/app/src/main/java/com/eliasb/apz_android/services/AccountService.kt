@@ -24,11 +24,7 @@ interface AccountService {
 
     companion object {
         fun create(): AccountService {
-            val retrofit = Retrofit.Builder()
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("https://apz-backend.azurewebsites.net")
-                .build()
+            val retrofit = RetrofitBuilder.build()
 
             return retrofit.create(AccountService::class.java)
         }

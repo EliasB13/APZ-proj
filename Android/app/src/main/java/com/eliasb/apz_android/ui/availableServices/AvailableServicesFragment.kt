@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.fragment_available_services.*
 
 class AvailableServicesFragment : Fragment() {
 
-    lateinit var adapter: AvailableServicesAdapter
+    private lateinit var adapter: AvailableServicesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,6 +26,7 @@ class AvailableServicesFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         adapter = AvailableServicesAdapter(context!!)
+        adapter.refreshServices()
 
         list.layoutManager = LinearLayoutManager(context)
         list.adapter = adapter

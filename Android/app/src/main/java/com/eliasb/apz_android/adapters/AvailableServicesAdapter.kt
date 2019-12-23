@@ -1,6 +1,7 @@
 package com.eliasb.apz_android.adapters
 
 import android.content.Context
+import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -8,10 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import com.eliasb.apz_android.R
+import com.eliasb.apz_android.config.ApiConfig
 import com.eliasb.apz_android.model.ServiceResponse
 import com.eliasb.apz_android.services.AvailableServicesService
 import com.eliasb.apz_android.services.PreferencesService
+import com.eliasb.apz_android.ui.availableServices.AvailableServiceFragment
 import com.squareup.picasso.Picasso
 
 
@@ -24,10 +30,6 @@ class AvailableServicesAdapter(val context: Context
 
     val client by lazy { AvailableServicesService.create() }
     val services: ArrayList<ServiceResponse> = ArrayList()
-
-    init {
-        refreshServices()
-    }
 
     class ServicesViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         private val serviceImage: ImageView = view.findViewById(R.id.photo)
@@ -48,10 +50,12 @@ class AvailableServicesAdapter(val context: Context
         holder.view.companyName.text = services[position].companyName
         holder.view.address.text = services[position].address
         holder.view.description.text = services[position].description
-        val imageUrl = "https://apz-backend.azurewebsites.net/" + if (services[position].photo == null) "resources/profilepics/default_photo.png" else services[position].photo
+        val imageUrl = ApiConfig.getBaseUrl() + "/" + if (services[position].photo == null) "resources/profilepics/default_photo.png" else services[position].photo
         holder.updateWithUrl(imageUrl)
-        Log.i("ImageUrl", imageUrl)
-        holder.view.setOnClickListener{ Log.i("INFO", "click!!!") }
+
+        val bundle = Bundle()
+        bundle.putInt(context.getString(R.string.service_id), services[position].id)
+        holder.view.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_nav_services_to_availableServiceFragment, bundle))
     }
 
     override fun getItemCount(): Int = services.size
