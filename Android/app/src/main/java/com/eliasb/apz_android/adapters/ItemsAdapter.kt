@@ -67,7 +67,7 @@ class ItemsAdapter(val context: Context
 
     fun refreshServiceItems(serviceId: Int, emptyListView: TextView, itemsList: RecyclerView) {
         val prefService = PreferencesService
-        prefService.create(context, context.getString(R.string.token_pref))
+        prefService.create(context, context.getString(R.string.user_pref))
         val token = prefService.getPreference(context.getString(R.string.token))
         if (token != null) {
             client.getServiceItems("Bearer $token", serviceId)
@@ -98,7 +98,7 @@ class ItemsAdapter(val context: Context
 
     fun refreshActiveItems(emptyListView: TextView, itemsList: RecyclerView) {
         val prefService = PreferencesService
-        prefService.create(context, context.getString(R.string.token_pref))
+        prefService.create(context, context.getString(R.string.user_pref))
         val token = prefService.getPreference(context.getString(R.string.token))
         if (token != null) {
             client.getActiveItems("Bearer $token")

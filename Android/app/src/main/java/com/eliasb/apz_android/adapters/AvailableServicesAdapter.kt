@@ -62,7 +62,7 @@ class AvailableServicesAdapter(val context: Context
 
     fun refreshServices() {
         val prefService = PreferencesService
-        prefService.create(context, context.getString(R.string.token_pref))
+        prefService.create(context, context.getString(R.string.user_pref))
         val token = prefService.getPreference(context.getString(R.string.token))
         client.getAvailableServices("Bearer $token")
             .subscribeOn(Schedulers.io())

@@ -18,6 +18,7 @@ import android.view.Menu
 import com.eliasb.apz_android.model.LoginRequest
 import com.eliasb.apz_android.services.AccountService
 import com.eliasb.apz_android.services.PreferencesService
+import com.google.android.material.appbar.AppBarLayout
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,13 +32,16 @@ class MainActivity : AppCompatActivity() {
         //supportActionBar?.setDisplayHomeAsUpEnabled(true)
         //supportActionBar?.setDisplayShowTitleEnabled(false)
 
+        val appBar = findViewById<AppBarLayout>(R.id.appBar)
+        appBar.outlineProvider = null
+
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_services, R.id.nav_active_items, R.id.nav_slideshow
+                R.id.nav_services, R.id.nav_active_items, R.id.nav_profile
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -60,7 +64,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkAuthorization() {
         val prefService = PreferencesService
-        prefService.create(this, getString(R.string.token_pref))
+        prefService.create(this, getString(R.string.user_pref))
         val token = prefService.getPreference(getString(R.string.token))
         if (token == null) {
             val intent = Intent(this, LoginActivity::class.java)

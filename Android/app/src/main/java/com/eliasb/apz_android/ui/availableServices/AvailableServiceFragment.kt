@@ -54,7 +54,7 @@ class AvailableServiceFragment : Fragment() {
 
     private fun loadService(serviceId: Int) {
         val prefService = PreferencesService
-        prefService.create(context!!, context!!.getString(R.string.token_pref))
+        prefService.create(context!!, context!!.getString(R.string.user_pref))
         val token = prefService.getPreference(context!!.getString(R.string.token))
         if (token != null) {
             val client = AvailableServicesService.create()

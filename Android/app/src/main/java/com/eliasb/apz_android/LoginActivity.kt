@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.eliasb.apz_android.model.ErrorBody
 import com.eliasb.apz_android.model.LoginRequest
+import com.eliasb.apz_android.model.LoginResponse
 import com.eliasb.apz_android.services.AccountService
 import com.eliasb.apz_android.services.PreferencesService
 import com.google.gson.Gson
@@ -40,8 +41,8 @@ class LoginActivity : AppCompatActivity() {
             .subscribe({
                     loginResponse ->
                 Log.d("Result", loginResponse.toString())
-                loginResponse.body()?.token?.let {
-                    saveToken(it)
+                loginResponse.body()?.let {
+                    saveUser(it)
                     goToMain()
                 }
                 loginResponse.errorBody()?.let {
@@ -67,9 +68,10 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun saveToken(token: String) {
+    private fun saveUser(response: LoginResponse) {
         val prefService = PreferencesService
-        prefService.create(this, getString(R.string.token_pref))
-        prefService.savePreference(getString(R.string.token), token)
+        prefService.create(this, getString(R.string.user_pref))
+        prefService.savePreference(getString(R.string.token), response.token)
+        prefService.savePreference(getString(R.string.id), response.id)
     }
 }

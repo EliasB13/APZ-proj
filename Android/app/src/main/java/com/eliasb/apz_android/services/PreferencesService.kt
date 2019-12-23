@@ -20,8 +20,19 @@ class PreferencesService {
             }
         }
 
+        fun savePreference(key: String, value: Int) {
+            with (sharedPreferences?.edit()) {
+                this?.putInt(key, value)
+                this?.commit()
+            }
+        }
+
         fun getPreference(key: String): String? {
             return sharedPreferences?.getString(key, null)
+        }
+
+        fun getPreferenceInt(key: String): Int? {
+            return sharedPreferences?.getInt(key, -1)
         }
 
         fun clearPreference(prefName: String) {

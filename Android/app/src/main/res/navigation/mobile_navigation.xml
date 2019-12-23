@@ -17,14 +17,9 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.eliasb.apz_android.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_profile"
-        tools:layout="@layout/fragment_slideshow" />
-    <fragment
         android:id="@+id/availableServiceFragment"
         android:name="com.eliasb.apz_android.ui.availableServices.AvailableServiceFragment"
-        android:label="fragment_available"
+        android:label="@string/service"
         tools:layout="@layout/fragment_available_service" />
 
     <fragment
@@ -32,5 +27,10 @@
         android:name="com.eliasb.apz_android.ui.activeItems.ActiveItemsFragment"
         android:label="@string/menu_items"
         tools:layout="@layout/fragment_items_list" />
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.eliasb.apz_android.ui.profile.ProfileFragment"
+        android:label="@string/menu_profile"
+        tools:layout="@layout/fragment_profile" />
 
 </navigation>

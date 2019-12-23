@@ -3,6 +3,7 @@ package com.eliasb.apz_android.services
 import android.content.Context
 import com.eliasb.apz_android.R
 import com.eliasb.apz_android.RegisterActivity
+import com.eliasb.apz_android.model.AccountDataResponse
 import com.eliasb.apz_android.model.LoginRequest
 import com.eliasb.apz_android.model.LoginResponse
 import com.eliasb.apz_android.model.RegisterRequest
@@ -12,6 +13,8 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 
@@ -22,6 +25,9 @@ interface AccountService {
     @POST("PrivateUsers/register-private")
     fun register(@Body registerRequest: RegisterRequest): Observable<Response<Void>>
 
+    @GET("PrivateUsers/account-data")
+    fun getProfile(@Header("Authorization")token: String): Observable<Response<AccountDataResponse>>
+
     companion object {
         fun create(): AccountService {
             val retrofit = RetrofitBuilder.build()
@@ -31,8 +37,8 @@ interface AccountService {
 
         fun logout(context: Context) {
             val prefService = PreferencesService
-            prefService.create(context, context.getString(R.string.token_pref))
-            prefService.clearPreference(context.getString(R.string.token_pref))
+            prefService.create(context, context.getString(R.string.user_pref))
+            prefService.clearPreference(context.getString(R.string.user_pref))
         }
     }
 }

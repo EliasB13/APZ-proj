@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">APZ-Android</string>
+    <string name="app_name">GetIt</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -13,6 +13,7 @@
 
     <!-- menu -->
     <string name="menu_services">Services</string>
+    <string name="service">Service</string>
     <string name="menu_items">Items</string>
     <string name="menu_profile">Profile</string>
     <string name="menu_tools">Tools</string>
@@ -38,10 +39,20 @@
     <string name="signInRedirect">Login into account</string>
     <string name="registerSuccess">Registration successful!</string>
 
+    <!-- profile -->
+    <string name="online_status">Online</string>
+    <string name="user_information_header">User information</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="contact_information_header">Contact information</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="phone">Phone</string>
 
     <!--preferences-->
-    <string name="token_pref">token_pref</string>
+    <string name="user_pref">token_pref</string>
     <string name="token">token_key</string>
+    <string name="id">id_key</string>
 
     <!--error codes-->
     <string name="validation_error">"Validation error occurred"</string>
