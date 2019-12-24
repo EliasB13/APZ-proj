@@ -2,6 +2,7 @@ package com.eliasb.apz_android
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -16,12 +17,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.view.GravityCompat
 import com.eliasb.apz_android.model.LoginRequest
 import com.eliasb.apz_android.services.AccountService
 import com.eliasb.apz_android.services.PreferencesService
 import com.google.android.material.appbar.AppBarLayout
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -48,6 +50,8 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        navView.setNavigationItemSelectedListener(this)
+
         //val accService = AccountService.logout(this)
 
         checkAuthorization()
@@ -61,6 +65,31 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    override fun onNavigationItemSelected(p0: MenuItem): Boolean {
+        when (p0.itemId) {
+            R.id.nav_services -> findNavController(R.id.nav_host_fragment).navigate(R.id.nav_services)
+            R.id.nav_active_items -> findNavController(R.id.nav_host_fragment).navigate(R.id.nav_active_items)
+            R.id.nav_profile -> findNavController(R.id.nav_host_fragment).navigate(R.id.nav_profile)
+            R.id.nav_share -> {
+                val share = Intent.createChooser(Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, "https://getit13.herokuapp.com/")
+                    type = "text/plain"
+                }, null)
+                startActivity(share)
+            }
+            R.id.nav_github -> {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse("https://github.com/EliasB13/APZ-proj")
+                startActivity(intent)
+            }
+        }
+        
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
     }
 
     fun checkAuthorization() {
