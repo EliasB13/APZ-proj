@@ -1,0 +1,66 @@
+<resources>
+    <string name="app_name">GetIt</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Настройки</string>
+    <string name="empty_list">Список пустий</string>
+    <string name="status">Статус:</string>
+    <string name="status_taken">Узятий</string>
+    <string name="status_not_taken">Доступний</string>
+
+    <!-- menu -->
+    <string name="menu_services">Сервіси</string>
+    <string name="service">Сервіс</string>
+    <string name="menu_items">Предмети</string>
+    <string name="menu_profile">Профіль</string>
+    <string name="menu_tools">Інструменти</string>
+    <string name="menu_share">Поділитися</string>
+    <string name="menu_github">Github</string>
+    <string name="submenu_header">Спілкування</string>
+    <string name="edit_profile">Редагувати профіль</string>
+
+    <!--auth-->
+    <string name="login_main_header">Ласкаво просимо</string>
+    <string name="login_secondary_header">Увійдіть у свій профіль щоб розпочати роботу</string>
+    <string name="register_secondary_header">Зареєструйтеся, щоб розпочати роботу</string>
+    <string name="signInHeader">Увійти за даними акаунту</string>
+    <string name="signUpHeader">Зареєструватися</string>
+    <string name="loginPlaceholder">Ім\'я користувача</string>
+    <string name="passPlaceholder">Пароль</string>
+    <string name="lastNamePlaceholder">Прізвище</string>
+    <string name="firstNamePlaceholder">Ім\'я</string>
+    <string name="emailPlaceholder">Електрона пошта</string>
+    <string name="passConfirmPlaceholder">Підтвердження паролю</string>
+    <string name="signInBtn">Увійти</string>
+    <string name="signUpBtn">Зареєструватися</string>
+    <string name="signUpRedirect">Створити новий акаунт</string>
+    <string name="signInRedirect">Увійти до акаунту</string>
+    <string name="registerSuccess">Регістрація успішна!</string>
+
+    <!-- profile -->
+    <string name="online_status">У мережі</string>
+    <string name="user_information_header">Інформація користувача</string>
+    <string name="login">Ім\'я користувача</string>
+    <string name="email">Електрона пошта</string>
+    <string name="contact_information_header">Контактна інформація</string>
+    <string name="first_name">Ім\'я</string>
+    <string name="last_name">Прізвище</string>
+    <string name="phone">Телефон</string>
+
+    <!--preferences-->
+    <string name="user_pref">token_pref</string>
+    <string name="token">token_key</string>
+    <string name="id">id_key</string>
+
+    <!--error codes-->
+    <string name="validation_error">Помилка валідації</string>
+    <string name="code_116">Логін чи пароль невірні</string>
+    <string name="code_123">Логин вже зайнято</string>
+    <string name="code_124">Електрону адресу вже зайнято</string>
+    <string name="fetch_err">Помилка завантаження данних</string>
+    <string name="update_success">Оновлення профілю успішне</string>
+
+    <!-- bundle keys -->
+    <string name="service_id">service_id</string>
+    <string name="account_data">account_data</string>
+</resources>
