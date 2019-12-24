@@ -3,11 +3,11 @@ package com.eliasb.apz_android.ui.profile
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import com.eliasb.apz_android.MainActivity
 import com.eliasb.apz_android.R
 import com.eliasb.apz_android.config.ApiConfig
 import com.eliasb.apz_android.model.AccountDataResponse
@@ -29,6 +29,22 @@ class ProfileFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu?.add(0, 0, 0, "Logout")?.setIcon(R.drawable.ic_logout)?.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.title == "Logout")
+            AccountService.logout(context!!)
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -77,6 +93,12 @@ class ProfileFragment : Fragment() {
         firstName.text = response.firstName
         lastName.text = response.lastName
         phone.text = response.phone
+
+
+        val bundle = Bundle()
+        bundle.putSerializable(context!!.getString(R.string.account_data), response)
+
+        editFab.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_nav_profile_to_editProfileFragment, bundle))
     }
 
     private fun getRoundImageTransformation(): Transformation = RoundedTransformationBuilder()

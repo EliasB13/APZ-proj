@@ -15,6 +15,7 @@ import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
+import android.view.MenuItem
 import com.eliasb.apz_android.model.LoginRequest
 import com.eliasb.apz_android.services.AccountService
 import com.eliasb.apz_android.services.PreferencesService
@@ -62,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    private fun checkAuthorization() {
+    fun checkAuthorization() {
         val prefService = PreferencesService
         prefService.create(this, getString(R.string.user_pref))
         val token = prefService.getPreference(getString(R.string.token))

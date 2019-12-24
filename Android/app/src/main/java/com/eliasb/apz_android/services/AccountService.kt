@@ -1,21 +1,14 @@
 package com.eliasb.apz_android.services
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import com.eliasb.apz_android.LoginActivity
 import com.eliasb.apz_android.R
-import com.eliasb.apz_android.RegisterActivity
-import com.eliasb.apz_android.model.AccountDataResponse
-import com.eliasb.apz_android.model.LoginRequest
-import com.eliasb.apz_android.model.LoginResponse
-import com.eliasb.apz_android.model.RegisterRequest
+import com.eliasb.apz_android.model.*
 import io.reactivex.Observable
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST
+import retrofit2.http.*
 
 
 interface AccountService {
@@ -28,6 +21,9 @@ interface AccountService {
     @GET("PrivateUsers/account-data")
     fun getProfile(@Header("Authorization")token: String): Observable<Response<AccountDataResponse>>
 
+    @PUT("PrivateUsers")
+    fun updateProfile(@Header("Authorization")token: String, @Body updateRequest: UpdateAccountRequest): Observable<Response<AccountDataResponse>>
+
     companion object {
         fun create(): AccountService {
             val retrofit = RetrofitBuilder.build()
@@ -39,6 +35,10 @@ interface AccountService {
             val prefService = PreferencesService
             prefService.create(context, context.getString(R.string.user_pref))
             prefService.clearPreference(context.getString(R.string.user_pref))
+            val activity = context as Activity
+            val intent = Intent(context, LoginActivity::class.java)
+            context.startActivity(intent)
+            activity.finish()
         }
     }
 }

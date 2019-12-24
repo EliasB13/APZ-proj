@@ -1,5 +1,7 @@
 package com.eliasb.apz_android.model
 
+import java.io.Serializable
+
 data class AccountDataResponse(
     val id: Int,
     val login: String,
@@ -8,4 +10,4 @@ data class AccountDataResponse(
     val lastName: String,
     val phone: String,
     val photo: String
-)
+) : Serializable
