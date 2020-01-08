@@ -10,6 +10,7 @@ using APZ_BACKEND.Presentation.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace APZ_BACKEND.Presentation.Controllers
 {
@@ -18,10 +19,13 @@ namespace APZ_BACKEND.Presentation.Controllers
     public class ReadersController : ControllerBase
     {
 		private readonly IReaderService readerService;
+		private readonly ILogger<ReadersController> logger;
 
-		public ReadersController(IReaderService readerService)
+		public ReadersController(IReaderService readerService,
+			ILogger<ReadersController> logger)
 		{
 			this.readerService = readerService;
+			this.logger = logger;
 		}
 
 		[HttpPost("reader-items")]
@@ -36,7 +40,10 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> GetReaders()
 		{
 			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+			{
+				logger.LogError("Current user is not a businessUser");
 				return BadRequest(new { message = "Current user is not a businessUser", code = ErrorCode.NOT_BUSINESS_USER });
+			}
 
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
@@ -49,13 +56,19 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> AddItemToReader(AddItemToReaderRequest request)
 		{
 			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+			{
+				logger.LogError("Current user is not a businessUser");
 				return BadRequest(new { message = "Current user is not a businessUser", code = ErrorCode.NOT_BUSINESS_USER });
+			}
 
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await readerService.AddItemToReader(contextUserId, request);
 			if (!result.Success)
+			{
+				logger.LogError(result.ErrorMessage);
 				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
+			}
 
 			return Ok();
 		}
@@ -64,14 +77,20 @@ namespace APZ_BACKEND.Presentation.Controllers
 		[HttpPost("order-card")]
 		public async Task<IActionResult> OrderCard()
 		{
-			if (ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
-				return BadRequest(new { message = "Current user is not a privateUser", code = ErrorCode.NOT_PRIVATE_USER });
+			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+			{
+				logger.LogError("Current user is not a businessUser");
+				return BadRequest(new { message = "Current user is not a businessUser", code = ErrorCode.NOT_BUSINESS_USER });
+			}
 
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await readerService.OrderCard(contextUserId);
 			if (!result.Success)
-				return BadRequest(new { message = result.ErrorCode, code = result.ErrorCode });
+			{
+				logger.LogError(result.ErrorMessage);
+				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
+			}
 
 			return Ok(result.Item);
 		}
@@ -81,13 +100,19 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> OrderReader()
 		{
 			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+			{
+				logger.LogError("Current user is not a businessUser");
 				return BadRequest(new { message = "Current user is not a businessUser", code = ErrorCode.NOT_BUSINESS_USER });
+			}
 
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await readerService.OrderReader(contextUserId);
 			if (!result.Success)
-				return BadRequest(new { message = result.ErrorCode, code = result.ErrorCode });
+			{
+				logger.LogError(result.ErrorMessage);
+				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
+			}
 
 			return Ok(result.Item);
 		}
@@ -98,7 +123,10 @@ namespace APZ_BACKEND.Presentation.Controllers
 		{
 			var result = await readerService.TakeItem(takeItemDto);
 			if (!result.Success)
+			{
+				logger.LogError(result.ErrorMessage);
 				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
+			}
 
 			return Ok();
 		}
@@ -109,7 +137,10 @@ namespace APZ_BACKEND.Presentation.Controllers
 		{
 			var result = await readerService.ReturnItem(returnItemRequest);
 			if (!result.Success)
+			{
+				logger.LogError(result.ErrorMessage);
 				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
+			}
 
 			return Ok();
 		}

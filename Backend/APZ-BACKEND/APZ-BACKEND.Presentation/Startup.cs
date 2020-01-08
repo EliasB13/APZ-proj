@@ -34,6 +34,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace APZ_BACKEND.Presentation
@@ -72,7 +73,7 @@ namespace APZ_BACKEND.Presentation
 
 			app.UseRouting();
 
-
+			app.UseSerilogRequestLogging();
 
 			app.UseCors("CorsPolicy");
 

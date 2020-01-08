@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
 
 namespace APZ_BACKEND.Presentation
 {
@@ -13,14 +15,30 @@ namespace APZ_BACKEND.Presentation
 	{
 		public static void Main(string[] args)
 		{
+			Log.Logger = new LoggerConfiguration()
+			.MinimumLevel.Debug()
+			.MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+			.Enrich.FromLogContext()
+			.WriteTo.Console()
+			.CreateLogger();
+
+			Log.Information("Starting web host");
+
 			CreateHostBuilder(args).Build().Run();
 		}
 
 		public static IHostBuilder CreateHostBuilder(string[] args) =>
 			Host.CreateDefaultBuilder(args)
-				.ConfigureWebHostDefaults(webBuilder =>
-				{
-					webBuilder.UseStartup<Startup>();
-				});
+			.UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
+				.ReadFrom.Configuration(hostingContext.Configuration)
+				.Enrich.FromLogContext()
+				.WriteTo.Debug()
+				.WriteTo.Debug()
+				.WriteTo.Console()
+				.WriteTo.File(@"logs\\apz-back_log-.txt", rollingInterval: RollingInterval.Day))
+			.ConfigureWebHostDefaults(webBuilder =>
+			{
+				webBuilder.UseStartup<Startup>();
+			});
 	}
 }

@@ -12,6 +12,7 @@ using APZ_BACKEND.Core.Services.Users.PrivateUsers;
 using APZ_BACKEND.Presentation.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace APZ_BACKEND.Presentation.Controllers
 {
@@ -22,12 +23,15 @@ namespace APZ_BACKEND.Presentation.Controllers
 	{
 		private readonly ISharedItemsService itemsService;
 		private readonly IAsyncRepository<PrivateUser> privateUsersRepository;
+		private readonly ILogger<SharedItemsController> logger;
 
 		public SharedItemsController(ISharedItemsService itemsService,
-			IAsyncRepository<PrivateUser> privateUsersRepository)
+			IAsyncRepository<PrivateUser> privateUsersRepository,
+			ILogger<SharedItemsController> logger)
 		{
 			this.itemsService = itemsService;
 			this.privateUsersRepository = privateUsersRepository;
+			this.logger = logger;
 		}
 
 		[HttpGet]
@@ -37,7 +41,10 @@ namespace APZ_BACKEND.Presentation.Controllers
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			if (!isBusinessUser && !businessUserId.HasValue)
+			{
+				logger.LogError("You should provide businessUserId");
 				return BadRequest("You should provide businessUserId");
+			}
 			else if (!isBusinessUser && businessUserId.HasValue)
 			{
 				var items = await itemsService.GetBusinessItems(businessUserId.Value, contextUserId);
@@ -54,7 +61,10 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> GetEmployeesRoleItems(int roleId)
 		{
 			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+			{
+				logger.LogError("Current user is not a business user");
 				return BadRequest(new { message = "Current user is not a businessUser", code = ErrorCode.NOT_BUSINESS_USER });
+			}
 
 			var contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
@@ -72,7 +82,10 @@ namespace APZ_BACKEND.Presentation.Controllers
 			{
 				var result = await itemsService.GetItem(contextUserId, id);
 				if (!result.Success)
+				{
+					logger.LogError(result.ErrorMessage);
 					return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
+				}
 
 				return Ok(result.Item);
 			}
@@ -80,7 +93,10 @@ namespace APZ_BACKEND.Presentation.Controllers
 			{
 				var result = await itemsService.GetItemPrivateUser(contextUserId, id);
 				if (!result.Success)
+				{
+					logger.LogError(result.ErrorMessage);
 					return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
+				}
 
 				return Ok(result.Item);
 			}
@@ -90,13 +106,19 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> AddItemToBusiness(AddSharedItemRequest addSharedItemRequest)
 		{
 			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+			{
+				logger.LogError("Current user is not a business user");
 				return BadRequest(new { message = "Current user is not a businessUser", code = ErrorCode.NOT_BUSINESS_USER });
+			}
 
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await itemsService.AddItemToBusiness(contextUserId, addSharedItemRequest);
 			if (!result.Success)
+			{
+				logger.LogError(result.ErrorMessage);
 				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
+			}
 
 			return Ok();
 		}
@@ -105,13 +127,19 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> AddItemToRole(AddEmployeeRoleItemRequest dto)
 		{
 			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+			{
+				logger.LogError("Current user is not a business user");
 				return BadRequest(new { message = "Current user is not a businessUser", code = ErrorCode.NOT_BUSINESS_USER });
+			}
 
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await itemsService.AddItemToEmployeesRole(contextUserId, dto.SharedItemId, dto.RoleId);
 			if (!result.Success)
+			{
+				logger.LogError(result.ErrorMessage);
 				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
+			}
 
 			return Ok(result.Item);
 		}
@@ -120,13 +148,19 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> UpdateItem(UpdateSharedItemRequest updateSharedItemRequest, int id)
 		{
 			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
-				return BadRequest(new { message = "Current user is not a businessUser", ErrorCode.NOT_BUSINESS_USER });
+			{
+				logger.LogError("Current user is not a business user");
+				return BadRequest(new { message = "Current user is not a businessUser", code = ErrorCode.NOT_BUSINESS_USER });
+			}
 
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await itemsService.Update(updateSharedItemRequest, id, contextUserId);
 			if (!result.Success)
+			{
+				logger.LogError(result.ErrorMessage);
 				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
+			}
 
 			return Ok();
 		}
@@ -135,13 +169,19 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> DeleteItem(int itemId)
 		{
 			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+			{
+				logger.LogError("Current user is not a business user");
 				return BadRequest(new { message = "Current user is not a businessUser", code = ErrorCode.NOT_BUSINESS_USER });
+			}
 
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await itemsService.Delete(itemId, contextUserId);
 			if (!result.Success)
+			{
+				logger.LogError(result.ErrorMessage);
 				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
+			}
 
 			return Ok();
 		}
@@ -150,13 +190,19 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> RemoveItemFromRole(int roleItemId)
 		{
 			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+			{
+				logger.LogError("Current user is not a business user");
 				return BadRequest(new { message = "Current user is not a businessUser", code = ErrorCode.NOT_BUSINESS_USER });
+			}
 
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
 
 			var result = await itemsService.RemoveItemFromEmployeesRole(roleItemId, contextUserId);
 			if (!result.Success)
+			{
+				logger.LogError(result.ErrorMessage);
 				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
+			}
 
 			return Ok();
 		}

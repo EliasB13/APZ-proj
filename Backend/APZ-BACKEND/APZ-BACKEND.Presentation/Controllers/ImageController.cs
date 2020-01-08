@@ -4,6 +4,7 @@ using APZ_BACKEND.Presentation.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +18,13 @@ namespace APZ_BACKEND.Presentation.Controllers
 	public class ImageController : ControllerBase
 	{
 		private readonly IImageService imagesService;
+		private readonly ILogger<ImageController> logger;
 
-		public ImageController(IImageService imagesService)
+		public ImageController(IImageService imagesService,
+			ILogger<ImageController> logger)
 		{
 			this.imagesService = imagesService;
+			this.logger = logger;
 		}
 
 		[HttpPost("upload-profile-photo")]
@@ -31,7 +35,10 @@ namespace APZ_BACKEND.Presentation.Controllers
 
 			var result = await imagesService.UploadProfilePicture(file, contextUserId, isBusinessUser ? UserType.BusinessUser : UserType.PrivateUser);
 			if (!result.Success)
-				return BadRequest( new { message = result.ErrorMessage, code = result.ErrorCode });
+			{
+				logger.LogError(result.ErrorMessage);
+				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
+			}
 
 			return Ok();
 		}
