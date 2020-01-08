@@ -52,7 +52,6 @@ function parseModelErrors(data) {
 }
 
 function getLocaleError(data) {
-  debugger;
   if (data.code == 999) return data.message;
   return i18n.t("errorCode." + data.code.toString());
 }

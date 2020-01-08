@@ -4,9 +4,7 @@
       <div class="container-fluid d-flex align-items-center">
         <div class="row">
           <div class="col-lg-7 col-md-10">
-            <p class="text-white mt-0 mb-5">
-              {{ $t("availableServicesPage.secondaryHeader") }}
-            </p>
+            <p class="text-white mt-0 mb-5">{{ $t("availableServicesPage.secondaryHeader") }}</p>
           </div>
         </div>
       </div>
@@ -16,6 +14,11 @@
 
     <div class="container-fluid">
       <!-- <base-cards-list cardType="base-card" v-if="showItems" :itemsList="availableServices"></base-cards-list> -->
+
+      <div v-if="showEmptyList" style="margin-top: 8rem;">
+        <p>{{ $t("common.emptyList") }}</p>
+      </div>
+
       <div class="row">
         <div
           class="col-xl-4 mb-5 mb-xl-0"
@@ -27,16 +30,11 @@
             <div class="row justify-content-center">
               <div class="col-lg-3 order-lg-2">
                 <div class="card-profile-image">
-                  <img
-                    :src="servicePhoto(service.photo)"
-                    class="rounded-circle"
-                  />
+                  <img :src="servicePhoto(service.photo)" class="rounded-circle" />
                 </div>
               </div>
             </div>
-            <div
-              class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4"
-            ></div>
+            <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4"></div>
             <div class="card-body pt-0 pt-md-4 mt-6">
               <div class="text-center">
                 <h3>{{ service.companyName }}</h3>
@@ -78,6 +76,12 @@ export default {
     },
     showItems() {
       return this.status.availableServicesLoaded;
+    },
+    showEmptyList() {
+      return (
+        this.status.availableServicesLoaded &&
+        this.availableServices.length == 0
+      );
     }
   },
   methods: {

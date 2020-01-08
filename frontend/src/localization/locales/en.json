@@ -172,7 +172,7 @@
     }
   },
   "sidebarLinks": {
-    "availableItems": "Available items",
+    "availableItems": "Available services",
     "activeItems": "Active items",
     "items": "Items",
     "consumers": "Consumers",
@@ -190,7 +190,8 @@
     "registerBtn": "Register",
     "loginBtn": "Login",
     "spinnerText": "Loading",
-    "notification": "Notification"
+    "notification": "Notification",
+    "emptyList": "There are no items to show"
   },
   "userDropDown": {
     "myProfile": "My profile",
@@ -229,6 +230,7 @@
     "115": "Wrong request parameters",
     "116": "Login or password is incorrect",
     "117": "File not found",
+    "123": "Login already taken",
     "900": "You have no access to this resource"
   }
 }

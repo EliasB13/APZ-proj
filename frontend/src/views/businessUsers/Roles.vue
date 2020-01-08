@@ -4,9 +4,7 @@
       <div class="container-fluid d-flex align-items-center">
         <div class="row">
           <div class="col-lg-7 col-md-10">
-            <p class="text-white mt-0 mb-5">
-              {{ $t("rolesPage.secondaryHeader") }}
-            </p>
+            <p class="text-white mt-0 mb-5">{{ $t("rolesPage.secondaryHeader") }}</p>
           </div>
         </div>
       </div>
@@ -14,17 +12,14 @@
 
     <div class="container-fluid mt--7 mb-5">
       <b-row class="px-3">
-        <b-col
-          class="manage-bar"
-          style="background-color: white; border-radius: 0.375rem"
-        >
+        <b-col class="manage-bar" style="background-color: white; border-radius: 0.375rem">
           <b-row>
             <b-col align-self="center">
               <h2 class="pl-3">
                 {{
-                  selectionMode
-                    ? $t("rolesPage.manageBar.remove")
-                    : $t("rolesPage.manageBar.manage")
+                selectionMode
+                ? $t("rolesPage.manageBar.remove")
+                : $t("rolesPage.manageBar.manage")
                 }}
               </h2>
             </b-col>
@@ -35,15 +30,13 @@
                 type="success"
                 icon="ni ni-fat-add"
                 @click="showAddingModal = true"
-                >{{ $t("common.addBtn") }}</base-button
-              >
+              >{{ $t("common.addBtn") }}</base-button>
               <base-button
                 v-if="selectionMode"
                 class="float-right"
                 type="link"
                 @click="resetClick"
-                >{{ $t("common.resetBtn") }}</base-button
-              >
+              >{{ $t("common.resetBtn") }}</base-button>
             </b-col>
             <b-col cols="auto" class="p-3">
               <base-button
@@ -51,8 +44,7 @@
                 type="danger"
                 icon="ni ni-fat-remove"
                 @click="removeClick"
-                >{{ $t("common.removeBtn") }}</base-button
-              >
+              >{{ $t("common.removeBtn") }}</base-button>
             </b-col>
           </b-row>
         </b-col>
@@ -60,6 +52,9 @@
     </div>
 
     <div class="container-fluid">
+      <div v-if="showEmptyList">
+        <p>{{ $t("common.emptyList") }}</p>
+      </div>
       <div v-if="showRoles">
         <role-card
           v-for="role in roles"
@@ -80,9 +75,7 @@
       modal-classes="modal-dialog-centered modal-sm"
       :showClose="false"
     >
-      <div slot="header" class="modal-title">
-        {{ $t("rolesPage.modal.header") }}
-      </div>
+      <div slot="header" class="modal-title">{{ $t("rolesPage.modal.header") }}</div>
       <card
         type="secondary"
         header-classes="bg-white text-default"
@@ -109,12 +102,8 @@
         </template>
       </card>
       <template slot="footer">
-        <base-button type="link" @click="showAddingModal = false">
-          {{ $t("common.closeBtn") }}
-        </base-button>
-        <base-button type="success" class="ml-auto" @click="addItemClick">
-          {{ $t("common.addBtn") }}
-        </base-button>
+        <base-button type="link" @click="showAddingModal = false">{{ $t("common.closeBtn") }}</base-button>
+        <base-button type="success" class="ml-auto" @click="addItemClick">{{ $t("common.addBtn") }}</base-button>
       </template>
     </modal>
 
@@ -162,6 +151,9 @@ export default {
     },
     showRoles() {
       return this.status.rolesLoaded;
+    },
+    showEmptyList() {
+      return this.status.rolesLoaded && this.roles.length == 0;
     }
   },
   methods: {
