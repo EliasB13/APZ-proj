@@ -98,9 +98,10 @@ export const router = new Router({
 router.beforeEach((to, from, next) => {
   const publicPages = ["/login", "/register"];
   const authRequired = !publicPages.includes(to.path);
-  const user = localStorage.getItem("user");
+  const userJson = localStorage.getItem("user");
+  const user = JSON.parse(userJson);
 
-  if (authRequired && !user) {
+  if (authRequired && !userJson) {
     return next("/login");
   }
 
@@ -111,10 +112,19 @@ router.beforeEach((to, from, next) => {
     "/roles",
     "/role"
   ];
-  debugger;
+  const privateUserPage = [
+    "/availableServices",
+    "/active-items",
+    "/service",
+    "/profile"
+  ];
   const isNextBusinessPage = businessUserPages.includes(to.path);
+  const isNextPrivatePage = privateUserPage.includes(to.path);
+
   if (isNextBusinessPage && !user.isBusinessUser)
     return next("/availableServices");
+
+  if (isNextPrivatePage && user.isBusinessUser) return next("/business-items");
 
   next();
 });

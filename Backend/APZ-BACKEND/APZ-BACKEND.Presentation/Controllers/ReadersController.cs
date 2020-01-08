@@ -14,8 +14,9 @@ using Microsoft.Extensions.Logging;
 
 namespace APZ_BACKEND.Presentation.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+	[Authorize]
+	[ApiController]
+	[Route("api/[controller]")]
     public class ReadersController : ControllerBase
     {
 		private readonly IReaderService readerService;
@@ -27,7 +28,7 @@ namespace APZ_BACKEND.Presentation.Controllers
 			this.readerService = readerService;
 			this.logger = logger;
 		}
-
+		[AllowAnonymous]
 		[HttpPost("reader-items")]
 		public async Task<IActionResult> GetReaderItems(GetReaderItemsRequest request)
 		{
@@ -35,7 +36,6 @@ namespace APZ_BACKEND.Presentation.Controllers
 			return Ok(items);
 		}
 
-		[Authorize]
 		[HttpGet("readers")]
 		public async Task<IActionResult> GetReaders()
 		{
@@ -51,7 +51,6 @@ namespace APZ_BACKEND.Presentation.Controllers
 			return Ok(items);
 		}
 
-		[Authorize]
 		[HttpPost("add-item-to-reader")]
 		public async Task<IActionResult> AddItemToReader(AddItemToReaderRequest request)
 		{
@@ -73,14 +72,13 @@ namespace APZ_BACKEND.Presentation.Controllers
 			return Ok();
 		}
 
-		[Authorize]
 		[HttpPost("order-card")]
 		public async Task<IActionResult> OrderCard()
 		{
-			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+			if (ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
 			{
-				logger.LogError("Current user is not a businessUser");
-				return BadRequest(new { message = "Current user is not a businessUser", code = ErrorCode.NOT_BUSINESS_USER });
+				logger.LogError("Current user is not a privateUser");
+				return BadRequest(new { message = "Current user is not a privateUser", code = ErrorCode.NOT_BUSINESS_USER });
 			}
 
 			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
@@ -95,7 +93,6 @@ namespace APZ_BACKEND.Presentation.Controllers
 			return Ok(result.Item);
 		}
 
-		[Authorize]
 		[HttpPost("order-reader")]
 		public async Task<IActionResult> OrderReader()
 		{

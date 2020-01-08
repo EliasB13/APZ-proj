@@ -61,7 +61,8 @@ namespace APZ_BACKEND.Core.Mappers
 				LastName = user.LastName,
 				Login = user.Login,
 				Phone = user.Phone,
-				Photo = user.Photo
+				Photo = user.Photo,
+				Rfid = user.RfidNumber
 			};
 		}
 

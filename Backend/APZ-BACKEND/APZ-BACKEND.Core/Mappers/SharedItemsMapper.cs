@@ -25,7 +25,8 @@ namespace APZ_BACKEND.Core.Mappers
 				Name = sharedItem.Name,
 				Description = sharedItem.Description,
 				Id = sharedItem.Id,
-				IsTaken = isTaken
+				IsTaken = isTaken,
+				Rfid = sharedItem.RfidNumber
 			};
 		}
 

@@ -64,6 +64,19 @@ const actions = {
       }
     );
   },
+  orderCard({ dispatch, commit }) {
+    commit("orderCardRequest");
+
+    userService.orderCard().then(
+      user => {
+        commit("orderCardSuccess", user.rfid);
+      },
+      error => {
+        commit("orderCardFailure", error);
+        dispatch("alert/error", error.toString(), { root: true });
+      }
+    );
+  },
   getAccountData({ commit, dispatch }, isBusinessUser) {
     commit("getAccountDataRequest", isBusinessUser);
 
@@ -188,6 +201,18 @@ const mutations = {
   updateUserFailure(state, error) {
     state.status = { ...state.status, userUpdating: false, userUpdated: false };
     state.userToUpdate = {};
+    state.error = error;
+  },
+
+  orderCardRequest(state) {
+    state.status = { ...state.status, orderingCard: true };
+  },
+  orderCardSuccess(state, rfid) {
+    state.status = { ...state.status, orderingCard: false, orderedCard: true };
+    state.user = { ...state.user, rfid: rfid };
+  },
+  orderCardFailure(state, error) {
+    state.status = { ...state.status, orderingCard: false, orderedCard: false };
     state.error = error;
   }
 };

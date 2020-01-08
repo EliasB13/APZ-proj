@@ -13,5 +13,6 @@ namespace APZ_BACKEND.Core.Dtos.Users
 		public string LastName { get; set; }
 		public string Phone { get; set; }
 		public string Photo { get; set; }
+		public string Rfid { get; set; }
 	}
 }

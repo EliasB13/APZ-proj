@@ -10,5 +10,6 @@ namespace APZ_BACKEND.Core.Dtos.SharedItems
 		public string Name { get; set; }
 		public string Description { get; set; }
 		public bool IsTaken { get; set; }
+		public string Rfid { get; set; }
 	}
 }

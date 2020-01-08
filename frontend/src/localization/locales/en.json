@@ -156,12 +156,14 @@
     "profileCardHeader": "My account",
     "userInformationHeader": "User information",
     "contactInformationHeader": "Contact information",
+    "rfidHeader": "RFID Card",
     "label": {
       "login": "Login",
       "email": "Email",
       "firstName": "First name",
       "lastName": "Last name",
-      "phone": "Phone"
+      "phone": "Phone",
+      "rfid": "Card number"
     },
     "placeholder": {
       "login": "Login",
@@ -191,7 +193,8 @@
     "loginBtn": "Login",
     "spinnerText": "Loading",
     "notification": "Notification",
-    "emptyList": "There are no items to show"
+    "emptyList": "There are no items to show",
+    "orderCard": "Order card"
   },
   "userDropDown": {
     "myProfile": "My profile",

@@ -1,30 +1,56 @@
 <template>
-  <div class="card-container pointer" @click="handleClick">
-    <a class="card-link">
-      <article class="blog-card" :class="selected ? 'item-selected' : ''">
-        <img class="post-image" :src="itemImage" />
-        <div class="article-details">
-          <h3 class="post-title">{{ itemName }}</h3>
-          <p class="post-description">{{ itemDesc }}</p>
-          <p class="post-author">
-            Status:
-            <span
-              :class="isTaken ? 'text-danger' : 'text-success'"
-              class="font-weight-700"
-              >{{ isTaken ? "Taken" : "Available" }}</span
-            >
-          </p>
-        </div>
-        <i
-          v-if="selectionMode"
-          :class="
+  <div class="card-container pointer">
+    <div class="card-container pointer" @click="handleClick">
+      <a class="card-link">
+        <article class="blog-card" :class="selected ? 'item-selected' : ''">
+          <img class="post-image" :src="itemImage" />
+          <div class="article-details">
+            <h3 class="post-title">{{ itemName }}</h3>
+            <p class="post-description">{{ itemDesc }}</p>
+            <p class="post-author">
+              Status:
+              <span
+                :class="isTaken ? 'text-danger' : 'text-success'"
+                class="font-weight-700"
+              >{{ isTaken ? "Taken" : "Available" }}</span>
+            </p>
+          </div>
+          <i
+            v-if="selectionMode"
+            :class="
             `far ${
               selected ? icon.checkedSquare : icon.square
             } fa-lg selection-box`
           "
-        ></i>
-      </article>
-    </a>
+          ></i>
+        </article>
+      </a>
+    </div>
+    <modal
+      :show.sync="showRfidModal"
+      header-classes="border"
+      footer-classes="border"
+      body-classes="p-0"
+      modal-classes="modal-dialog-centered modal-sm"
+      :showClose="true"
+    >
+      <div slot="header" class="modal-title">{{ $t("privateProfilePage.label.rfid") }}</div>
+      <card
+        type="secondary"
+        header-classes="bg-white text-default"
+        body-classes="px-lg-5 py-lg-5"
+        class="border-0"
+      >
+        <template>
+          <label class="form-control-label">
+            {{
+            $t("privateProfilePage.label.rfid")
+            }}
+          </label>
+          <p>{{ itemRfid }}</p>
+        </template>
+      </card>
+    </modal>
   </div>
 </template>
 <script>
@@ -47,7 +73,8 @@ export default {
         checkedSquare: "fa-check-square",
         square: "fa-square"
       },
-      selected: false
+      selected: false,
+      showRfidModal: false
     };
   },
   props: {
@@ -59,6 +86,7 @@ export default {
       default: "/img/theme/item.png"
     },
     itemId: Number,
+    itemRfid: String,
     selectionMode: Boolean
   },
   methods: {
@@ -71,6 +99,8 @@ export default {
         this.selected
           ? this.addSelectedItem(this.itemId)
           : this.removeSelectedItem(this.itemId);
+      } else {
+        this.showRfidModal = true;
       }
     }
   }

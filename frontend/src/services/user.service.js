@@ -7,6 +7,7 @@ export const userService = {
   register,
   getPublicProfile,
   update,
+  orderCard,
   delete: _delete,
   getAccountData
 };
@@ -100,6 +101,18 @@ function update(user, isBusinessUser) {
     `${process.env.VUE_APP_DEV_BACKEND_URL}/${endpoint}`,
     requestOptions
   ).then(responseHandler.handleResponse);
+}
+
+function orderCard() {
+  const requestOptions = {
+    method: "POST",
+    headers: authHeader()
+  };
+
+  const requestString = `${process.env.VUE_APP_DEV_BACKEND_URL}/api/Readers/order-card`;
+  return fetch(requestString, requestOptions).then(
+    responseHandler.handleResponse
+  );
 }
 
 function _delete(id) {

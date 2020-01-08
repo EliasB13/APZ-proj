@@ -107,6 +107,26 @@
                     </div>
                   </div>
                 </div>
+                <hr class="my-4" />
+                <h6 class="heading-small text-muted mb-4">{{ $t("privateProfilePage.rfidHeader") }}</h6>
+                <div class="pl-lg-4 pr-2">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <label class="form-control-label">
+                        {{
+                        $t("privateProfilePage.label.rfid")
+                        }}
+                      </label>
+                      <p>{{ user.rfid ? user.rfid : "-" }}</p>
+                    </div>
+                    <b-col lg="6" v-if="!user.rfid">
+                      <div
+                        @click="orderCardClick"
+                        class="btn btn-sm btn-success float-right"
+                      >{{ $t("common.orderCard") }}</div>
+                    </b-col>
+                  </div>
+                </div>
               </form>
             </template>
           </card>
@@ -241,7 +261,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions("account", ["getAccountData", "updateUser"]),
+    ...mapActions("account", ["getAccountData", "updateUser", "orderCard"]),
     editClick() {
       this.model.login = this.user.login;
       this.model.email = this.user.email;
@@ -257,6 +277,9 @@ export default {
         isBusinessUser: this.user.isBusinessUser
       });
       if (this.status.userUpdated) this.editingMode = false;
+    },
+    orderCardClick() {
+      this.orderCard();
     }
   },
   mounted() {

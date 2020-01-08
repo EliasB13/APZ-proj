@@ -156,12 +156,14 @@
     "profileCardHeader": "Мій обліковий запис",
     "userInformationHeader": "Інформація про користувача",
     "contactInformationHeader": "Контактна інформація",
+    "rfidHeader": "RFID картка",
     "label": {
       "login": "Ім'я користувача",
       "email": "Електрона пошта",
       "firstName": "Ім'я",
       "lastName": "Прізвище",
-      "phone": "Телефон"
+      "phone": "Телефон",
+      "rfid": "Номер картки"
     },
     "placeholder": {
       "login": "Ім'я користувача",
@@ -191,7 +193,8 @@
     "loginBtn": "Увійти",
     "spinnerText": "Завантаження",
     "notification": "Повідомлення",
-    "emptyList": "Немає елементів для відображення"
+    "emptyList": "Немає елементів для відображення",
+    "orderCard": "Замовити картку"
   },
   "userDropDown": {
     "myProfile": "Мій профіль",

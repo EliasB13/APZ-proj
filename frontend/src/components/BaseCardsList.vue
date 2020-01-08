@@ -1,16 +1,13 @@
 <template>
   <b-row>
-    <b-col
-      :class="'mb-5 ' + colsClasses"
-      v-for="item in itemsList"
-      :key="item.id"
-    >
+    <b-col :class="'mb-5 ' + colsClasses" v-for="item in itemsList" :key="item.id">
       <base-card
         v-if="cardType == 'base-card'"
         :itemName="item.name"
         :itemDesc="item.description"
         :isTaken="item.isTaken"
         :itemId="item.id"
+        :itemRfid="item.rfid"
         :selectionMode="selectionMode"
       ></base-card>
       <user-card
