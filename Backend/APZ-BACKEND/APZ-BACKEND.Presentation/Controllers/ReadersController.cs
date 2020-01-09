@@ -69,7 +69,7 @@ namespace APZ_BACKEND.Presentation.Controllers
 				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
 			}
 
-			return Ok();
+			return Ok(result.Item);
 		}
 
 		[HttpPost("order-card")]
@@ -133,6 +133,27 @@ namespace APZ_BACKEND.Presentation.Controllers
 		public async Task<IActionResult> ReturnItem(ReturnItemRequest returnItemRequest)
 		{
 			var result = await readerService.ReturnItem(returnItemRequest);
+			if (!result.Success)
+			{
+				logger.LogError(result.ErrorMessage);
+				return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
+			}
+
+			return Ok();
+		}
+
+		[HttpDelete("remove-item-from-reader/{itemId}")]
+		public async Task<IActionResult> RemoveItemFromReader(int itemId)
+		{
+			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+			{
+				logger.LogError("Current user is not a businessUser");
+				return BadRequest(new { message = "Current user is not a businessUser", code = ErrorCode.NOT_BUSINESS_USER });
+			}
+
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+
+			var result = await readerService.RemoveReaderItem(contextUserId, itemId);
 			if (!result.Success)
 			{
 				logger.LogError(result.ErrorMessage);

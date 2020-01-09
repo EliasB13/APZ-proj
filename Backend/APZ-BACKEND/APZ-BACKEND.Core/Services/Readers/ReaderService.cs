@@ -270,5 +270,21 @@ namespace APZ_BACKEND.Core.Services.Readers
 			
 			return dtos;
 		}
+
+		public async Task<GenericServiceResponse<SharedItemDto>> RemoveReaderItem(int businessUserId, int itemId)
+		{
+			var user = await businessUsersRepository.GetByIdAsync(businessUserId);
+			if (user == null)
+				return new GenericServiceResponse<SharedItemDto>("Business user wasn't found", ErrorCode.CONTEXT_USER_NOT_FOUND);
+
+			var item = await sharedItemsRepository.SingleOrDefaultAsync(si => si.Id == itemId, si => si.Reader);
+			if (item == null)
+				return new GenericServiceResponse<SharedItemDto>("Item wasn't found", ErrorCode.ITEM_NOT_FOUND);
+
+			item.Reader = null;
+			await sharedItemsRepository.UpdateAsync(item);
+
+			return new GenericServiceResponse<SharedItemDto>(item.ToDto(false));
+		}
 	}
 }

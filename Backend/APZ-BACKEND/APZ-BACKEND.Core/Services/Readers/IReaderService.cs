@@ -18,5 +18,6 @@ namespace APZ_BACKEND.Core.Services.Readers
 		Task<GenericServiceResponse<PrivateUserAccountData>> OrderCard(int privateUserId);
 		Task<GenericServiceResponse<SharedItemDto>> TakeItem(TakeItemRequest request);
 		Task<GenericServiceResponse<SharedItemDto>> ReturnItem(ReturnItemRequest request);
+		Task<GenericServiceResponse<SharedItemDto>> RemoveReaderItem(int businessUserId, int itemId);
 	}
 }

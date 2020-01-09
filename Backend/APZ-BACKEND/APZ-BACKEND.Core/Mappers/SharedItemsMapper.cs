@@ -36,7 +36,8 @@ namespace APZ_BACKEND.Core.Mappers
 			{
 				Description = sharedItem.Description,
 				Name = sharedItem.Name,
-				Rfid = sharedItem.RfidNumber
+				Rfid = sharedItem.RfidNumber,
+				Id = sharedItem.Id
 			};
 		}
 

@@ -6,6 +6,7 @@ namespace APZ_BACKEND.Core.Dtos.SharedItems
 {
 	public class ReaderItemDto
 	{
+		public int Id { get; set; }
 		public string Name { get; set; }
 		public string Description { get; set; }
 		public string Rfid { get; set; }
