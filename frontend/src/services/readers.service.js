@@ -61,13 +61,12 @@ function removeItemFromReader(itemId) {
 
 function getReaderItems(readerId) {
   const requestOptions = {
-    method: "POST",
-    headers: { ...authHeader(), "Content-Type": "application/json" },
-    body: JSON.stringify({ readerId: readerId, secret: "reader-secret-key" })
+    method: "GET",
+    headers: { ...authHeader(), "Content-Type": "application/json" }
   };
 
   return fetch(
-    `${process.env.VUE_APP_DEV_BACKEND_URL}/api/Readers/reader-items`,
+    `${process.env.VUE_APP_DEV_BACKEND_URL}/api/Readers/reader-items/${readerId}`,
     requestOptions
   ).then(responseHandler.handleResponse);
 }
