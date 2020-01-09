@@ -74,7 +74,22 @@ namespace APZ_BACKEND.Core.Services.Readers
 			}
 		}
 
-		public async Task<IEnumerable<ReaderItemDto>> GetReaderItems(int readerId, string secret)
+		public async Task<IEnumerable<ReaderItemDto>> GetReaderItems(int businessUserId, int readerId)
+		{
+			var user = await businessUsersRepository.GetByIdAsync(businessUserId);
+			if (user == null)
+				return new List<ReaderItemDto>();
+
+			var reader = await readersRepository.GetByIdAsync(readerId);
+			if (reader == null)
+				return new List<ReaderItemDto>();
+
+			var items = await sharedItemsRepository.ListAllAsync(si => si.Reader.Id == readerId, si => si.Reader);
+			var dtos = items.Select(i => i.ToDto());
+			return dtos;
+		}
+
+		public async Task<IEnumerable<ReaderItemDto>> GetActualReaderItems(int readerId, string secret)
 		{
 			var reader = await readersRepository.GetByIdAsync(readerId);
 			if (reader == null)
@@ -83,7 +98,8 @@ namespace APZ_BACKEND.Core.Services.Readers
 			if (!UsersExtensions.VerifyHash(secret, reader.SecretHash, reader.SecretSalt))
 				return new List<ReaderItemDto>();
 
-			var items = await sharedItemsRepository.ListAllAsync(si => si.Reader.Id == readerId, si => si.Reader);
+			//var items = await sharedItemsRepository.ListAllAsync(si => si.Reader.Id == readerId, si => si.Reader);
+			var items = await sharedItemsRepository.GetActualItemsByReader(readerId);
 			var dtos = items.Select(i => i.ToDto());
 			return dtos;
 		}

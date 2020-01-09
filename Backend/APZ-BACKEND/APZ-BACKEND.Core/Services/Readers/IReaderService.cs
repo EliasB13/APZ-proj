@@ -11,7 +11,8 @@ namespace APZ_BACKEND.Core.Services.Readers
 {
 	public interface IReaderService
 	{
-		Task<IEnumerable<ReaderItemDto>> GetReaderItems(int readerId, string secret);
+		Task<IEnumerable<ReaderItemDto>> GetActualReaderItems(int readerId, string secret);
+		Task<IEnumerable<ReaderItemDto>> GetReaderItems(int businessUserId, int readerId);
 		Task<IEnumerable<ReaderDto>> GetReaders(int businessUserId);
 		Task<GenericServiceResponse<SharedItemDto>> AddItemToReader(int businessUserId, AddItemToReaderRequest request);
 		Task<GenericServiceResponse<ReaderDto>> OrderReader(int businessUserId);
@@ -19,5 +20,6 @@ namespace APZ_BACKEND.Core.Services.Readers
 		Task<GenericServiceResponse<SharedItemDto>> TakeItem(TakeItemRequest request);
 		Task<GenericServiceResponse<SharedItemDto>> ReturnItem(ReturnItemRequest request);
 		Task<GenericServiceResponse<SharedItemDto>> RemoveReaderItem(int businessUserId, int itemId);
+
 	}
 }

@@ -28,5 +28,10 @@ namespace APZ_BACKEND.Infrastructure.Data.Repositories.SharedItems
 		{
 			return await dbContext.SharedItems.Where(si => si.ItemTakingLines.Any(itl => itl.ItemTaking.PrivateUser.Id == privateUserId && itl.IsTaken && !itl.IsReturned)).ToListAsync();
 		}
+
+		public async Task<IEnumerable<SharedItem>> GetActualItemsByReader(int readerId)
+		{
+			return await dbContext.SharedItems.Where(si => !si.ItemTakingLines.Any(itl => itl.IsTaken && !itl.IsReturned) && si.Reader.Id == readerId).ToListAsync();
+		}
 	}
 }

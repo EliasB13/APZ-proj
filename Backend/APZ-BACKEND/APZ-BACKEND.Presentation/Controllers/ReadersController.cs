@@ -28,11 +28,28 @@ namespace APZ_BACKEND.Presentation.Controllers
 			this.readerService = readerService;
 			this.logger = logger;
 		}
+
 		[AllowAnonymous]
 		[HttpPost("reader-items")]
 		public async Task<IActionResult> GetReaderItems(GetReaderItemsRequest request)
 		{
-			var items = await readerService.GetReaderItems(request.ReaderId, request.Secret);
+			var items = await readerService.GetActualReaderItems(request.ReaderId, request.Secret);
+			return Ok(items);
+		}
+
+		[Authorize]
+		[HttpGet("reader-items/{readerId}")]
+		public async Task<IActionResult> GetReaderItemsForBusiness(int readerId)
+		{
+			if (!ContextAuthHelper.IsBusinessUser(HttpContext.User.Claims))
+			{
+				logger.LogError("Current user is not a businessUser");
+				return BadRequest(new { message = "Current user is not a businessUser", code = ErrorCode.NOT_BUSINESS_USER });
+			}
+
+			int contextUserId = int.Parse(HttpContext.User.Identity.Name);
+
+			var items = await readerService.GetReaderItems(contextUserId, readerId);
 			return Ok(items);
 		}
 

@@ -10,5 +10,6 @@ namespace APZ_BACKEND.Core.Interfaces
 	{
 		Task<bool> IsItemAvailableForUser(int itemId, int privateUserId);
 		Task<IEnumerable<SharedItem>> GetActiveItemsByUser(int privateUserId);
+		Task<IEnumerable<SharedItem>> GetActualItemsByReader(int readerId);
 	}
 }
