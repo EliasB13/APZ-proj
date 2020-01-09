@@ -10,7 +10,9 @@
     "profile": "profile",
     "service": "service",
     "login": "login",
-    "register": "register"
+    "register": "register",
+    "readers": "readers",
+    "reader": "reader"
   },
   "businessItemsPage": {
     "secondaryHeader": "This is your items page. Here you can explore or manage your items",
@@ -55,6 +57,18 @@
   "rolePage": {
     "description": "Description",
     "employees": "Employees",
+    "items": "Items"
+  },
+  "readersPage": {
+    "secondaryHeader": "This is readers page. Here you can explore or order readers for your items.",
+    "manageBar": {
+      "manage": "Manage"
+    },
+    "orderReaderBtn": "Order reader",
+    "reader": "Reader"
+  },
+  "readerPage": {
+    "description": "Description",
     "items": "Items"
   },
   "businessProfilePage": {
@@ -179,7 +193,8 @@
     "items": "Items",
     "consumers": "Consumers",
     "roles": "Roles",
-    "profile": "Profile"
+    "profile": "Profile",
+    "readers": "Readers"
   },
   "common": {
     "addBtn": "Add",
@@ -212,7 +227,10 @@
     "addEmployeeToRoleSuccess": "Employee was added to role",
     "addItemToRoleSuccess": "Item was added to role",
     "removeEmployeeFromRoleSuccess": "Employee was removed from role",
-    "removeItemFromRoleSuccess": "Item was removed from role"
+    "removeItemFromRoleSuccess": "Item was removed from role",
+    "orderReaderSuccess": "Reader was successfuly ordered",
+    "addItemToReaderSuccess": "Item was added to reader",
+    "removeItemFromReaderSuccess": "Item was removed from reader"
   },
   "errorCode": {
     "100": "User was not found",

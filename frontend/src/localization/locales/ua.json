@@ -10,7 +10,9 @@
     "profile": "профіль",
     "service": "сервіс",
     "login": "авторизація",
-    "register": "реєстрація"
+    "register": "реєстрація",
+    "readers": "зчитувачі",
+    "reader": "зчитувач"
   },
   "businessItemsPage": {
     "secondaryHeader": "Це сторінка ваших предметів. Тут ви можете переглядати чи керувати предметами.",
@@ -56,6 +58,18 @@
     "description": "Опис",
     "employees": "Користувачі",
     "items": "Предмети"
+  },
+  "readersPage": {
+    "secondaryHeader": "This is readers page. Here you can explore or order readers for your items.",
+    "manageBar": {
+      "manage": "Керування"
+    },
+    "orderReaderBtn": "Замовити зчитувач",
+    "reader": "Зчитувач"
+  },
+  "readerPage": {
+    "description": "Description",
+    "items": "Items"
   },
   "businessProfilePage": {
     "mainHeader": "Вітаємо, {name}",
@@ -179,7 +193,8 @@
     "items": "Предмети",
     "consumers": "Користувачі",
     "roles": "Ролі",
-    "profile": "Профіль"
+    "profile": "Профіль",
+    "readers": "Зчитувачі"
   },
   "common": {
     "addBtn": "Додати",
@@ -212,7 +227,10 @@
     "addEmployeeToRoleSuccess": "Користувача було додано до ролі",
     "addItemToRoleSuccess": "Предмет було додано до ролі",
     "removeEmployeeFromRoleSuccess": "Користувача було видалено з ролі",
-    "removeItemFromRoleSuccess": "Предмет було видалено з ролі"
+    "removeItemFromRoleSuccess": "Предмет було видалено з ролі",
+    "orderReaderSuccess": "Зчитувач було успішно замовлено",
+    "addItemToReaderSuccess": "Предмет був доданий до зчитувача",
+    "removeItemFromReaderSuccess": "Предмет був видалений зі зчитувача"
   },
   "errorCode": {
     "100": "Користувача не було знайдено",

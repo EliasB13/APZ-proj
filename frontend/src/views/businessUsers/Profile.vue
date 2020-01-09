@@ -76,7 +76,9 @@
                   </div>
                 </div>
                 <hr class="my-4" />
-                <h6 class="heading-small text-muted mb-4">{{ $t("businessProfilePage.contact") }}</h6>
+                <h6
+                  class="heading-small text-muted mb-4"
+                >{{ $t("businessProfilePage.contactInformationHeader") }}</h6>
                 <div class="pl-lg-4">
                   <div class="row">
                     <div class="col-md-12">

@@ -40,6 +40,17 @@ export const router = new Router({
           name: "role",
           component: () => import("../views/businessUsers/Role.vue"),
           props: true
+        },
+        {
+          path: "/readers",
+          name: "readers",
+          component: () => import("../views/businessUsers/Readers.vue")
+        },
+        {
+          path: "/reader/:readerId",
+          name: "reader",
+          component: () => import("../views/businessUsers/Reader.vue"),
+          props: true
         }
       ]
     },
@@ -110,7 +121,9 @@ router.beforeEach((to, from, next) => {
     "/consumers",
     "/business-profile",
     "/roles",
-    "/role"
+    "/role",
+    "/readers",
+    "/reader"
   ];
   const privateUserPage = [
     "/availableServices",

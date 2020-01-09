@@ -10,6 +10,7 @@ import { roles } from "./modules/roles.module";
 import { employeesInRole } from "./modules/employees-in-role.module";
 import { privateItems } from "./modules/private-items.module";
 import { itemsInRole } from "./modules/items-in-role.module";
+import { readers } from "./modules/readers.module";
 
 Vue.use(Vuex);
 
@@ -23,6 +24,7 @@ export const store = new Vuex.Store({
     roles,
     employeesInRole,
     privateItems,
-    itemsInRole
+    itemsInRole,
+    readers
   }
 });
