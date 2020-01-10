@@ -60,7 +60,7 @@
     "items": "Предмети"
   },
   "readersPage": {
-    "secondaryHeader": "This is readers page. Here you can explore or order readers for your items.",
+    "secondaryHeader": "Це сторінка зчитувачі. Тут ви можете переглянути ваші пристрої, замовити нові чи прив'язати придмети до пристроїв.",
     "manageBar": {
       "manage": "Керування"
     },
