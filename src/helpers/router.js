@@ -40,6 +40,17 @@ export const router = new Router({
           name: "role",
           component: () => import("../views/businessUsers/Role.vue"),
           props: true
+        },
+        {
+          path: "/readers",
+          name: "readers",
+          component: () => import("../views/businessUsers/Readers.vue")
+        },
+        {
+          path: "/reader/:readerId",
+          name: "reader",
+          component: () => import("../views/businessUsers/Reader.vue"),
+          props: true
         }
       ]
     },
@@ -96,16 +107,37 @@ export const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  // redirect to login page if not logged in and trying to access a restricted page
   const publicPages = ["/login", "/register"];
   const authRequired = !publicPages.includes(to.path);
-  const user = localStorage.getItem("user");
+  const userJson = localStorage.getItem("user");
+  const user = JSON.parse(userJson);
 
-  if (authRequired && !user) {
+  if (authRequired && !userJson) {
     return next("/login");
   }
 
-  // TODO: error page when acessing business pages from private and vice versa
+  const businessUserPages = [
+    "/business-items",
+    "/consumers",
+    "/business-profile",
+    "/roles",
+    "/role",
+    "/readers",
+    "/reader"
+  ];
+  const privateUserPage = [
+    "/availableServices",
+    "/active-items",
+    "/service",
+    "/profile"
+  ];
+  const isNextBusinessPage = businessUserPages.includes(to.path);
+  const isNextPrivatePage = privateUserPage.includes(to.path);
+
+  if (isNextBusinessPage && !user.isBusinessUser)
+    return next("/availableServices");
+
+  if (isNextPrivatePage && user.isBusinessUser) return next("/business-items");
 
   next();
 });

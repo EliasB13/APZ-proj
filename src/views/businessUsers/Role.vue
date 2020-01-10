@@ -1,9 +1,6 @@
 <template>
   <div>
-    <base-header
-      type="gradient-success"
-      class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center"
-    >
+    <base-header type="gradient-success" class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center">
       <div class="container-fluid d-flex align-items-center">
         <div class="row">
           <div class="col-lg-7 col-md-10 col-xl-12">
@@ -15,9 +12,7 @@
 
     <div class="container-fluid mt--7 mb-5">
       <b-card>
-        <p class="card-text">
-          {{ $t("rolePage.description") }}: {{ role.description }}
-        </p>
+        <p class="card-text">{{ $t("rolePage.description") }}: {{ role.description }}</p>
       </b-card>
 
       <div
@@ -38,15 +33,8 @@
         </b-row>
       </div>
 
-      <b-collapse
-        :id="`employees-collapse-${roleId}`"
-        v-model="showEmployeesCollapse"
-        class="mt-2"
-      >
-        <employees-in-role-list
-          :showEmployees="showEmployeesCollapse"
-          :roleId="parseInt(roleId)"
-        ></employees-in-role-list>
+      <b-collapse :id="`employees-collapse-${roleId}`" v-model="showEmployeesCollapse" class="mt-2">
+        <employees-in-role-list :showEmployees="showEmployeesCollapse" :roleId="parseInt(roleId)"></employees-in-role-list>
       </b-collapse>
 
       <div
@@ -67,16 +55,8 @@
         </b-row>
       </div>
 
-      <b-collapse
-        :id="`items-collapse-${roleId}`"
-        v-model="showItemsCollapse"
-        class="mt-2"
-      >
-        <items-in-role-list
-          class="mt-2"
-          :showItems="showItemsCollapse"
-          :roleId="parseInt(roleId)"
-        ></items-in-role-list>
+      <b-collapse :id="`items-collapse-${roleId}`" v-model="showItemsCollapse" class="mt-2">
+        <items-in-role-list :showItems="showItemsCollapse" :roleId="parseInt(roleId)"></items-in-role-list>
       </b-collapse>
     </div>
   </div>

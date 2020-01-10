@@ -1,18 +1,13 @@
 <template>
   <div>
-    <base-header
-      type="gradient-primary"
-      class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center"
-    >
+    <base-header type="gradient-primary" class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center">
       <div class="container-fluid d-flex align-items-center">
         <div class="row">
           <div class="col-lg-7 col-md-10">
-            <h1 class="display-2 text-white">
-              {{ $t("privateProfilePage.mainHeader", { name: user.login }) }}
-            </h1>
-            <p class="text-white mt-0 mb-5">
-              {{ $t("privateProfilePage.secondaryHeader") }}
-            </p>
+            <h1
+              class="display-2 text-white"
+            >{{ $t("privateProfilePage.mainHeader", { name: user.login }) }}</h1>
+            <p class="text-white mt-0 mb-5">{{ $t("privateProfilePage.secondaryHeader") }}</p>
           </div>
         </div>
       </div>
@@ -31,9 +26,7 @@
                 </div>
               </div>
             </div>
-            <div
-              class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4"
-            ></div>
+            <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4"></div>
             <div class="card-body pt-0 pt-md-4 mt-6">
               <div class="text-center">
                 <h3>{{ user.firstName + " " + user.lastName }}</h3>
@@ -48,64 +41,90 @@
             <div slot="header" class="bg-white border-0">
               <div class="row align-items-center">
                 <div class="col-8">
-                  <h3 class="mb-0">
-                    {{ $t("privateProfilePage.profileCardHeader") }}
-                  </h3>
+                  <h3 class="mb-0">{{ $t("privateProfilePage.profileCardHeader") }}</h3>
                 </div>
                 <div class="col-4 text-right">
-                  <div @click="editClick" class="btn btn-sm btn-primary">
-                    {{ $t("common.editBtn") }}
-                  </div>
+                  <div @click="editClick" class="btn btn-sm btn-primary">{{ $t("common.editBtn") }}</div>
                 </div>
               </div>
             </div>
             <template>
               <form @submit.prevent>
-                <h6 class="heading-small text-muted mb-4">
-                  {{ $t("privateProfilePage.userInformationHeader") }}
-                </h6>
+                <h6
+                  class="heading-small text-muted mb-4"
+                >{{ $t("privateProfilePage.userInformationHeader") }}</h6>
                 <div class="pl-lg-4">
                   <div class="row">
                     <div class="col-lg-6">
-                      <label class="form-control-label">{{
+                      <label class="form-control-label">
+                        {{
                         $t("privateProfilePage.label.login")
-                      }}</label>
+                        }}
+                      </label>
                       <p>{{ user.login }}</p>
                     </div>
                     <div class="col-lg-6">
-                      <label class="form-control-label">{{
+                      <label class="form-control-label">
+                        {{
                         $t("privateProfilePage.label.email")
-                      }}</label>
+                        }}
+                      </label>
                       <p>{{ user.email }}</p>
                     </div>
                   </div>
                 </div>
                 <hr class="my-4" />
-                <h6 class="heading-small text-muted mb-4">
-                  {{ $t("privateProfilePage.contactInformationHeader") }}
-                </h6>
+                <h6
+                  class="heading-small text-muted mb-4"
+                >{{ $t("privateProfilePage.contactInformationHeader") }}</h6>
                 <div class="pl-lg-4">
                   <div class="row">
                     <div class="col-lg-6">
-                      <label class="form-control-label">{{
+                      <label class="form-control-label">
+                        {{
                         $t("privateProfilePage.label.firstName")
-                      }}</label>
+                        }}
+                      </label>
                       <p>{{ user.firstName }}</p>
                     </div>
                     <div class="col-lg-6">
-                      <label class="form-control-label">{{
+                      <label class="form-control-label">
+                        {{
                         $t("privateProfilePage.label.lastName")
-                      }}</label>
+                        }}
+                      </label>
                       <p>{{ user.lastName }}</p>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-12">
-                      <label class="form-control-label">{{
+                      <label class="form-control-label">
+                        {{
                         $t("privateProfilePage.label.phone")
-                      }}</label>
+                        }}
+                      </label>
                       <p>{{ user.phone ? user.phone : "-" }}</p>
                     </div>
+                  </div>
+                </div>
+                <hr class="my-4" />
+                <h6 class="heading-small text-muted mb-4">{{ $t("privateProfilePage.rfidHeader") }}</h6>
+                <div class="pl-lg-4 pr-2">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <label class="form-control-label">
+                        {{
+                        $t("privateProfilePage.label.rfid")
+                        }}
+                      </label>
+                      <p>{{ user.rfid ? user.rfid : "-" }}</p>
+                    </div>
+                    <b-col lg="6" v-if="!user.rfid">
+                      <div
+                        @click="orderCardClick"
+                        class="btn btn-sm btn-success float-right"
+                      >{{ $t("common.orderCard") }}</div>
+                    </b-col>
                   </div>
                 </div>
               </form>
@@ -118,22 +137,18 @@
             <div slot="header" class="bg-white border-0">
               <div class="row align-items-center">
                 <div class="col-8">
-                  <h3 class="mb-0">
-                    {{ $t("privateProfilePage.profileCardHeader") }}
-                  </h3>
+                  <h3 class="mb-0">{{ $t("privateProfilePage.profileCardHeader") }}</h3>
                 </div>
                 <div class="col-4 text-right">
-                  <div @click="saveClick" class="btn btn-sm btn-success">
-                    {{ $t("common.saveBtn") }}
-                  </div>
+                  <div @click="saveClick" class="btn btn-sm btn-success">{{ $t("common.saveBtn") }}</div>
                 </div>
               </div>
             </div>
             <template>
               <form @submit.prevent>
-                <h6 class="heading-small text-muted mb-4">
-                  {{ $t("privateProfilePage.userInformationHeader") }}
-                </h6>
+                <h6
+                  class="heading-small text-muted mb-4"
+                >{{ $t("privateProfilePage.userInformationHeader") }}</h6>
                 <div class="pl-lg-4">
                   <div class="row">
                     <div class="col-lg-6">
@@ -159,9 +174,9 @@
                   </div>
                 </div>
                 <hr class="my-4" />
-                <h6 class="heading-small text-muted mb-4">
-                  {{ $t("privateProfilePage.contactInformationHeader") }}
-                </h6>
+                <h6
+                  class="heading-small text-muted mb-4"
+                >{{ $t("privateProfilePage.contactInformationHeader") }}</h6>
                 <div class="pl-lg-4">
                   <div class="row">
                     <div class="col-lg-6">
@@ -224,7 +239,9 @@ export default {
       status: state => state.account.status
     }),
     userPhoto() {
-      return `${process.env.VUE_APP_DEV_BACKEND_URL}/${this.user.photo}`;
+      if (this.user.photo)
+        return `${process.env.VUE_APP_DEV_BACKEND_URL}/${this.user.photo}`;
+      return `/img/theme/default_photo.png`;
     },
     showSpinner() {
       return this.status.accountDataLoading || this.status.userUpdating;
@@ -244,7 +261,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions("account", ["getAccountData", "updateUser"]),
+    ...mapActions("account", ["getAccountData", "updateUser", "orderCard"]),
     editClick() {
       this.model.login = this.user.login;
       this.model.email = this.user.email;
@@ -260,6 +277,9 @@ export default {
         isBusinessUser: this.user.isBusinessUser
       });
       if (this.status.userUpdated) this.editingMode = false;
+    },
+    orderCardClick() {
+      this.orderCard();
     }
   },
   mounted() {

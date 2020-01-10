@@ -10,7 +10,9 @@
     "profile": "профіль",
     "service": "сервіс",
     "login": "авторизація",
-    "register": "реєстрація"
+    "register": "реєстрація",
+    "readers": "зчитувачі",
+    "reader": "зчитувач"
   },
   "businessItemsPage": {
     "secondaryHeader": "Це сторінка ваших предметів. Тут ви можете переглядати чи керувати предметами.",
@@ -56,6 +58,18 @@
     "description": "Опис",
     "employees": "Користувачі",
     "items": "Предмети"
+  },
+  "readersPage": {
+    "secondaryHeader": "Це сторінка зчитувачі. Тут ви можете переглянути ваші пристрої, замовити нові чи прив'язати придмети до пристроїв.",
+    "manageBar": {
+      "manage": "Керування"
+    },
+    "orderReaderBtn": "Замовити зчитувач",
+    "reader": "Зчитувач"
+  },
+  "readerPage": {
+    "description": "Description",
+    "items": "Items"
   },
   "businessProfilePage": {
     "mainHeader": "Вітаємо, {name}",
@@ -156,12 +170,14 @@
     "profileCardHeader": "Мій обліковий запис",
     "userInformationHeader": "Інформація про користувача",
     "contactInformationHeader": "Контактна інформація",
+    "rfidHeader": "RFID картка",
     "label": {
       "login": "Ім'я користувача",
       "email": "Електрона пошта",
       "firstName": "Ім'я",
       "lastName": "Прізвище",
-      "phone": "Телефон"
+      "phone": "Телефон",
+      "rfid": "Номер картки"
     },
     "placeholder": {
       "login": "Ім'я користувача",
@@ -172,12 +188,13 @@
     }
   },
   "sidebarLinks": {
-    "availableItems": "Доступні предмети",
+    "availableItems": "Доступні сервіси",
     "activeItems": "Активні предмети",
     "items": "Предмети",
     "consumers": "Користувачі",
     "roles": "Ролі",
-    "profile": "Профіль"
+    "profile": "Профіль",
+    "readers": "Зчитувачі"
   },
   "common": {
     "addBtn": "Додати",
@@ -190,7 +207,9 @@
     "registerBtn": "Зареєструватися",
     "loginBtn": "Увійти",
     "spinnerText": "Завантаження",
-    "notification": "Повідомлення"
+    "notification": "Повідомлення",
+    "emptyList": "Немає елементів для відображення",
+    "orderCard": "Замовити картку"
   },
   "userDropDown": {
     "myProfile": "Мій профіль",
@@ -208,7 +227,10 @@
     "addEmployeeToRoleSuccess": "Користувача було додано до ролі",
     "addItemToRoleSuccess": "Предмет було додано до ролі",
     "removeEmployeeFromRoleSuccess": "Користувача було видалено з ролі",
-    "removeItemFromRoleSuccess": "Предмет було видалено з ролі"
+    "removeItemFromRoleSuccess": "Предмет було видалено з ролі",
+    "orderReaderSuccess": "Зчитувач було успішно замовлено",
+    "addItemToReaderSuccess": "Предмет був доданий до зчитувача",
+    "removeItemFromReaderSuccess": "Предмет був видалений зі зчитувача"
   },
   "errorCode": {
     "100": "Користувача не було знайдено",
@@ -229,6 +251,7 @@
     "115": "Неправильні параметри запиту",
     "116": "Логін або пароль невірні",
     "117": "Файл не було знайдено",
+    "123": "Ім'я користувача вже зайнято",
     "900": "Ви не маєте доступу до цього ресурсу"
   }
 }

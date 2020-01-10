@@ -1,13 +1,6 @@
 <template>
-  <base-nav
-    class="navbar-top navbar-dark"
-    id="navbar-main"
-    :show-toggle-button="false"
-    expand
-  >
-    <form
-      class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto"
-    >
+  <base-nav class="navbar-top navbar-dark" id="navbar-main" :show-toggle-button="false" expand>
+    <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
       <div class="form-group mb-0">
         <base-input
           placeholder="Search"
@@ -25,9 +18,11 @@
               <img alt="Image placeholder" :src="userPhoto" />
             </span>
             <div class="media-body ml-2 d-none d-lg-block">
-              <span class="mb-0 text-sm font-weight-bold">{{
+              <span class="mb-0 text-sm font-weight-bold">
+                {{
                 currentUser.login
-              }}</span>
+                }}
+              </span>
             </div>
           </div>
 
@@ -74,7 +69,9 @@ export default {
       currentUser: state => state.account.user
     }),
     userPhoto() {
-      return `${process.env.VUE_APP_DEV_BACKEND_URL}/${this.currentUser.photo}`;
+      if (this.currentUser.photo)
+        return `${process.env.VUE_APP_DEV_BACKEND_URL}/${this.currentUser.photo}`;
+      return `/img/theme/default_photo.png`;
     }
   }
 };

@@ -4,9 +4,7 @@
       <div class="container-fluid d-flex align-items-center">
         <div class="row">
           <div class="col-lg-7 col-md-10">
-            <p class="text-white mt-0 mb-5">
-              {{ $t("activeItemsPage.secondaryHeader") }}
-            </p>
+            <p class="text-white mt-0 mb-5">{{ $t("activeItemsPage.secondaryHeader") }}</p>
           </div>
         </div>
       </div>
@@ -15,6 +13,9 @@
     <div class="container-fluid mt--7 mb-5"></div>
 
     <div class="container-fluid">
+      <div v-if="showEmptyList" style="margin-top: 8rem;">
+        <p>{{ $t("common.emptyList") }}</p>
+      </div>
       <base-cards-list
         colsClasses="col-xl-4 col-lg-6"
         cardType="base-card"
@@ -51,6 +52,9 @@ export default {
     },
     showItems() {
       return this.status.activeItemsLoaded;
+    },
+    showEmptyList() {
+      return this.status.activeItemsLoaded && this.activeItems.length == 0;
     }
   },
   methods: {

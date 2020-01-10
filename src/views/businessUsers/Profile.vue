@@ -1,18 +1,13 @@
 <template>
   <div>
-    <base-header
-      type="gradient-primary"
-      class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center"
-    >
+    <base-header type="gradient-primary" class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center">
       <div class="container-fluid d-flex align-items-center">
         <div class="row">
           <div class="col-lg-7 col-md-10">
-            <h1 class="display-2 text-white">
-              {{ $t("businessProfilePage.mainHeader", { name: user.login }) }}
-            </h1>
-            <p class="text-white mt-0 mb-5">
-              {{ $t("businessProfilePage.secondaryHeader") }}
-            </p>
+            <h1
+              class="display-2 text-white"
+            >{{ $t("businessProfilePage.mainHeader", { name: user.login }) }}</h1>
+            <p class="text-white mt-0 mb-5">{{ $t("businessProfilePage.secondaryHeader") }}</p>
           </div>
         </div>
       </div>
@@ -31,9 +26,7 @@
                 </div>
               </div>
             </div>
-            <div
-              class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4"
-            ></div>
+            <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4"></div>
             <div class="card-body pt-0 pt-md-4 mt-6">
               <div class="text-center">
                 <h3>{{ user.companyName }}</h3>
@@ -50,76 +43,79 @@
             <div slot="header" class="bg-white border-0">
               <div class="row align-items-center">
                 <div class="col-8">
-                  <h3 class="mb-0">
-                    {{ $t("businessProfilePage.profileCardHeader") }}
-                  </h3>
+                  <h3 class="mb-0">{{ $t("businessProfilePage.profileCardHeader") }}</h3>
                 </div>
                 <div class="col-4 text-right">
-                  <div @click="editClick" class="btn btn-sm btn-primary">
-                    Edit
-                  </div>
+                  <div @click="editClick" class="btn btn-sm btn-primary">Edit</div>
                 </div>
               </div>
             </div>
             <template>
               <form @submit.prevent>
-                <h6 class="heading-small text-muted mb-4">
-                  {{ $t("businessProfilePage.userInformationHeader") }}
-                </h6>
+                <h6
+                  class="heading-small text-muted mb-4"
+                >{{ $t("businessProfilePage.userInformationHeader") }}</h6>
                 <div class="pl-lg-4">
                   <div class="row">
                     <div class="col-lg-6">
-                      <label class="form-control-label">{{
+                      <label class="form-control-label">
+                        {{
                         $t("businessProfilePage.label.login")
-                      }}</label>
+                        }}
+                      </label>
                       <p>{{ user.login }}</p>
                     </div>
                     <div class="col-lg-6">
-                      <label class="form-control-label">{{
+                      <label class="form-control-label">
+                        {{
                         $t("businessProfilePage.label.email")
-                      }}</label>
+                        }}
+                      </label>
                       <p>{{ user.email }}</p>
                     </div>
                   </div>
                 </div>
                 <hr class="my-4" />
-                <h6 class="heading-small text-muted mb-4">
-                  {{ $t("businessProfilePage.contact") }}
-                </h6>
+                <h6
+                  class="heading-small text-muted mb-4"
+                >{{ $t("businessProfilePage.contactInformationHeader") }}</h6>
                 <div class="pl-lg-4">
                   <div class="row">
                     <div class="col-md-12">
-                      <label class="form-control-label">{{
+                      <label class="form-control-label">
+                        {{
                         $t("businessProfilePage.label.companyName")
-                      }}</label>
+                        }}
+                      </label>
                       <p>{{ user.companyName }}</p>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-lg-6">
-                      <label class="form-control-label">{{
+                      <label class="form-control-label">
+                        {{
                         $t("businessProfilePage.label.address")
-                      }}</label>
+                        }}
+                      </label>
                       <p>{{ user.address ? user.address : "-" }}</p>
                     </div>
                     <div class="col-lg-6">
-                      <label class="form-control-label">{{
+                      <label class="form-control-label">
+                        {{
                         $t("businessProfilePage.label.phone")
-                      }}</label>
+                        }}
+                      </label>
                       <p>{{ user.phone ? user.phone : "-" }}</p>
                     </div>
                   </div>
                 </div>
                 <hr class="my-4" />
-                <h6 class="heading-small text-muted mb-4">
-                  {{ $t("businessProfilePage.descriptionHeader") }}
-                </h6>
+                <h6
+                  class="heading-small text-muted mb-4"
+                >{{ $t("businessProfilePage.descriptionHeader") }}</h6>
                 <div class="pl-lg-4">
                   <div class="form-group">
-                    <base-input
-                      alternative
-                      :label="$t('businessProfilePage.label.description')"
-                    >
+                    <base-input alternative :label="$t('businessProfilePage.label.description')">
                       <p>{{ user.description ? user.description : "-" }}</p>
                     </base-input>
                   </div>
@@ -134,22 +130,18 @@
             <div slot="header" class="bg-white border-0">
               <div class="row align-items-center">
                 <div class="col-8">
-                  <h3 class="mb-0">
-                    {{ $t("businessProfilePage.profileCardHeader") }}
-                  </h3>
+                  <h3 class="mb-0">{{ $t("businessProfilePage.profileCardHeader") }}</h3>
                 </div>
                 <div class="col-4 text-right">
-                  <div @click="saveClick" class="btn btn-sm btn-success">
-                    {{ $t("common.saveBtn") }}
-                  </div>
+                  <div @click="saveClick" class="btn btn-sm btn-success">{{ $t("common.saveBtn") }}</div>
                 </div>
               </div>
             </div>
             <template>
               <form @submit.prevent>
-                <h6 class="heading-small text-muted mb-4">
-                  {{ $t("businessProfilePage.userInformationHeader") }}
-                </h6>
+                <h6
+                  class="heading-small text-muted mb-4"
+                >{{ $t("businessProfilePage.userInformationHeader") }}</h6>
                 <div class="pl-lg-4">
                   <div class="row">
                     <div class="col-lg-6">
@@ -175,9 +167,9 @@
                   </div>
                 </div>
                 <hr class="my-4" />
-                <h6 class="heading-small text-muted mb-4">
-                  {{ $t("businessProfilePage.contactInformationHeader") }}
-                </h6>
+                <h6
+                  class="heading-small text-muted mb-4"
+                >{{ $t("businessProfilePage.contactInformationHeader") }}</h6>
                 <div class="pl-lg-4">
                   <div class="row">
                     <div class="col-md-12">
@@ -218,15 +210,12 @@
                   </div>
                 </div>
                 <hr class="my-4" />
-                <h6 class="heading-small text-muted mb-4">
-                  {{ $t("businessProfilePage.descriptionHeader") }}
-                </h6>
+                <h6
+                  class="heading-small text-muted mb-4"
+                >{{ $t("businessProfilePage.descriptionHeader") }}</h6>
                 <div class="pl-lg-4">
                   <div class="form-group">
-                    <base-input
-                      alternative
-                      :label="$t('businessProfilePage.label.description')"
-                    >
+                    <base-input alternative :label="$t('businessProfilePage.label.description')">
                       <textarea
                         rows="4"
                         class="form-control form-control-alternative"
@@ -262,7 +251,9 @@ export default {
       status: state => state.account.status
     }),
     userPhoto() {
-      return `${process.env.VUE_APP_DEV_BACKEND_URL}/${this.user.photo}`;
+      if (this.user.photo)
+        return `${process.env.VUE_APP_DEV_BACKEND_URL}/${this.user.photo}`;
+      return `/img/theme/default_photo.png`;
     },
     showSpinner() {
       return this.status.accountDataLoading || this.status.userUpdating;
