@@ -21,7 +21,7 @@ To sign in you can use sample credentials:
   Pass: **#SampleBusAcc13**
     
 * Private user  
-  Login: **SampleBusinessAccount**  
-  Pass: **#SampleBusAcc13**
+  Login: **SamplePrivateAccount**  
+  Pass: **#SamplePrivAcc13**
   
 *Or you can create a new account.*
